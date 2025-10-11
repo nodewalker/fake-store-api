@@ -9,6 +9,10 @@ export type Tokens = {
   refresh_token: string;
 };
 
+export type JWTPayload = {
+  sub: string;
+};
+
 // USER
 export type CreateUserDetails = {
   firstName: string;

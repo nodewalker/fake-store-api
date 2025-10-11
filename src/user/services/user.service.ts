@@ -23,7 +23,6 @@ export class UserService implements IUserService {
       if (existUser) {
         throw new HttpException('Email already used', HttpStatus.BAD_REQUEST);
       }
-
       const user: UserEntity = await this.userRepository.save({
         ...details,
         password: await hashPassword(details.password),
@@ -31,6 +30,7 @@ export class UserService implements IUserService {
       // TODO:
       return user as ReturnUserDetails;
     } catch (error) {
+      // TODO: Exceptions
       throw new HttpException(
         error as string,
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -38,12 +38,17 @@ export class UserService implements IUserService {
     }
   }
 
-  async findOne(login: string): Promise<UserEntity> {
+  async findOne(
+    loginOrUuid: string,
+    selectAll: boolean,
+  ): Promise<UserEntity | ReturnUserDetails> {
     const user: UserEntity | null = await this.userRepository.findOne({
-      where: { login },
+      where: [{ login: loginOrUuid }, { _uuid: loginOrUuid }],
     });
 
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    return user;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...data } = user;
+    return selectAll ? user : data;
   }
 }
