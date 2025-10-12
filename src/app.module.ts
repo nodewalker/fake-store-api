@@ -2,8 +2,15 @@ import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from './utils/typeorm';
+import {
+  CartEntity,
+  ProductEntity,
+  ProductImageEntity,
+  UserEntity,
+} from './utils/typeorm';
 import { Config } from './utils/Config';
+import { ProductModule } from './product/product.module';
+import { ProductCategoryEntity } from './utils/typeorm/entities/productCategory';
 
 @Module({
   imports: [
@@ -14,12 +21,19 @@ import { Config } from './utils/Config';
       username: Config.DATABASE.USERNAME,
       password: Config.DATABASE.PASSWORD,
       database: Config.DATABASE.NAME,
-      entities: [UserEntity],
+      entities: [
+        UserEntity,
+        CartEntity,
+        ProductEntity,
+        ProductImageEntity,
+        ProductCategoryEntity,
+      ],
       logging: false,
       synchronize: true,
     }),
     UserModule,
     AuthModule,
+    ProductModule,
   ],
   controllers: [],
   providers: [],
