@@ -1,9 +1,14 @@
-import { hashPassword } from './../../utils/security/password';
+import { hashPassword, verifyPassword } from './../../utils/security/password';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IUserService } from 'src/utils/interfaces/IUserService';
 import { UserEntity } from 'src/utils/typeorm';
-import { CreateUserDetails, ReturnUserDetails } from 'src/utils/types';
+import {
+  CreateUserDetails,
+  ReturnUserDetails,
+  UpdateUserDetails,
+  UpdateUserPasswordDetails,
+} from 'src/utils/types';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -50,5 +55,51 @@ export class UserService implements IUserService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...data } = user;
     return selectAll ? user : data;
+  }
+
+  async updateUser(userId: string, details: UpdateUserDetails): Promise<void> {
+    try {
+      await this.userRepository.update(userId, details);
+    } catch (error) {
+      throw new HttpException(
+        error as string,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async updateUserPassword(
+    userId: string,
+    details: UpdateUserPasswordDetails,
+  ): Promise<void> {
+    try {
+      const user: UserEntity = (await this.findOne(userId, true)) as UserEntity;
+      if (!(await verifyPassword(details.currentPassword, user.password)))
+        throw new HttpException(
+          'The old password is incorrect',
+          HttpStatus.BAD_REQUEST,
+        );
+
+      if (details.currentPassword === details.newPassword)
+        throw new HttpException(
+          'The old and new passwords are the same',
+          HttpStatus.BAD_REQUEST,
+        );
+
+      if (details.newPassword !== details.repeatNewPassword)
+        throw new HttpException(
+          'The new password repeat is incorrect',
+          HttpStatus.BAD_REQUEST,
+        );
+
+      await this.userRepository.update(userId, {
+        password: await hashPassword(details.newPassword),
+      });
+    } catch (error) {
+      throw new HttpException(
+        error as string,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

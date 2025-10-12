@@ -13,6 +13,10 @@ export type JWTPayload = {
   sub: string;
 };
 
+export type UserRequest = {
+  _uuid: string;
+};
+
 // USER
 export type CreateUserDetails = {
   firstName: string;
@@ -28,4 +32,18 @@ export type ReturnUserDetails = {
   lastName: string;
   login: string;
   avatarURL: string;
+};
+
+export type UpdateUserDetails = {
+  firstName: string;
+  lastName: string;
+  login: string;
+  email: string;
+  avatarURL: string;
+};
+
+export type UpdateUserPasswordDetails = {
+  currentPassword: string;
+  newPassword: string;
+  repeatNewPassword: string;
 };

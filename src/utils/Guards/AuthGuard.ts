@@ -1,15 +1,13 @@
 import {
   CanActivate,
   ExecutionContext,
-  HttpException,
-  HttpStatus,
   Inject,
   Injectable,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { Services } from '../const';
 import { IAuthService } from '../interfaces';
-import { ReturnUserDetails } from '../types';
+import { UserRequest } from '../types';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -21,14 +19,12 @@ export class AuthGuard implements CanActivate {
     const request: Request = context.switchToHttp().getRequest();
 
     const bearerToken = request.headers.authorization;
-    if (!bearerToken || bearerToken.split(' ')[0] !== 'Bearer')
-      throw new HttpException('Unauthorized user', HttpStatus.UNAUTHORIZED);
+    if (!bearerToken || bearerToken.split(' ')[0] !== 'Bearer') return false;
 
-    const user: ReturnUserDetails = await this.authService.verifyUser(
+    const user: UserRequest = await this.authService.verifyUser(
       bearerToken.split(' ')[1],
     );
-    if (!user)
-      throw new HttpException('Unauthorized user', HttpStatus.UNAUTHORIZED);
+    if (!user._uuid) return false;
 
     request.user = user;
     return true;

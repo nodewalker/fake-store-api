@@ -10,6 +10,7 @@ import {
   LoginDetails,
   ReturnUserDetails,
   Tokens,
+  UserRequest,
 } from 'src/utils/types';
 import { Config } from 'src/utils/Config';
 
@@ -31,19 +32,22 @@ export class AuthService implements IAuthService {
       true,
     )) as UserEntity;
     if (!(await verifyPassword(details.password, user.password)))
-      throw new HttpException('', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'The login or password is incorrect',
+        HttpStatus.BAD_REQUEST,
+      );
 
     return this.generateJwtTokens(user);
   }
 
-  async verifyUser(token: string): Promise<ReturnUserDetails> {
+  async verifyUser(token: string): Promise<UserRequest> {
     try {
       const payload: JWTPayload = this.jwtService.verify(token);
       const user: ReturnUserDetails = (await this.userService.findOne(
         payload.sub,
         false,
       )) as ReturnUserDetails;
-      return user;
+      return { _uuid: user._uuid };
     } catch (error) {
       throw new HttpException(
         error as string,
@@ -53,14 +57,21 @@ export class AuthService implements IAuthService {
   }
 
   async refreshTokens(refreshToken: string): Promise<Tokens> {
-    const user: ReturnUserDetails = await this.verifyUser(refreshToken);
+    if (!refreshToken)
+      throw new HttpException(
+        'The refresh token are empty',
+        HttpStatus.BAD_REQUEST,
+      );
+    const user: UserRequest = await this.verifyUser(refreshToken);
     if (!user)
-      throw new HttpException('Unauthorized user', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('Unauthorised user', HttpStatus.UNAUTHORIZED);
 
     return this.generateJwtTokens(user);
   }
 
-  private generateJwtTokens(user: UserEntity | ReturnUserDetails): Tokens {
+  private generateJwtTokens(
+    user: UserEntity | ReturnUserDetails | UserRequest,
+  ): Tokens {
     return {
       access_token: this.jwtService.sign(
         {

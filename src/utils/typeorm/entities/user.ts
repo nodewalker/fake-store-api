@@ -11,7 +11,7 @@ export class UserEntity {
   @Column({ name: 'last_name' })
   lastName: string;
 
-  @Column({})
+  @Column({ unique: true })
   login: string;
 
   @Column({ unique: true })
