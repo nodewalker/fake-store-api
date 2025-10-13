@@ -7,6 +7,7 @@ import { CategoryService } from './services/category.service';
 import { CategoryController } from './controllers/category.controller';
 import { ProductEntity, ProductImageEntity } from 'src/utils/typeorm';
 import { ProductCategoryEntity } from 'src/utils/typeorm/entities/productCategory';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ProductCategoryEntity } from 'src/utils/typeorm/entities/productCategor
       ProductImageEntity,
       ProductCategoryEntity,
     ]),
+    UserModule,
   ],
   providers: [
     { provide: Services.product, useClass: ProductService },

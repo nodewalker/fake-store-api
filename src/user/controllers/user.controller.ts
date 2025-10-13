@@ -34,7 +34,7 @@ export class UserController {
     @Res() res: Response,
   ) {
     await this.userService.updateUser(req.user._uuid, dto);
-    return res.status(200);
+    return res.status(200).send();
   }
 
   @UseGuards(AuthGuard)
@@ -45,6 +45,6 @@ export class UserController {
     @Res() res: Response,
   ) {
     await this.userService.updateUserPassword(req.user._uuid, dto);
-    return res.status(200);
+    return res.status(200).send();
   }
 }

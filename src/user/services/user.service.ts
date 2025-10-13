@@ -35,9 +35,11 @@ export class UserService implements IUserService {
       // TODO:
       return user as ReturnUserDetails;
     } catch (error) {
-      // TODO: Exceptions
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new HttpException(
-        error as string,
+        'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -47,22 +49,36 @@ export class UserService implements IUserService {
     loginOrUuid: string,
     selectAll: boolean,
   ): Promise<UserEntity | ReturnUserDetails> {
-    const user: UserEntity | null = await this.userRepository.findOne({
-      where: [{ login: loginOrUuid }, { _uuid: loginOrUuid }],
-    });
+    try {
+      const user: UserEntity | null = await this.userRepository.findOne({
+        where: [{ login: loginOrUuid }, { _uuid: loginOrUuid }],
+      });
 
-    if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...data } = user;
-    return selectAll ? user : data;
+      if (!user)
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...data } = user;
+      return selectAll ? user : data;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async updateUser(userId: string, details: UpdateUserDetails): Promise<void> {
     try {
       await this.userRepository.update(userId, details);
     } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new HttpException(
-        error as string,
+        'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -96,8 +112,11 @@ export class UserService implements IUserService {
         password: await hashPassword(details.newPassword),
       });
     } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new HttpException(
-        error as string,
+        'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

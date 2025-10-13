@@ -1,3 +1,5 @@
+import { ProductCategoryEntity, ProductEntity } from './typeorm';
+
 // AUTH
 export type LoginDetails = {
   login: string;
@@ -46,4 +48,25 @@ export type UpdateUserPasswordDetails = {
   currentPassword: string;
   newPassword: string;
   repeatNewPassword: string;
+};
+
+// CATEGORY
+export type CreateCategoryDetails = {
+  name: string;
+};
+export type GetCategoriesReturn = {
+  data: ProductCategoryEntity[];
+  total: number;
+  page: number;
+  limit: number;
+  lastPage: number;
+};
+
+// PRODUCT
+export type GetProductsReturn = {
+  data: ProductEntity[];
+  total: number;
+  page: number;
+  limit: number;
+  lastPage: number;
 };

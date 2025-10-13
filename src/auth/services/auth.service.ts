@@ -22,22 +22,43 @@ export class AuthService implements IAuthService {
   ) {}
 
   async signup(details: CreateUserDetails): Promise<Tokens> {
-    const user: ReturnUserDetails = await this.userService.createUser(details);
-    return this.generateJwtTokens(user);
+    try {
+      const user: ReturnUserDetails =
+        await this.userService.createUser(details);
+      return this.generateJwtTokens(user);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async signin(details: LoginDetails): Promise<Tokens> {
-    const user: UserEntity = (await this.userService.findOne(
-      details.login,
-      true,
-    )) as UserEntity;
-    if (!(await verifyPassword(details.password, user.password)))
-      throw new HttpException(
-        'The login or password is incorrect',
-        HttpStatus.BAD_REQUEST,
-      );
+    try {
+      const user: UserEntity = (await this.userService.findOne(
+        details.login,
+        true,
+      )) as UserEntity;
+      if (!(await verifyPassword(details.password, user.password)))
+        throw new HttpException(
+          'The login or password is incorrect',
+          HttpStatus.BAD_REQUEST,
+        );
 
-    return this.generateJwtTokens(user);
+      return this.generateJwtTokens(user);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async verifyUser(token: string): Promise<UserRequest> {
@@ -49,42 +70,60 @@ export class AuthService implements IAuthService {
       )) as ReturnUserDetails;
       return { _uuid: user._uuid };
     } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new HttpException(
-        error as string,
+        'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
 
   async refreshTokens(refreshToken: string): Promise<Tokens> {
-    if (!refreshToken)
-      throw new HttpException(
-        'The refresh token are empty',
-        HttpStatus.BAD_REQUEST,
-      );
-    const user: UserRequest = await this.verifyUser(refreshToken);
-    if (!user)
-      throw new HttpException('Unauthorised user', HttpStatus.UNAUTHORIZED);
+    try {
+      const user: UserRequest = await this.verifyUser(refreshToken);
+      if (!user)
+        throw new HttpException('Unauthorised user', HttpStatus.UNAUTHORIZED);
 
-    return this.generateJwtTokens(user);
+      return this.generateJwtTokens(user);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   private generateJwtTokens(
     user: UserEntity | ReturnUserDetails | UserRequest,
   ): Tokens {
-    return {
-      access_token: this.jwtService.sign(
-        {
-          sub: user._uuid,
-        },
-        { expiresIn: Config.JWT.ACCESS_TOKEN_EXPIRES },
-      ),
-      refresh_token: this.jwtService.sign(
-        {
-          sub: user._uuid,
-        },
-        { expiresIn: Config.JWT.REFRESH_TOKEN_EXPIRES },
-      ),
-    };
+    try {
+      return {
+        access_token: this.jwtService.sign(
+          {
+            sub: user._uuid,
+          },
+          { expiresIn: Config.JWT.ACCESS_TOKEN_EXPIRES },
+        ),
+        refresh_token: this.jwtService.sign(
+          {
+            sub: user._uuid,
+          },
+          { expiresIn: Config.JWT.REFRESH_TOKEN_EXPIRES },
+        ),
+      };
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
