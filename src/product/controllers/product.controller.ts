@@ -1,14 +1,31 @@
 import {
+  Body,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Inject,
   Param,
+  ParseFilePipe,
   ParseIntPipe,
   Post,
   Query,
+  Req,
+  Res,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { Request, Response } from 'express';
+import { diskStorage } from 'multer';
 import { Controllers, Services } from 'src/utils/const';
-import { GetProductsDto, PaginationQueryDto } from 'src/utils/dto';
+import {
+  CreateProductDto,
+  GetProductsDto,
+  PaginationQueryDto,
+} from 'src/utils/dto';
+import { AuthGuard } from 'src/utils/Guards/AuthGuard';
 import { IProductService } from 'src/utils/interfaces';
 
 @Controller(Controllers.product)
@@ -31,7 +48,48 @@ export class ProductController {
     return this.productServcie.getProductById(id);
   }
 
-  // TODO:
+  @UseGuards(AuthGuard)
+  @UseInterceptors(
+    FilesInterceptor('images', 3, {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, callback) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const sanitized = file.originalname
+            .replace(/\s+/g, '_')
+            .replace(/[^a-zA-Z0-9._-]/g, '');
+          callback(null, `${uniqueSuffix}-${sanitized}`);
+        },
+      }),
+      limits: { fileSize: 20 * 1024 * 1024 },
+      fileFilter: (req, file, callback) => {
+        if (!file.mimetype.match(/^image\/(jpg|jpeg|png|webp)$/)) {
+          return callback(
+            new HttpException(
+              'You can upload only images',
+              HttpStatus.BAD_REQUEST,
+            ),
+            false,
+          );
+        }
+        callback(null, true);
+      },
+    }),
+  )
   @Post('/')
-  createProduct() {}
+  async createProduct(
+    @Req() req: Request,
+    @Body() dto: CreateProductDto,
+    @UploadedFiles(
+      new ParseFilePipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
+    )
+    images: Express.Multer.File[],
+  ) {
+    console.log(images);
+    return await this.productServcie.createProduct(req.user._uuid, {
+      ...dto,
+      images: images.map((image) => image.filename),
+    });
+  }
 }

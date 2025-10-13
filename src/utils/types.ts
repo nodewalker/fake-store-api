@@ -1,4 +1,4 @@
-import { SortType } from './const';
+import { OrderBy, SortType } from './const';
 import { ProductCategoryEntity, ProductEntity } from './typeorm';
 
 // AUTH
@@ -58,36 +58,41 @@ export type CreateCategoryDetails = {
 };
 export type GetCategoriesReturn = {
   tree: ProductCategoryEntity[];
-  pagination: {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-    isLastPage: boolean;
-  };
+  pagination: PaginationReturn;
 };
 
 // PRODUCT
+export type CreateProductDetails = {
+  name: string;
+  price: number;
+  categoryId: string;
+  discount?: number;
+  images: string[];
+};
 export type GetProductsDetails = {
   limit: number;
   page: number;
   name?: string;
-  price?: SortType;
-  discount?: SortType;
+  orderBy?: OrderBy;
+  sortBy?: SortType;
   priceFrom?: number;
   priceTo?: number;
   categoryName?: string;
 };
 export type GetProductsReturn = {
   data: ProductEntity[];
-  total: number;
-  page: number;
-  limit: number;
-  lastPage: number;
+  pagination: PaginationReturn;
 };
 
 // utils
 export type PaginationDetails = {
   limit: number;
   page: number;
+};
+export type PaginationReturn = {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  isLastPage: boolean;
 };

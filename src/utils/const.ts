@@ -12,6 +12,11 @@ export enum Controllers {
   category = 'category',
 }
 
+export enum OrderBy {
+  PRICE = 'price',
+  DISCOUNT = 'discount',
+}
+
 export enum SortType {
   ASC = 'ASC',
   DESC = 'DESC',

@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpStatus,
   Inject,
   Param,
   Post,
@@ -31,7 +32,7 @@ export class CategoryController {
     @Res() res: Response,
   ) {
     await this.categoryServcie.createCategory(req.user._uuid, dto);
-    return res.status(200).send();
+    return res.sendStatus(HttpStatus.CREATED);
   }
 
   @Get('/')
@@ -44,6 +45,7 @@ export class CategoryController {
     return await this.categoryServcie.getRootCategories(dto);
   }
 
+  // BUG: repeat categories
   @Get('/:uuid/children')
   async getChildrenByParentId(@Param('uuid') uuid: string) {
     return await this.categoryServcie.getChildrenByParentId(uuid);

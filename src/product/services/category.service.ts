@@ -214,4 +214,32 @@ export class CategoryService implements ICategoryService {
       );
     }
   }
+
+  async getCategoryById(
+    uuid: string,
+    isCanCreateProduct: boolean,
+  ): Promise<ProductCategoryEntity> {
+    try {
+      const category: ProductCategoryEntity | null =
+        await this.categoryRepository
+          .createQueryBuilder('category')
+          .where('category._uuid = :uuid', { uuid })
+          .leftJoinAndSelect('category.children', 'children')
+          .getOne();
+      if (!category?._uuid)
+        throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
+      if (category.children?.length && isCanCreateProduct)
+        throw new HttpException(
+          'Subcategories exist. Only create products in categories that do not have subcategories.',
+          HttpStatus.BAD_REQUEST,
+        );
+      return category;
+    } catch (error) {
+      if (error instanceof HttpException) throw error;
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

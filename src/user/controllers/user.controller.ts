@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpStatus,
   Inject,
   Patch,
   Req,
@@ -34,7 +35,7 @@ export class UserController {
     @Res() res: Response,
   ) {
     await this.userService.updateUser(req.user._uuid, dto);
-    return res.status(200).send();
+    return res.sendStatus(HttpStatus.OK);
   }
 
   @UseGuards(AuthGuard)
@@ -45,6 +46,6 @@ export class UserController {
     @Res() res: Response,
   ) {
     await this.userService.updateUserPassword(req.user._uuid, dto);
-    return res.status(200).send();
+    return res.sendStatus(HttpStatus.OK);
   }
 }
