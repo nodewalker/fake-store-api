@@ -13,7 +13,7 @@ export class ProductCategoryEntity {
   @PrimaryGeneratedColumn('uuid')
   _uuid: string;
 
-  @Column({ unique: true })
+  @Column()
   name: string;
 
   @OneToMany(() => ProductEntity, (product) => product.category)
@@ -21,4 +21,12 @@ export class ProductCategoryEntity {
 
   @ManyToOne(() => UserEntity, (user) => user.categories)
   user: UserEntity;
+
+  @ManyToOne(() => ProductCategoryEntity, (category) => category.children, {
+    nullable: true,
+  })
+  parent?: ProductCategoryEntity;
+
+  @OneToMany(() => ProductCategoryEntity, (category) => category.parent)
+  children: ProductCategoryEntity[];
 }

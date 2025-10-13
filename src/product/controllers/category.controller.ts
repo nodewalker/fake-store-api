@@ -2,10 +2,7 @@ import {
   Body,
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
   Inject,
-  ParseIntPipe,
   Post,
   Query,
   Req,
@@ -14,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Controllers, Services } from 'src/utils/const';
-import { CreateCategoryDto } from 'src/utils/dto';
+import { CreateCategoryDto, PaginationQueryDto } from 'src/utils/dto';
 import { AuthGuard } from 'src/utils/Guards/AuthGuard';
 import { ICategoryService } from 'src/utils/interfaces';
 
@@ -33,41 +30,15 @@ export class CategoryController {
     @Res() res: Response,
   ) {
     await this.categoryServcie.createCategory(req.user._uuid, dto);
-    res.status(200).send();
+    return res.status(200).send();
   }
 
   // TODO: query dto
   @Get('/all')
   async getAllCategories(
-    @Query('c')
-    categoryName: string,
-    @Query(
-      'l',
-      new ParseIntPipe({
-        errorHttpStatusCode: HttpStatus.BAD_REQUEST,
-        optional: true,
-      }),
-    )
-    limit: number = 25,
-    @Query(
-      'p',
-      new ParseIntPipe({
-        errorHttpStatusCode: HttpStatus.BAD_REQUEST,
-        optional: true,
-      }),
-    )
-    page: number = 1,
+    @Query()
+    dto: PaginationQueryDto,
   ) {
-    if (!categoryName?.trim()) {
-      throw new HttpException(
-        'Category must not be empty',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    return await this.categoryServcie.getAllCategories(
-      categoryName,
-      limit,
-      page,
-    );
+    return await this.categoryServcie.getAllCategories(dto);
   }
 }

@@ -1,3 +1,4 @@
+import { PaginationQueryDto } from './PaginationQuery.dto';
 import { GetProductsDto } from './GetProducts.dto';
 import { CreateCategoryDto } from './CreateCategory.dto';
 import { UpdateUserPasswordDto } from './UpdateUserPassword.dto';
@@ -12,4 +13,5 @@ export {
   UpdateUserPasswordDto,
   CreateCategoryDto,
   GetProductsDto,
+  PaginationQueryDto,
 };

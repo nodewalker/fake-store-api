@@ -17,6 +17,7 @@ export class UpdateUserDto {
   @IsOptional()
   email?: string;
 
+  // TODO: MULTER
   @IsString()
   @IsOptional()
   avatarURL?: string;

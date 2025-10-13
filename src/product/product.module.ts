@@ -8,6 +8,7 @@ import { CategoryController } from './controllers/category.controller';
 import { ProductEntity, ProductImageEntity } from 'src/utils/typeorm';
 import { ProductCategoryEntity } from 'src/utils/typeorm/entities/productCategory';
 import { UserModule } from 'src/user/user.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UserModule } from 'src/user/user.module';
       ProductCategoryEntity,
     ]),
     UserModule,
+    AuthModule,
   ],
   providers: [
     { provide: Services.product, useClass: ProductService },

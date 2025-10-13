@@ -2,7 +2,7 @@ import { hashPassword, verifyPassword } from './../../utils/security/password';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IUserService } from 'src/utils/interfaces/IUserService';
-import { UserEntity } from 'src/utils/typeorm';
+import { CartEntity, UserEntity } from 'src/utils/typeorm';
 import {
   CreateUserDetails,
   ReturnUserDetails,
@@ -10,12 +10,15 @@ import {
   UpdateUserPasswordDetails,
 } from 'src/utils/types';
 import { Repository } from 'typeorm';
+import { validate } from 'uuid';
 
 @Injectable()
 export class UserService implements IUserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(CartEntity)
+    private readonly cartRepository: Repository<CartEntity>,
   ) {}
 
   async createUser(details: CreateUserDetails): Promise<ReturnUserDetails> {
@@ -27,10 +30,12 @@ export class UserService implements IUserService {
       // TODO: password check
       if (existUser)
         throw new HttpException('Email already used', HttpStatus.BAD_REQUEST);
+
       const user: UserEntity = await this.userRepository.save({
         ...details,
         password: await hashPassword(details.password),
       });
+      await this.cartRepository.save({ user });
       // TODO:
       return user as ReturnUserDetails;
     } catch (error) {
@@ -47,11 +52,12 @@ export class UserService implements IUserService {
     selectAll: boolean,
   ): Promise<UserEntity | ReturnUserDetails> {
     try {
-      const user: UserEntity | null = await this.userRepository
+      const qb = this.userRepository
         .createQueryBuilder('user')
-        .where('user.login = :login', { login: loginOrUuid })
-        .orWhere('user._uuid = :uuid', { uuid: loginOrUuid })
-        .getOne();
+        .where('user.login = :login', { login: loginOrUuid });
+      if (validate(loginOrUuid))
+        qb.orWhere('user._uuid = :uuid', { uuid: loginOrUuid });
+      const user: UserEntity | null = await qb.getOne();
       if (!user)
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars

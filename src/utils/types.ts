@@ -54,9 +54,10 @@ export type UpdateUserPasswordDetails = {
 // CATEGORY
 export type CreateCategoryDetails = {
   name: string;
+  parentId?: string;
 };
 export type GetCategoriesReturn = {
-  data: ProductCategoryEntity[];
+  tree: ProductCategoryEntity[];
   total: number;
   page: number;
   limit: number;
@@ -80,4 +81,10 @@ export type GetProductsReturn = {
   page: number;
   limit: number;
   lastPage: number;
+};
+
+// utils
+export type PaginationDetails = {
+  limit: number;
+  page: number;
 };

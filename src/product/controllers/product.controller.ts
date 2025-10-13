@@ -8,7 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { Controllers, Services } from 'src/utils/const';
-import { GetProductsDto } from 'src/utils/dto';
+import { GetProductsDto, PaginationQueryDto } from 'src/utils/dto';
 import { IProductService } from 'src/utils/interfaces';
 
 @Controller(Controllers.product)
@@ -19,8 +19,11 @@ export class ProductController {
 
   // TEST: TRY TO SORT
   @Get('/')
-  async getProducts(@Query() dto: GetProductsDto) {
-    return await this.productServcie.getProducts(dto);
+  async getProducts(
+    @Query() paginationDto: PaginationQueryDto,
+    @Query() dto: GetProductsDto,
+  ) {
+    return await this.productServcie.getProducts({ ...dto, ...paginationDto });
   }
 
   @Get('/:id')
