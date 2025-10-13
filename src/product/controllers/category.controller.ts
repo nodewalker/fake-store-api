@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Inject,
+  Param,
   Post,
   Query,
   Req,
@@ -33,12 +34,18 @@ export class CategoryController {
     return res.status(200).send();
   }
 
-  // TODO: query dto
-  @Get('/all')
-  async getAllCategories(
+  @Get('/')
+  async getRootCategories(
     @Query()
     dto: PaginationQueryDto,
   ) {
-    return await this.categoryServcie.getAllCategories(dto);
+    // TODO: undefined dto
+    console.log(dto);
+    return await this.categoryServcie.getRootCategories(dto);
+  }
+
+  @Get('/:uuid/children')
+  async getChildrenByParentId(@Param('uuid') uuid: string) {
+    return await this.categoryServcie.getChildrenByParentId(uuid);
   }
 }

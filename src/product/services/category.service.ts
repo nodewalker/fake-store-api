@@ -38,7 +38,7 @@ export class CategoryService implements ICategoryService {
       // OK
       if (parentCategory?._uuid) {
         // Check name
-        parentCategory?.children.forEach((children) => {
+        parentCategory.children?.forEach((children) => {
           if (children.name === details.name)
             throw new HttpException(
               'The name of the category is already taken',
@@ -47,7 +47,7 @@ export class CategoryService implements ICategoryService {
         });
 
         // Check is product exist
-        if (parentCategory.products.length)
+        if (parentCategory.products?.length)
           throw new HttpException(
             'The parent category contains products',
             HttpStatus.BAD_REQUEST,
@@ -62,7 +62,7 @@ export class CategoryService implements ICategoryService {
           );
 
         // check children length
-        if (parentCategory.children.length >= Config.CATEGORY.MAX_CHILDREN)
+        if (parentCategory?.children!.length >= Config.CATEGORY.MAX_CHILDREN)
           throw new HttpException(
             `Cannot have more than ${Config.CATEGORY.MAX_CHILDREN} subcategories`,
             HttpStatus.BAD_REQUEST,
@@ -124,48 +124,89 @@ export class CategoryService implements ICategoryService {
     return depth;
   }
 
-  async getAllCategories(
+  async getRootCategories(
     details: PaginationDetails,
   ): Promise<GetCategoriesReturn> {
     try {
-      const categories: ProductCategoryEntity[] = await this.categoryRepository
-        .createQueryBuilder('category')
-        .leftJoinAndSelect('category.parent', 'parent')
-        .getMany();
-
-      const categoryMap = new Map<
-        string,
-        ProductCategoryEntity & { children: ProductCategoryEntity[] }
-      >();
-
-      categories.forEach((cat) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { parent, ...rest } = cat;
-        categoryMap.set(cat._uuid, { ...rest, children: [] });
-      });
-
-      const tree: ProductCategoryEntity[] = [];
-      categoryMap.forEach((cat) => {
-        const originalCat = categories.find((c) => c._uuid === cat._uuid);
-        if (originalCat?.parent) {
-          const parent = categoryMap.get(originalCat.parent._uuid);
-          parent?.children.push(cat);
-        } else {
-          tree.push(cat);
-        }
-      });
-
-      const offset = (details.page - 1) * details.limit;
-      const paginatedTree = tree.slice(offset, offset + details.limit);
-
+      const [categories, total] = await Promise.all([
+        this.categoryRepository
+          .createQueryBuilder('category')
+          .select(['category._uuid', 'category.name'])
+          .addSelect((subQuery) => {
+            return subQuery
+              .select('COUNT(*) > 0', 'hasChildren')
+              .from(ProductCategoryEntity, 'child')
+              .where('child.parent._uuid = category._uuid');
+          }, 'hasChildren')
+          .where('category.parent._uuid IS NULL')
+          .orderBy('category.name', 'ASC')
+          .offset((details.page - 1) * details.limit)
+          .limit(details.limit)
+          .getRawMany(),
+        this.categoryRepository
+          .createQueryBuilder('category')
+          .where('category.parent IS NULL')
+          .getCount(),
+      ]);
       return {
-        tree: paginatedTree,
-        total: tree.length,
-        page: details.page,
-        limit: details.limit,
-        lastPage: Math.ceil(tree.length / details.limit),
+        tree: categories.map((cat) => ({
+          _uuid: cat.category__uuid,
+          name: cat.category_name,
+          hasChildren: cat.hasChildren,
+        })),
+        pagination: {
+          total,
+          page: details.page,
+          limit: details.limit,
+          totalPages: Math.ceil(total / details.limit),
+          isLastPage: details.page >= Math.ceil(total / details.limit),
+        },
       };
     } catch (error) {
+      console.log(error);
+      if (error instanceof HttpException) throw error;
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async getChildrenByParentId(uuid: string): Promise<ProductCategoryEntity[]> {
+    try {
+      const parentCategory: ProductCategoryEntity | null =
+        await this.categoryRepository
+          .createQueryBuilder('category')
+          .where('category._uuid = :uuid', { uuid })
+          .getOne();
+      if (!parentCategory?._uuid)
+        throw new HttpException(
+          'Parent category not found',
+          HttpStatus.NOT_FOUND,
+        );
+
+      const categories = await this.categoryRepository
+        .createQueryBuilder('category')
+        .leftJoin('category.children', 'children')
+        .select(['category._uuid', 'category.name'])
+        .addSelect((subQuery) => {
+          return subQuery
+            .select('COUNT(*) > 0', 'hasChildren')
+            .from(ProductCategoryEntity, 'child')
+            .where('child.parent._uuid = category._uuid');
+        }, 'hasChildren')
+        .where('category.parent._uuid = :parentId', {
+          parentId: parentCategory._uuid,
+        })
+        .getRawMany();
+
+      return categories.map((cat) => ({
+        _uuid: cat.category__uuid,
+        name: cat.category_name,
+        hasChildren: cat.hasChildren,
+      }));
+    } catch (error) {
+      console.log(error);
       if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Internal server error',

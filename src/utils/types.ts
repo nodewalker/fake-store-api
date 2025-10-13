@@ -58,10 +58,13 @@ export type CreateCategoryDetails = {
 };
 export type GetCategoriesReturn = {
   tree: ProductCategoryEntity[];
-  total: number;
-  page: number;
-  limit: number;
-  lastPage: number;
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+    isLastPage: boolean;
+  };
 };
 
 // PRODUCT

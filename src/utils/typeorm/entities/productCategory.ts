@@ -17,16 +17,17 @@ export class ProductCategoryEntity {
   name: string;
 
   @OneToMany(() => ProductEntity, (product) => product.category)
-  products: ProductEntity[];
+  products?: ProductEntity[];
 
   @ManyToOne(() => UserEntity, (user) => user.categories)
-  user: UserEntity;
+  user?: UserEntity;
 
   @ManyToOne(() => ProductCategoryEntity, (category) => category.children, {
     nullable: true,
+    onDelete: 'CASCADE',
   })
   parent?: ProductCategoryEntity;
 
   @OneToMany(() => ProductCategoryEntity, (category) => category.parent)
-  children: ProductCategoryEntity[];
+  children?: ProductCategoryEntity[];
 }
