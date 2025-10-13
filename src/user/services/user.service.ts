@@ -20,14 +20,13 @@ export class UserService implements IUserService {
 
   async createUser(details: CreateUserDetails): Promise<ReturnUserDetails> {
     try {
-      const existUser: UserEntity | null = await this.userRepository.findOne({
-        where: { email: details.email },
-      });
-
+      const existUser: UserEntity | null = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user.email = :email', { email: details.email })
+        .getOne();
       // TODO: password check
-      if (existUser) {
+      if (existUser)
         throw new HttpException('Email already used', HttpStatus.BAD_REQUEST);
-      }
       const user: UserEntity = await this.userRepository.save({
         ...details,
         password: await hashPassword(details.password),
@@ -35,9 +34,7 @@ export class UserService implements IUserService {
       // TODO:
       return user as ReturnUserDetails;
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -50,19 +47,18 @@ export class UserService implements IUserService {
     selectAll: boolean,
   ): Promise<UserEntity | ReturnUserDetails> {
     try {
-      const user: UserEntity | null = await this.userRepository.findOne({
-        where: [{ login: loginOrUuid }, { _uuid: loginOrUuid }],
-      });
-
+      const user: UserEntity | null = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user.login = :login', { login: loginOrUuid })
+        .orWhere('user._uuid = :uuid', { uuid: loginOrUuid })
+        .getOne();
       if (!user)
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...data } = user;
       return selectAll ? user : data;
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -74,9 +70,7 @@ export class UserService implements IUserService {
     try {
       await this.userRepository.update(userId, details);
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -112,9 +106,7 @@ export class UserService implements IUserService {
         password: await hashPassword(details.newPassword),
       });
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,

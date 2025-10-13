@@ -1,3 +1,4 @@
+import { GetProductsDto } from './GetProducts.dto';
 import { CreateCategoryDto } from './CreateCategory.dto';
 import { UpdateUserPasswordDto } from './UpdateUserPassword.dto';
 import { UpdateUserDto } from './UpdateUser.dto';
@@ -10,4 +11,5 @@ export {
   UpdateUserDto,
   UpdateUserPasswordDto,
   CreateCategoryDto,
+  GetProductsDto,
 };

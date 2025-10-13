@@ -36,6 +36,7 @@ export class CategoryController {
     res.status(200).send();
   }
 
+  // TODO: query dto
   @Get('/all')
   async getAllCategories(
     @Query('c')

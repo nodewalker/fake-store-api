@@ -1,3 +1,4 @@
+import { SortType } from './const';
 import { ProductCategoryEntity, ProductEntity } from './typeorm';
 
 // AUTH
@@ -37,11 +38,11 @@ export type ReturnUserDetails = {
 };
 
 export type UpdateUserDetails = {
-  firstName: string;
-  lastName: string;
-  login: string;
-  email: string;
-  avatarURL: string;
+  firstName?: string;
+  lastName?: string;
+  login?: string;
+  email?: string;
+  avatarURL?: string;
 };
 
 export type UpdateUserPasswordDetails = {
@@ -63,6 +64,16 @@ export type GetCategoriesReturn = {
 };
 
 // PRODUCT
+export type GetProductsDetails = {
+  limit: number;
+  page: number;
+  name?: string;
+  price?: SortType;
+  discount?: SortType;
+  priceFrom?: number;
+  priceTo?: number;
+  categoryName?: string;
+};
 export type GetProductsReturn = {
   data: ProductEntity[];
   total: number;

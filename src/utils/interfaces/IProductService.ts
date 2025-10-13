@@ -1,11 +1,7 @@
 import { ProductEntity } from '../typeorm';
-import { GetProductsReturn } from '../types';
+import { GetProductsDetails, GetProductsReturn } from '../types';
 
 export interface IProductService {
-  getProducts(
-    limit: number,
-    page: number,
-    categoryName?: string,
-  ): Promise<GetProductsReturn>;
+  getProducts(details: GetProductsDetails): Promise<GetProductsReturn>;
   getProductById(id: string): Promise<ProductEntity>;
 }

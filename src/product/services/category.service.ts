@@ -24,9 +24,10 @@ export class CategoryService implements ICategoryService {
   ): Promise<void> {
     try {
       const categoryExist: ProductCategoryEntity | null =
-        await this.categoryRepository.findOne({
-          where: { name: details.name },
-        });
+        await this.categoryRepository
+          .createQueryBuilder('category')
+          .where('category.name = :name', { name: details.name })
+          .getOne();
 
       if (categoryExist)
         throw new HttpException(
@@ -42,9 +43,7 @@ export class CategoryService implements ICategoryService {
         user: user,
       });
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -59,16 +58,15 @@ export class CategoryService implements ICategoryService {
   ): Promise<GetCategoriesReturn> {
     try {
       const [data, total]: [ProductCategoryEntity[], number] =
-        await this.categoryRepository.findAndCount({
-          where: { name },
-          take: limit,
-          skip: (page - 1) * limit,
-        });
+        await this.categoryRepository
+          .createQueryBuilder('category')
+          .take(limit)
+          .offset((page - 1) * limit)
+          .where('category.name = :name', { name })
+          .getManyAndCount();
       return { data, total, page, limit, lastPage: Math.ceil(total / limit) };
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -80,9 +78,7 @@ export class CategoryService implements ICategoryService {
     try {
       return await this.categoryRepository.findOne({ where: { name } });
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,

@@ -27,9 +27,7 @@ export class AuthService implements IAuthService {
         await this.userService.createUser(details);
       return this.generateJwtTokens(user);
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -51,9 +49,7 @@ export class AuthService implements IAuthService {
 
       return this.generateJwtTokens(user);
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -70,9 +66,7 @@ export class AuthService implements IAuthService {
       )) as ReturnUserDetails;
       return { _uuid: user._uuid };
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -88,9 +82,7 @@ export class AuthService implements IAuthService {
 
       return this.generateJwtTokens(user);
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -117,9 +109,7 @@ export class AuthService implements IAuthService {
         ),
       };
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,

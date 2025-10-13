@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  HttpStatus,
   Inject,
   Param,
   ParseIntPipe,
@@ -9,6 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { Controllers, Services } from 'src/utils/const';
+import { GetProductsDto } from 'src/utils/dto';
 import { IProductService } from 'src/utils/interfaces';
 
 @Controller(Controllers.product)
@@ -17,27 +17,10 @@ export class ProductController {
     @Inject(Services.product) private readonly productServcie: IProductService,
   ) {}
 
+  // TEST: TRY TO SORT
   @Get('/')
-  async getProducts(
-    @Query(
-      'l',
-      new ParseIntPipe({
-        errorHttpStatusCode: HttpStatus.BAD_REQUEST,
-        optional: true,
-      }),
-    )
-    limit: number = 25,
-    @Query(
-      'p',
-      new ParseIntPipe({
-        errorHttpStatusCode: HttpStatus.BAD_REQUEST,
-        optional: true,
-      }),
-    )
-    page: number = 1,
-    @Query('c') categoryName?: string,
-  ) {
-    return await this.productServcie.getProducts(limit, page, categoryName);
+  async getProducts(@Query() dto: GetProductsDto) {
+    return await this.productServcie.getProducts(dto);
   }
 
   @Get('/:id')
@@ -45,6 +28,7 @@ export class ProductController {
     return this.productServcie.getProductById(id);
   }
 
+  // TODO:
   @Post('/')
   createProduct() {}
 }

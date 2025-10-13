@@ -12,7 +12,6 @@ import { Config } from 'src/utils/Config';
       secret: Config.JWT.SECRET,
     }),
     UserModule,
-    // AuthGuard,
   ],
   providers: [{ provide: Services.auth, useClass: AuthService }],
   controllers: [AuthController],

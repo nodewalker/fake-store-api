@@ -11,3 +11,8 @@ export enum Controllers {
   product = 'product',
   category = 'category',
 }
+
+export enum SortType {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
