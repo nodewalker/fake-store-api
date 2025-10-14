@@ -9,6 +9,7 @@ import {
 import { CartEntity } from './cart';
 import { ProductCategoryEntity } from './productCategory';
 import { ProductEntity } from './product';
+import { Exclude } from 'class-transformer';
 
 @Entity('user')
 export class UserEntity {
@@ -27,6 +28,7 @@ export class UserEntity {
   @Column({ unique: true })
   email: string;
 
+  @Exclude()
   @Column()
   password: string;
 

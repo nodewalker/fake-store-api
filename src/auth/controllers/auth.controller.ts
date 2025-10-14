@@ -35,6 +35,6 @@ export class AuthController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    return this.authService.refreshTokens(refreshToken);
+    return this.authService.refreshTokens(refreshToken.trim());
   }
 }

@@ -1,3 +1,4 @@
+import { plainToInstance } from 'class-transformer';
 import { JwtService } from '@nestjs/jwt';
 import { verifyPassword } from './../../utils/security/password';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
@@ -8,11 +9,10 @@ import {
   CreateUserDetails,
   JWTPayload,
   LoginDetails,
-  ReturnUserDetails,
   Tokens,
-  UserRequest,
 } from 'src/utils/types';
 import { Config } from 'src/utils/Config';
+import { CreateJwtTokensDetails, ReturnCreateUserDetails } from 'src/utils/dto';
 
 @Injectable()
 export class AuthService implements IAuthService {
@@ -22,98 +22,74 @@ export class AuthService implements IAuthService {
   ) {}
 
   async signup(details: CreateUserDetails): Promise<Tokens> {
-    try {
-      const user: ReturnUserDetails =
-        await this.userService.createUser(details);
-      return this.generateJwtTokens(user);
-    } catch (error) {
-      if (error instanceof HttpException) throw error;
-      throw new HttpException(
-        'Internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    const user: ReturnCreateUserDetails =
+      await this.userService.createUser(details);
+    return this.generateJwtTokens(
+      plainToInstance(CreateJwtTokensDetails, user, {
+        excludeExtraneousValues: true,
+      }),
+    );
   }
 
   async signin(details: LoginDetails): Promise<Tokens> {
-    try {
-      const user: UserEntity = (await this.userService.findOne(
-        details.login,
-        true,
-      )) as UserEntity;
-      if (!(await verifyPassword(details.password, user.password)))
-        throw new HttpException(
-          'The login or password is incorrect',
-          HttpStatus.BAD_REQUEST,
-        );
-
-      return this.generateJwtTokens(user);
-    } catch (error) {
-      if (error instanceof HttpException) throw error;
+    const user: UserEntity | null = await this.userService.findOne(
+      details.login,
+    );
+    if (
+      !user?._uuid ||
+      (user?._uuid && !(await verifyPassword(details.password, user.password)))
+    )
       throw new HttpException(
-        'Internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        'The login or password is incorrect',
+        HttpStatus.BAD_REQUEST,
       );
-    }
-  }
-
-  async verifyUser(token: string): Promise<UserRequest> {
-    try {
-      const payload: JWTPayload = this.jwtService.verify(token);
-      const user: ReturnUserDetails = (await this.userService.findOne(
-        payload.sub,
-        false,
-      )) as ReturnUserDetails;
-      return { _uuid: user._uuid };
-    } catch (error) {
-      if (error instanceof HttpException) throw error;
-      throw new HttpException(
-        'Internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    return this.generateJwtTokens(user);
   }
 
   async refreshTokens(refreshToken: string): Promise<Tokens> {
-    try {
-      const user: UserRequest = await this.verifyUser(refreshToken);
-      if (!user)
-        throw new HttpException('Unauthorised user', HttpStatus.UNAUTHORIZED);
+    const user: CreateJwtTokensDetails = await this.verifyUser(refreshToken);
+    return this.generateJwtTokens(user);
+  }
 
-      return this.generateJwtTokens(user);
+  async verifyUser(token: string): Promise<CreateJwtTokensDetails> {
+    try {
+      const payload: JWTPayload = this.jwtService.verify(token);
+      const user: UserEntity | null = await this.userService.findOne(
+        payload.sub,
+      );
+      if (!user?._uuid)
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      return plainToInstance(CreateJwtTokensDetails, user, {
+        excludeExtraneousValues: true,
+      });
     } catch (error) {
-      if (error instanceof HttpException) throw error;
+      if (error.name === 'TokenExpiredError') {
+        throw new HttpException('Token expired', HttpStatus.UNAUTHORIZED);
+      }
+      if (error.name === 'JsonWebTokenError') {
+        throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+      }
       throw new HttpException(
-        'Internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        'Token verification failed',
+        HttpStatus.UNAUTHORIZED,
       );
     }
   }
 
-  private generateJwtTokens(
-    user: UserEntity | ReturnUserDetails | UserRequest,
-  ): Tokens {
-    try {
-      return {
-        access_token: this.jwtService.sign(
-          {
-            sub: user._uuid,
-          },
-          { expiresIn: Config.JWT.ACCESS_TOKEN_EXPIRES },
-        ),
-        refresh_token: this.jwtService.sign(
-          {
-            sub: user._uuid,
-          },
-          { expiresIn: Config.JWT.REFRESH_TOKEN_EXPIRES },
-        ),
-      };
-    } catch (error) {
-      if (error instanceof HttpException) throw error;
-      throw new HttpException(
-        'Internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+  private generateJwtTokens(user: CreateJwtTokensDetails): Tokens {
+    return {
+      access_token: this.jwtService.sign(
+        {
+          sub: user._uuid,
+        },
+        { expiresIn: Config.JWT.ACCESS_TOKEN_EXPIRES },
+      ),
+      refresh_token: this.jwtService.sign(
+        {
+          sub: user._uuid,
+        },
+        { expiresIn: Config.JWT.REFRESH_TOKEN_EXPIRES },
+      ),
+    };
   }
 }

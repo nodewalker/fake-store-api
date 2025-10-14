@@ -1,9 +1,18 @@
 import { Transform, Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Length,
+  Max,
+  Min,
+} from 'class-validator';
 
 export class CreateProductDto {
   @IsString()
   @Transform(({ value }: { value: string }) => value?.trim())
+  @Length(2, 50)
   name: string;
 
   @Type(() => Number)
@@ -13,6 +22,7 @@ export class CreateProductDto {
 
   @IsString()
   @Transform(({ value }: { value: string }) => value?.trim())
+  @IsUUID()
   categoryId: string;
 
   @IsOptional()

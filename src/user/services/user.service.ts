@@ -1,16 +1,17 @@
 import { hashPassword, verifyPassword } from './../../utils/security/password';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { plainToInstance } from 'class-transformer';
+import { ReturnCreateUserDetails } from 'src/utils/dto';
 import { IUserService } from 'src/utils/interfaces/IUserService';
 import { CartEntity, UserEntity } from 'src/utils/typeorm';
 import {
   CreateUserDetails,
-  ReturnUserDetails,
   UpdateUserDetails,
   UpdateUserPasswordDetails,
 } from 'src/utils/types';
 import { Repository } from 'typeorm';
-import { validate } from 'uuid';
+import { validate as UUIDValidate } from 'uuid';
 
 @Injectable()
 export class UserService implements IUserService {
@@ -21,67 +22,51 @@ export class UserService implements IUserService {
     private readonly cartRepository: Repository<CartEntity>,
   ) {}
 
-  async createUser(details: CreateUserDetails): Promise<ReturnUserDetails> {
-    try {
-      const existUser: UserEntity | null = await this.userRepository
-        .createQueryBuilder('user')
-        .where('user.email = :email', { email: details.email })
-        .getOne();
-      // TODO: password check
-      if (existUser)
+  async createUser(
+    details: CreateUserDetails,
+  ): Promise<ReturnCreateUserDetails> {
+    const existUser: UserEntity | null = await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.email = :email', { email: details.email })
+      .orWhere('user.login = :login', { login: details.login })
+      .getOne();
+    if (existUser)
+      if (existUser.email == details.email && existUser.login === details.login)
+        throw new HttpException(
+          'Login and email already used',
+          HttpStatus.BAD_REQUEST,
+        );
+      else if (existUser.email === details.email)
         throw new HttpException('Email already used', HttpStatus.BAD_REQUEST);
+      else if (existUser.login === details.login)
+        throw new HttpException('Login already used', HttpStatus.BAD_REQUEST);
 
-      const user: UserEntity = await this.userRepository.save({
-        ...details,
-        password: await hashPassword(details.password),
-      });
-      await this.cartRepository.save({ user });
-      // TODO:
-      return user as ReturnUserDetails;
-    } catch (error) {
-      if (error instanceof HttpException) throw error;
-      throw new HttpException(
-        'Internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    const user: UserEntity = await this.userRepository.save({
+      ...details,
+      password: await hashPassword(details.password),
+    });
+    await this.cartRepository.save({ user });
+    return plainToInstance(ReturnCreateUserDetails, user, {
+      excludeExtraneousValues: true,
+    });
   }
 
-  async findOne(
-    loginOrUuid: string,
-    selectAll: boolean,
-  ): Promise<UserEntity | ReturnUserDetails> {
-    try {
-      const qb = this.userRepository
-        .createQueryBuilder('user')
-        .where('user.login = :login', { login: loginOrUuid });
-      if (validate(loginOrUuid))
-        qb.orWhere('user._uuid = :uuid', { uuid: loginOrUuid });
-      const user: UserEntity | null = await qb.getOne();
-      if (!user)
-        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...data } = user;
-      return selectAll ? user : data;
-    } catch (error) {
-      if (error instanceof HttpException) throw error;
-      throw new HttpException(
-        'Internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+  async findOne(loginOrUuid: string): Promise<UserEntity | null> {
+    const qb = this.userRepository
+      .createQueryBuilder('user')
+      .where('user.login = :login', { login: loginOrUuid });
+    if (UUIDValidate(loginOrUuid))
+      qb.orWhere('user._uuid = :uuid', { uuid: loginOrUuid });
+    const user: UserEntity | null = await qb.getOne();
+    return user;
   }
 
+  // TODO:
   async updateUser(userId: string, details: UpdateUserDetails): Promise<void> {
-    try {
-      await this.userRepository.update(userId, details);
-    } catch (error) {
-      if (error instanceof HttpException) throw error;
-      throw new HttpException(
-        'Internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    const a = Object.values(details).filter((d) => d === undefined);
+    if (a.length === Object.values(details).length)
+      throw new HttpException('Empty data', HttpStatus.BAD_REQUEST);
+    await this.userRepository.update(userId, details);
   }
 
   async updateUserPassword(
@@ -89,7 +74,9 @@ export class UserService implements IUserService {
     details: UpdateUserPasswordDetails,
   ): Promise<void> {
     try {
-      const user: UserEntity = (await this.findOne(userId, true)) as UserEntity;
+      const user: UserEntity | null = await this.findOne(userId);
+      if (!user?._uuid)
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
       if (!(await verifyPassword(details.currentPassword, user.password)))
         throw new HttpException(
           'The old password is incorrect',

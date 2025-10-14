@@ -3,12 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Config } from 'src/utils/Config';
 import { Services } from 'src/utils/const';
 import { ICategoryService, IUserService } from 'src/utils/interfaces';
-import { ProductCategoryEntity } from 'src/utils/typeorm';
+import { ProductCategoryEntity, UserEntity } from 'src/utils/typeorm';
 import {
   CreateCategoryDetails,
   GetCategoriesReturn,
   PaginationDetails,
-  ReturnUserDetails,
 } from 'src/utils/types';
 import { Repository } from 'typeorm';
 
@@ -83,21 +82,18 @@ export class CategoryService implements ICategoryService {
           );
       }
 
-      const user: ReturnUserDetails = (await this.userService.findOne(
-        userId,
-        false,
-      )) as ReturnUserDetails;
-      if (parentCategory?._uuid)
-        await this.categoryRepository.save({
-          name: details.name,
-          user: user,
-          parent: parentCategory,
-        });
-      else
-        await this.categoryRepository.save({
-          name: details.name,
-          user: user,
-        });
+      const user: UserEntity | null = await this.userService.findOne(userId);
+      // if (parentCategory?._uuid)
+      //   await this.categoryRepository.save({
+      //     name: details.name,
+      //     user: user,
+      //     parent: parentCategory,
+      //   });
+      // else
+      //   await this.categoryRepository.save({
+      //     name: details.name,
+      //     user: user,
+      //   });
     } catch (error) {
       console.log(error);
       if (error instanceof HttpException) throw error;

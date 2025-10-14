@@ -1,5 +1,5 @@
 import { OrderBy, SortType } from './const';
-import { ProductCategoryEntity, ProductEntity } from './typeorm';
+import { ProductCategoryEntity, ProductEntity, UserEntity } from './typeorm';
 
 // AUTH
 export type LoginDetails = {
@@ -28,14 +28,12 @@ export type CreateUserDetails = {
   email: string;
   password: string;
 };
-
-export type ReturnUserDetails = {
-  _uuid: string;
-  firstName: string;
-  lastName: string;
-  login: string;
-  avatarURL: string;
+export type FindUserOptions = {
+  selectAll: boolean;
+  isAuth: boolean;
 };
+
+export type ReturnUserDetails = Omit<UserEntity, 'password'>;
 
 export type UpdateUserDetails = {
   firstName?: string;

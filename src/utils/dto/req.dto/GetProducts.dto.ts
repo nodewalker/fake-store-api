@@ -1,5 +1,12 @@
-import { IsEnum, IsNumber, IsOptional, IsString, Min } from 'class-validator';
-import { OrderBy, SortType } from '../const';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator';
+import { OrderBy, SortType } from '../../const';
 import { Expose, Transform, Type } from 'class-transformer';
 
 export class GetProductsDto {
@@ -7,6 +14,7 @@ export class GetProductsDto {
   @IsOptional()
   @IsString()
   @Transform(({ value }: { value: string }) => value?.trim())
+  @IsNotEmpty()
   name?: string;
 
   @Expose({ name: 'orderBy' })
@@ -14,10 +22,10 @@ export class GetProductsDto {
   @IsEnum(OrderBy)
   orderBy?: OrderBy;
 
-  @Expose({ name: 'sortBy' })
+  @Expose({ name: 'sort' })
   @IsOptional()
   @IsEnum(SortType)
-  sortBy?: SortType;
+  sort?: SortType;
 
   @Expose({ name: 'pfrom' })
   @IsOptional()
@@ -34,8 +42,8 @@ export class GetProductsDto {
   priceTo?: number;
 
   @Expose({ name: 'cn' })
-  @Transform(({ value }: { value: string }) => value?.trim())
   @IsOptional()
   @IsString()
+  @Transform(({ value }: { value: string }) => value?.trim())
   categoryName?: string;
 }

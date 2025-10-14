@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -36,6 +36,6 @@ import { ProductCategoryEntity } from './utils/typeorm/entities/productCategory'
     ProductModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [Logger],
 })
 export class AppModule {}

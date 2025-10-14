@@ -11,7 +11,6 @@ import {
   Post,
   Query,
   Req,
-  Res,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -52,7 +51,7 @@ export class ProductController {
   @UseInterceptors(
     FilesInterceptor('images', 3, {
       storage: diskStorage({
-        destination: './uploads',
+        destination: './uploads/products',
         filename: (req, file, callback) => {
           const uniqueSuffix =
             Date.now() + '-' + Math.round(Math.random() * 1e9);
@@ -62,7 +61,7 @@ export class ProductController {
           callback(null, `${uniqueSuffix}-${sanitized}`);
         },
       }),
-      limits: { fileSize: 20 * 1024 * 1024 },
+      limits: { fileSize: 10 * 1024 * 1024 }, // 10mb
       fileFilter: (req, file, callback) => {
         if (!file.mimetype.match(/^image\/(jpg|jpeg|png|webp)$/)) {
           return callback(
