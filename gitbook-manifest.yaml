@@ -1,0 +1,46 @@
+version: 1
+title: Fake Store API
+description: >
+  A simple REST API that simulates an online store — provides fake products, categories, and users for testing, prototyping, and learning purposes.
+root: ./docs
+structure:
+  readme: README.md
+  summary: SUMMARY.md
+
+openapi:
+  path: ./swagger.json
+  output: ./docs/api.md
+  tool: widdershins
+  options:
+    language_tabs:
+      - javascript: JavaScript
+      - typescript: TypeScript
+    summary: true
+    codeSamples: true
+
+visibility: private
+
+scripts:
+  prebuild:
+    - npm run docs:swagger
+    - npm run docs:markdown
+  build:
+    - gitbook build docs
+  serve:
+    - gitbook serve docs
+
+publish:
+  provider: gitbook
+  space: fake-store-api
+  branch: main
+  path: /
+  token: ${GITBOOK_TOKEN}
+
+metadata:
+  repository: https://github.com/nodewalker/fake-store-api
+  language: en
+  tags:
+    - nestjs
+    - swagger
+    - openapi
+    - gitbook
