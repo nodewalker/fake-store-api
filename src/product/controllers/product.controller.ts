@@ -1,9 +1,9 @@
-import { ProductEntity } from 'src/utils/typeorm';
 import {
   Body,
   Controller,
   Delete,
   Get,
+  HttpCode,
   HttpException,
   HttpStatus,
   Inject,
@@ -26,36 +26,97 @@ import { Controllers, Services } from 'src/utils/const';
 import {
   CreateProductDto,
   GetProductsDto,
-  PaginationQueryDto,
+  ProductDetails,
+  ProductsListDetails,
 } from 'src/utils/dto';
 import { AuthGuard } from 'src/utils/Guards/AuthGuard';
 import { IProductService } from 'src/utils/interfaces';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags('Product')
 @Controller(Controllers.product)
 export class ProductController {
   constructor(
     @Inject(Services.product) private readonly productServcie: IProductService,
   ) {}
 
+  @ApiOperation({ summary: 'Get list of products' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Products recived',
+    type: ProductsListDetails,
+  })
+  @ApiResponse({
+    status: '4XX',
+    description: 'Check response message',
+  })
+  @ApiResponse({
+    status: '5XX',
+    description: 'Server error',
+  })
   @Get('/')
-  async getProducts(
-    @Query() paginationDto: PaginationQueryDto,
-    @Query() dto: GetProductsDto,
-  ) {
-    return await this.productServcie.getProducts({ ...dto, ...paginationDto });
+  @HttpCode(HttpStatus.OK)
+  async getProducts(@Query() dto: GetProductsDto) {
+    return await this.productServcie.getProducts(dto);
   }
 
+  @ApiOperation({ summary: 'Get product by id' })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: String,
+    description: 'Product id',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Product recived',
+    type: ProductDetails,
+  })
+  @ApiResponse({
+    status: '4XX',
+    description: 'Check response message',
+  })
+  @ApiResponse({
+    status: '5XX',
+    description: 'Server error',
+  })
   @Get('/:id')
+  @HttpCode(HttpStatus.OK)
   getOneById(
     @Param('id', new ParseUUIDPipe())
     id: string,
   ) {
     return plainToInstance(
-      ProductEntity,
+      ProductDetails,
       this.productServcie.getProductById(id),
+      { excludeExtraneousValues: true },
     );
   }
-
+  @ApiOperation({ summary: 'Create product' })
+  @ApiBearerAuth()
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: CreateProductDto })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Product created',
+    type: ProductDetails,
+  })
+  @ApiResponse({
+    status: '4XX',
+    description: 'Check response message',
+  })
+  @ApiResponse({
+    status: '5XX',
+    description: 'Server error',
+  })
   @UseGuards(AuthGuard)
   @UseInterceptors(
     FilesInterceptor('images', 3, {
@@ -86,21 +147,39 @@ export class ProductController {
     }),
   )
   @Post('/')
+  @HttpCode(HttpStatus.CREATED)
   async createProduct(
     @Req() req: Request,
     @Body() dto: CreateProductDto,
     @UploadedFiles(new ParseFilePipe())
     images: Express.Multer.File[],
   ) {
-    return plainToInstance(
-      ProductEntity,
-      await this.productServcie.createProduct(req.user._uuid, {
-        ...dto,
-        images: images.map((image) => image.filename),
-      }),
-    );
+    return await this.productServcie.createProduct(req.user._uuid, {
+      ...dto,
+      images: images.map((image) => image.filename),
+    });
   }
 
+  @ApiOperation({ summary: 'Remove product' })
+  @ApiBearerAuth()
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: String,
+    description: 'Product id',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Product removed',
+  })
+  @ApiResponse({
+    status: '4XX',
+    description: 'Check response message',
+  })
+  @ApiResponse({
+    status: '5XX',
+    description: 'Server error',
+  })
   @UseGuards(AuthGuard)
   @Delete('/:id')
   async removeProduct(

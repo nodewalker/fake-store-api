@@ -1,11 +1,12 @@
 import { PaginationDetails } from './../types';
-import { CreateCategoryDetails, GetCategoriesReturn } from '../types';
+import { CreateCategoryDetails } from '../types';
 import { ProductCategoryEntity } from '../typeorm';
+import { CategoryDetails, RootCategoriesDetail } from '../dto';
 
 export interface ICategoryService {
   createCategory(userId: string, details: CreateCategoryDetails): Promise<void>;
-  getRootCategories(details: PaginationDetails): Promise<GetCategoriesReturn>;
-  getChildrenByParentId(uuid: string): Promise<ProductCategoryEntity[]>;
+  getRootCategories(details: PaginationDetails): Promise<RootCategoriesDetail>;
+  getChildrenByParentId(uuid: string): Promise<CategoryDetails[]>;
   getCategoryById(
     uuid: string,
     isCanCreateProduct: boolean,

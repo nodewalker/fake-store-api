@@ -3,7 +3,7 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
+  HttpCode,
   HttpStatus,
   Inject,
   Param,
@@ -14,12 +14,26 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { Controllers, Services } from 'src/utils/const';
-import { CreateCategoryDto, PaginationQueryDto } from 'src/utils/dto';
+import {
+  CategoryDetails,
+  CreateCategoryDto,
+  PaginationQueryDto,
+  RootCategoriesDetail,
+} from 'src/utils/dto';
 import { AuthGuard } from 'src/utils/Guards/AuthGuard';
 import { ICategoryService } from 'src/utils/interfaces';
 
+@ApiTags('Category')
 @Controller(Controllers.category)
 export class CategoryController {
   constructor(
@@ -27,6 +41,21 @@ export class CategoryController {
     private readonly categoryServcie: ICategoryService,
   ) {}
 
+  @ApiOperation({ summary: 'Create category' })
+  @ApiBearerAuth()
+  @ApiBody({ type: CreateCategoryDto })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Category created',
+  })
+  @ApiResponse({
+    status: '4XX',
+    description: 'Check response message',
+  })
+  @ApiResponse({
+    status: '5XX',
+    description: 'Server error',
+  })
   @UseGuards(AuthGuard)
   @Post('/')
   async createCategory(
@@ -38,7 +67,22 @@ export class CategoryController {
     return res.sendStatus(HttpStatus.CREATED);
   }
 
+  @ApiOperation({ summary: 'Get root categories' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Root categories received',
+    type: RootCategoriesDetail,
+  })
+  @ApiResponse({
+    status: '4XX',
+    description: 'Check response message',
+  })
+  @ApiResponse({
+    status: '5XX',
+    description: 'Server error',
+  })
   @Get('/')
+  @HttpCode(HttpStatus.OK)
   async getRootCategories(
     @Query()
     dto: PaginationQueryDto,
@@ -46,7 +90,29 @@ export class CategoryController {
     return await this.categoryServcie.getRootCategories(dto);
   }
 
+  @ApiOperation({ summary: 'Get subcategories' })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: String,
+    description: 'Parent category id',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Subcategories received',
+    isArray: true,
+    type: CategoryDetails,
+  })
+  @ApiResponse({
+    status: '4XX',
+    description: 'Check response message',
+  })
+  @ApiResponse({
+    status: '5XX',
+    description: 'Server error',
+  })
   @Get('/:id/children')
+  @HttpCode(HttpStatus.OK)
   async getChildrenByParentId(
     @Param('id', new ParseUUIDPipe())
     id: string,
@@ -54,6 +120,26 @@ export class CategoryController {
     return await this.categoryServcie.getChildrenByParentId(id);
   }
 
+  @ApiOperation({ summary: 'Remove category by id' })
+  @ApiBearerAuth()
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: String,
+    description: 'Category id',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Category deleted',
+  })
+  @ApiResponse({
+    status: '4XX',
+    description: 'Check response message',
+  })
+  @ApiResponse({
+    status: '5XX',
+    description: 'Server error',
+  })
   @UseGuards(AuthGuard)
   @Delete('/:id')
   async removeCategory(

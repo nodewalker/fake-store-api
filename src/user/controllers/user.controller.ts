@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   HttpException,
   HttpStatus,
   Inject,
@@ -13,6 +14,12 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiResponse,
+  ApiBody,
+} from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Request, Response } from 'express';
 import { diskStorage } from 'multer';
@@ -31,8 +38,24 @@ export class UserController {
     @Inject(Services.user) private readonly userService: IUserService,
   ) {}
 
+  @ApiOperation({ summary: 'Get user info' })
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'User info recived',
+    type: ReturnUserProfileDetails,
+  })
+  @ApiResponse({
+    status: '4XX',
+    description: 'Check response message',
+  })
+  @ApiResponse({
+    status: '5XX',
+    description: 'Server error',
+  })
   @UseGuards(AuthGuard)
   @Get('/')
+  @HttpCode(HttpStatus.OK)
   async getUserProfile(@Req() req: Request) {
     return plainToInstance(
       ReturnUserProfileDetails,
@@ -41,6 +64,21 @@ export class UserController {
     );
   }
 
+  @ApiOperation({ summary: 'Update user info' })
+  @ApiBearerAuth()
+  @ApiBody({ type: UpdateUserDto })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'User info updated',
+  })
+  @ApiResponse({
+    status: '4XX',
+    description: 'Check response message',
+  })
+  @ApiResponse({
+    status: '5XX',
+    description: 'Server error',
+  })
   @UseGuards(AuthGuard)
   @Patch('/')
   @UseInterceptors(
@@ -84,6 +122,21 @@ export class UserController {
     return res.sendStatus(HttpStatus.OK);
   }
 
+  @ApiOperation({ summary: 'Update user password' })
+  @ApiBearerAuth()
+  @ApiBody({ type: UpdateUserPasswordDto })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'User password updated',
+  })
+  @ApiResponse({
+    status: '4XX',
+    description: 'Check response message',
+  })
+  @ApiResponse({
+    status: '5XX',
+    description: 'Server error',
+  })
   @UseGuards(AuthGuard)
   @Patch('/password')
   async updateUserPassword(

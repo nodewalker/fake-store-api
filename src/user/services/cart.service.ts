@@ -1,7 +1,9 @@
+import { plainToInstance } from 'class-transformer';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Config } from 'src/utils/Config';
 import { Services } from 'src/utils/const';
+import { CartDetails } from 'src/utils/dto';
 import { ICartService, IProductService } from 'src/utils/interfaces';
 import { ProductEntity, UserCartEntity } from 'src/utils/typeorm';
 import { PaginationDetails } from 'src/utils/types';
@@ -18,7 +20,7 @@ export class CartService implements ICartService {
   async getUserCart(
     userId: string,
     details: PaginationDetails,
-  ): Promise<UserCartEntity> {
+  ): Promise<CartDetails> {
     const cart: UserCartEntity = (await this.cartRepository
       .createQueryBuilder('cart')
       .leftJoin('cart.user', 'user')
@@ -27,7 +29,9 @@ export class CartService implements ICartService {
       .take(details.limit)
       .skip((details.page - 1) * details.limit)
       .getOne()) as UserCartEntity;
-    return cart;
+    return plainToInstance(CartDetails, cart, {
+      excludeExtraneousValues: true,
+    });
   }
 
   async addProductToUserCart(userId: string, productId: string): Promise<void> {

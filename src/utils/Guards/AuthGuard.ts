@@ -9,7 +9,7 @@ import {
 import { Request } from 'express';
 import { Services } from '../const';
 import { IAuthService } from '../interfaces';
-import { UserRequest } from '../types';
+import { JwtTokensDetails } from '../dto';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -27,7 +27,7 @@ export class AuthGuard implements CanActivate {
         HttpStatus.UNAUTHORIZED,
       );
 
-    const user: UserRequest = await this.authService.verifyUser(
+    const user: JwtTokensDetails = await this.authService.verifyUser(
       bearerToken.split(' ')[1],
     );
     if (!user._uuid)

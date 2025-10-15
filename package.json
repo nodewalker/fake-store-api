@@ -25,10 +25,12 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/jwt": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.2.0",
     "@nestjs/typeorm": "^11.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "express-rate-limit": "^8.1.0",
+    "gitbook": "^3.2.3",
     "hash-wasm": "^4.12.0",
     "helmet": "^8.1.0",
     "nest-winston": "^1.10.2",
@@ -66,8 +68,9 @@
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.7.3",
-    "typescript-eslint": "^8.20.0"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.20.0",
+    "widdershins": "^4.0.1"
   },
   "jest": {
     "moduleFileExtensions": [

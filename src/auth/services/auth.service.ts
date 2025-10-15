@@ -5,14 +5,13 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Services } from 'src/utils/const';
 import { IAuthService, IUserService } from 'src/utils/interfaces';
 import { UserEntity } from 'src/utils/typeorm';
-import {
-  CreateUserDetails,
-  JWTPayload,
-  LoginDetails,
-  Tokens,
-} from 'src/utils/types';
+import { CreateUserDetails, JWTPayload, LoginDetails } from 'src/utils/types';
 import { Config } from 'src/utils/Config';
-import { CreateJwtTokensDetails, ReturnCreateUserDetails } from 'src/utils/dto';
+import {
+  JwtTokensDetails,
+  ReturnCreateUserDetails,
+  TokensDetails,
+} from 'src/utils/dto';
 
 @Injectable()
 export class AuthService implements IAuthService {
@@ -21,17 +20,23 @@ export class AuthService implements IAuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signup(details: CreateUserDetails): Promise<Tokens> {
+  async signup(details: CreateUserDetails): Promise<TokensDetails> {
     const user: ReturnCreateUserDetails =
       await this.userService.createUser(details);
-    return this.generateJwtTokens(
-      plainToInstance(CreateJwtTokensDetails, user, {
+    return plainToInstance(
+      TokensDetails,
+      this.generateJwtTokens(
+        plainToInstance(JwtTokensDetails, user, {
+          excludeExtraneousValues: true,
+        }),
+      ),
+      {
         excludeExtraneousValues: true,
-      }),
+      },
     );
   }
 
-  async signin(details: LoginDetails): Promise<Tokens> {
+  async signin(details: LoginDetails): Promise<TokensDetails> {
     const user: UserEntity | null = await this.userService.findOne(
       details.login,
     );
@@ -43,15 +48,35 @@ export class AuthService implements IAuthService {
         'The login or password is incorrect',
         HttpStatus.BAD_REQUEST,
       );
-    return this.generateJwtTokens(user);
+    return plainToInstance(
+      TokensDetails,
+      this.generateJwtTokens(
+        plainToInstance(JwtTokensDetails, user, {
+          excludeExtraneousValues: true,
+        }),
+      ),
+      {
+        excludeExtraneousValues: true,
+      },
+    );
   }
 
-  async refreshTokens(refreshToken: string): Promise<Tokens> {
-    const user: CreateJwtTokensDetails = await this.verifyUser(refreshToken);
-    return this.generateJwtTokens(user);
+  async refreshTokens(refreshToken: string): Promise<TokensDetails> {
+    const user: JwtTokensDetails = await this.verifyUser(refreshToken);
+    return plainToInstance(
+      TokensDetails,
+      this.generateJwtTokens(
+        plainToInstance(JwtTokensDetails, user, {
+          excludeExtraneousValues: true,
+        }),
+      ),
+      {
+        excludeExtraneousValues: true,
+      },
+    );
   }
 
-  async verifyUser(token: string): Promise<CreateJwtTokensDetails> {
+  async verifyUser(token: string): Promise<JwtTokensDetails> {
     try {
       const payload: JWTPayload = this.jwtService.verify(token);
       const user: UserEntity | null = await this.userService.findOne(
@@ -59,7 +84,7 @@ export class AuthService implements IAuthService {
       );
       if (!user?._uuid)
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-      return plainToInstance(CreateJwtTokensDetails, user, {
+      return plainToInstance(JwtTokensDetails, user, {
         excludeExtraneousValues: true,
       });
     } catch (error) {
@@ -76,7 +101,7 @@ export class AuthService implements IAuthService {
     }
   }
 
-  private generateJwtTokens(user: CreateJwtTokensDetails): Tokens {
+  private generateJwtTokens(user: JwtTokensDetails): TokensDetails {
     return {
       access_token: this.jwtService.sign(
         {

@@ -1,14 +1,22 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { plainToInstance } from 'class-transformer';
 import { Config } from 'src/utils/Config';
 import { Services } from 'src/utils/const';
-import { ICategoryService, IUserService } from 'src/utils/interfaces';
-import { ProductCategoryEntity, UserEntity } from 'src/utils/typeorm';
+import { CategoryDetails, RootCategoriesDetail } from 'src/utils/dto';
 import {
-  CreateCategoryDetails,
-  GetCategoriesReturn,
-  PaginationDetails,
-} from 'src/utils/types';
+  ICategoryService,
+  IProductService,
+  IUserService,
+} from 'src/utils/interfaces';
+import { ProductCategoryEntity, UserEntity } from 'src/utils/typeorm';
+import { CreateCategoryDetails, PaginationDetails } from 'src/utils/types';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -17,6 +25,8 @@ export class CategoryService implements ICategoryService {
     @InjectRepository(ProductCategoryEntity)
     private readonly categoryRepository: Repository<ProductCategoryEntity>,
     @Inject(Services.user) private readonly userService: IUserService,
+    @Inject(forwardRef(() => Services.product))
+    private readonly productService: IProductService,
   ) {}
 
   async createCategory(
@@ -128,7 +138,7 @@ export class CategoryService implements ICategoryService {
 
   async getRootCategories(
     details: PaginationDetails,
-  ): Promise<GetCategoriesReturn> {
+  ): Promise<RootCategoriesDetail> {
     const [categories, total] = await Promise.all([
       this.categoryRepository
         .createQueryBuilder('category')
@@ -149,23 +159,43 @@ export class CategoryService implements ICategoryService {
         .where('category.parent IS NULL')
         .getCount(),
     ]);
-    return {
-      tree: categories.map((cat) => ({
+    console.log(
+      categories.map(async (cat) => ({
         _uuid: cat.category__uuid,
         name: cat.category_name,
         hasChildren: cat.hasChildren,
+        hasProduct: await this.productService.isCategoryhasProducts(
+          cat.category__uuid as string,
+        ),
       })),
-      pagination: {
-        total,
-        page: details.page,
-        limit: details.limit,
-        totalPages: Math.ceil(total / details.limit),
-        isLastPage: details.page >= Math.ceil(total / details.limit),
+    );
+    console.log(categories);
+    return plainToInstance(
+      RootCategoriesDetail,
+      {
+        tree: await Promise.all(
+          categories.map(async (cat) => ({
+            _uuid: cat.category__uuid,
+            name: cat.category_name,
+            hasChildren: cat.hasChildren,
+            hasProduct: await this.productService.isCategoryhasProducts(
+              cat.category__uuid as string,
+            ),
+          })),
+        ),
+        pagination: {
+          total,
+          page: details.page,
+          limit: details.limit,
+          totalPages: Math.ceil(total / details.limit),
+          isLastPage: details.page >= Math.ceil(total / details.limit),
+        },
       },
-    };
+      {},
+    );
   }
 
-  async getChildrenByParentId(uuid: string): Promise<ProductCategoryEntity[]> {
+  async getChildrenByParentId(uuid: string): Promise<CategoryDetails[]> {
     const parentCategory: ProductCategoryEntity | null =
       await this.categoryRepository
         .createQueryBuilder('category')
@@ -190,11 +220,24 @@ export class CategoryService implements ICategoryService {
       })
       .getRawMany();
 
-    return categories.map((cat) => ({
-      _uuid: cat.category__uuid,
-      name: cat.category_name,
-      hasChildren: cat.hasChildren,
-    }));
+    return plainToInstance(
+      CategoryDetails,
+      await Promise.all(
+        categories.map(
+          async (cat) => ({
+            _uuid: cat.category__uuid,
+            name: cat.category_name,
+            hasChildren: cat.hasChildren,
+            hasProduct: await this.productService.isCategoryhasProducts(
+              cat.category__uuid as string,
+            ),
+          }),
+          {
+            excludeExtraneousValues: true,
+          },
+        ),
+      ),
+    );
   }
 
   async getCategoryById(

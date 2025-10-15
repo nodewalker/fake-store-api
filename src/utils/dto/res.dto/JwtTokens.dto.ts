@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
-export class ReturnCreateUserDetails {
+export class JwtTokensDetails {
   @ApiProperty({
-    name: '_uuid',
-    description: 'User id',
+    name: 'uuid',
+    description: 'User id for jwt payload',
     type: String,
   })
   @Expose()

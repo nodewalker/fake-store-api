@@ -4,14 +4,11 @@ import { Services } from 'src/utils/const';
 import { ICategoryService } from 'src/utils/interfaces';
 import { IProductService } from 'src/utils/interfaces/IProductService';
 import { ProductEntity, ProductImageEntity } from 'src/utils/typeorm';
-import {
-  CreateProductDetails,
-  GetProductsDetails,
-  GetProductsReturn,
-} from 'src/utils/types';
+import { CreateProductDetails, GetProductsDetails } from 'src/utils/types';
 import { Repository } from 'typeorm';
 import * as fs from 'fs';
 import { plainToInstance } from 'class-transformer';
+import { ProductDetails, ProductsListDetails } from 'src/utils/dto';
 
 @Injectable()
 export class ProductService implements IProductService {
@@ -50,15 +47,19 @@ export class ProductService implements IProductService {
         _uuid: details.images[i],
       });
     }
-    return (await this.productRepository
-      .createQueryBuilder('product')
-      .where('product._uuid = :uuid', { uuid: product._uuid })
-      .leftJoinAndSelect('product.images', 'images')
-      .leftJoinAndSelect('product.category', 'category')
-      .getOne()) as ProductEntity;
+    return plainToInstance(
+      ProductDetails,
+      (await this.productRepository
+        .createQueryBuilder('product')
+        .where('product._uuid = :uuid', { uuid: product._uuid })
+        .leftJoinAndSelect('product.images', 'images')
+        .leftJoinAndSelect('product.category', 'category')
+        .getOne()) as ProductEntity,
+      { excludeExtraneousValues: true },
+    );
   }
 
-  async getProducts(details: GetProductsDetails): Promise<GetProductsReturn> {
+  async getProducts(details: GetProductsDetails): Promise<ProductsListDetails> {
     console.log(details);
     const qb = this.productRepository
       .createQueryBuilder('product')
@@ -92,16 +93,21 @@ export class ProductService implements IProductService {
       .take(details.limit)
       .skip((details.page - 1) * details.limit)
       .getManyAndCount();
-    return {
-      data: plainToInstance(ProductEntity, data),
-      pagination: {
-        total,
-        page: details.page,
-        limit: details.limit,
-        totalPages: Math.ceil(total / details.limit),
-        isLastPage: details.page >= Math.ceil(total / details.limit),
+
+    return plainToInstance(
+      ProductsListDetails,
+      {
+        data,
+        pagination: {
+          total,
+          page: details.page,
+          limit: details.limit,
+          totalPages: Math.ceil(total / details.limit),
+          isLastPage: details.page >= Math.ceil(total / details.limit),
+        },
       },
-    };
+      { excludeExtraneousValues: true },
+    );
   }
 
   async getProductById(id: string): Promise<ProductEntity> {
@@ -133,5 +139,14 @@ export class ProductService implements IProductService {
       });
     });
     await this.productRepository.remove(product);
+  }
+
+  async isCategoryhasProducts(categoryId: string): Promise<boolean> {
+    const count: number = await this.productRepository
+      .createQueryBuilder('product')
+      .leftJoin('product.category', 'category')
+      .where('category._uuid = :uuid', { uuid: categoryId })
+      .getCount();
+    return count > 0;
   }
 }
