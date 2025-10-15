@@ -1,10 +1,12 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Inject,
   Param,
+  ParseUUIDPipe,
   Post,
   Query,
   Req,
@@ -40,14 +42,22 @@ export class CategoryController {
     @Query()
     dto: PaginationQueryDto,
   ) {
-    // TODO: undefined dto
-    console.log(dto);
     return await this.categoryServcie.getRootCategories(dto);
   }
 
-  // BUG: repeat categories
-  @Get('/:uuid/children')
-  async getChildrenByParentId(@Param('uuid') uuid: string) {
-    return await this.categoryServcie.getChildrenByParentId(uuid);
+  @Get('/:id/children')
+  async getChildrenByParentId(@Param('id', new ParseUUIDPipe()) id: string) {
+    return await this.categoryServcie.getChildrenByParentId(id);
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('/:id')
+  async removeCategory(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Res() res: Response,
+    @Query('all') all?: boolean,
+  ) {
+    await this.categoryServcie.removeCategory(id, all ? all : false);
+    return res.sendStatus(HttpStatus.OK);
   }
 }

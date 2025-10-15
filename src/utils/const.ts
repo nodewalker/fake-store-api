@@ -3,6 +3,7 @@ export enum Services {
   auth = 'AUTH_PROVIDER',
   product = 'PRODUCT_PROVIDER',
   category = 'CATEGORY_PROVIDER',
+  cart = 'CART_PROVIDER',
 }
 
 export enum Controllers {
@@ -10,6 +11,7 @@ export enum Controllers {
   user = 'user',
   product = 'product',
   category = 'category',
+  cart = `${Controllers.user}/cart`,
 }
 
 export enum OrderBy {

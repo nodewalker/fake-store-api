@@ -1,16 +1,18 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
   Inject,
   Param,
   ParseFilePipe,
-  ParseIntPipe,
+  ParseUUIDPipe,
   Post,
   Query,
   Req,
+  Res,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -43,7 +45,7 @@ export class ProductController {
   }
 
   @Get('/:id')
-  getOneById(@Param('id', new ParseIntPipe()) id: string) {
+  getOneById(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.productServcie.getProductById(id);
   }
 
@@ -85,10 +87,19 @@ export class ProductController {
     )
     images: Express.Multer.File[],
   ) {
-    console.log(images);
     return await this.productServcie.createProduct(req.user._uuid, {
       ...dto,
       images: images.map((image) => image.filename),
     });
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('/:id')
+  async removeProduct(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Res() res: Response,
+  ) {
+    await this.productServcie.removeProduct(id);
+    return res.sendStatus(HttpStatus.OK);
   }
 }

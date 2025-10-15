@@ -16,7 +16,9 @@ export class ProductCategoryEntity {
   @Column()
   name: string;
 
-  @OneToMany(() => ProductEntity, (product) => product.category)
+  @OneToMany(() => ProductEntity, (product) => product.category, {
+    onDelete: 'CASCADE',
+  })
   products?: ProductEntity[];
 
   @ManyToOne(() => UserEntity, (user) => user.categories)
@@ -28,6 +30,8 @@ export class ProductCategoryEntity {
   })
   parent?: ProductCategoryEntity;
 
-  @OneToMany(() => ProductCategoryEntity, (category) => category.parent)
+  @OneToMany(() => ProductCategoryEntity, (category) => category.parent, {
+    onDelete: 'CASCADE',
+  })
   children?: ProductCategoryEntity[];
 }

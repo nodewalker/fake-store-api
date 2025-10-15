@@ -9,7 +9,7 @@ import { UserEntity } from './user';
 import { ProductEntity } from './product';
 
 @Entity({ name: 'user_cart' })
-export class CartEntity {
+export class UserCartEntity {
   @PrimaryGeneratedColumn('uuid')
   _uuid: string;
 

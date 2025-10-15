@@ -12,4 +12,5 @@ export interface IProductService {
   ): Promise<ProductEntity>;
   getProducts(details: GetProductsDetails): Promise<GetProductsReturn>;
   getProductById(id: string): Promise<ProductEntity>;
+  removeProduct(productId: string): Promise<void>;
 }

@@ -3,7 +3,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
-  CartEntity,
+  UserCartEntity,
   ProductEntity,
   ProductImageEntity,
   UserEntity,
@@ -23,7 +23,7 @@ import { ProductCategoryEntity } from './utils/typeorm/entities/productCategory'
       database: Config.DATABASE.NAME,
       entities: [
         UserEntity,
-        CartEntity,
+        UserCartEntity,
         ProductEntity,
         ProductImageEntity,
         ProductCategoryEntity,

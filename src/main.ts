@@ -20,4 +20,4 @@ async function bootstrap(): Promise<void> {
   await app.listen(port).then(() => console.log(`Server start on: ${port}`));
 }
 
-bootstrap();
+void bootstrap();

@@ -40,14 +40,14 @@ export class CustomValidationPipe extends ValidationPipe {
 
   async transform(value: any, metadata: ArgumentMetadata) {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return await super.transform(value, metadata);
     } catch (error) {
       if (error instanceof BadRequestException) {
         const response: any = error.getResponse();
-        // возвращаем только message[], без вложенности
         throw new HttpException(
           Array.isArray(response.message)
-            ? response.message
+            ? (response.message as string)
             : [response.message],
           HttpStatus.BAD_REQUEST,
         );

@@ -1,4 +1,4 @@
-import { CartEntity } from './cart';
+import { UserCartEntity } from './userCart';
 import { ProductCategoryEntity } from './productCategory';
 import { ProductImageEntity } from './productImages';
 import {
@@ -24,11 +24,13 @@ export class ProductEntity {
   @Column({ default: 0 })
   discount: number;
 
-  @OneToMany(() => ProductImageEntity, (img) => img.product, { nullable: true })
+  @OneToMany(() => ProductImageEntity, (img) => img.product, {
+    onDelete: 'CASCADE',
+  })
   images?: ProductImageEntity[];
 
-  @ManyToOne(() => CartEntity, (cart) => cart.products, { nullable: true })
-  carts?: CartEntity[];
+  @ManyToOne(() => UserCartEntity, (cart) => cart.products)
+  carts?: UserCartEntity[];
 
   @ManyToOne(() => ProductCategoryEntity, (category) => category.products)
   category?: ProductCategoryEntity;

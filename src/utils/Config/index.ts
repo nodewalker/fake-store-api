@@ -16,11 +16,14 @@ export const Config = {
   },
   JWT: {
     SECRET: process.env['JWT_SECRET'] as string,
-    ACCESS_TOKEN_EXPIRES: '20d' as StringValue, // for dev
+    ACCESS_TOKEN_EXPIRES: '20m' as StringValue,
     REFRESH_TOKEN_EXPIRES: '30d' as StringValue,
   },
   CATEGORY: {
     MAX_CHILDREN: 8,
     MAX_DEEP: 4,
+  },
+  CART: {
+    SIZE: 50,
   },
 };

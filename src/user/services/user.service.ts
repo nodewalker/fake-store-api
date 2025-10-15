@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
 import { ReturnCreateUserDetails } from 'src/utils/dto';
 import { IUserService } from 'src/utils/interfaces/IUserService';
-import { CartEntity, UserEntity } from 'src/utils/typeorm';
+import { UserCartEntity, UserEntity } from 'src/utils/typeorm';
 import {
   CreateUserDetails,
   UpdateUserDetails,
@@ -12,14 +12,15 @@ import {
 } from 'src/utils/types';
 import { Repository } from 'typeorm';
 import { validate as UUIDValidate } from 'uuid';
+import * as fs from 'fs';
 
 @Injectable()
 export class UserService implements IUserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(CartEntity)
-    private readonly cartRepository: Repository<CartEntity>,
+    @InjectRepository(UserCartEntity)
+    private readonly cartRepository: Repository<UserCartEntity>,
   ) {}
 
   async createUser(
@@ -61,11 +62,20 @@ export class UserService implements IUserService {
     return user;
   }
 
-  // TODO:
   async updateUser(userId: string, details: UpdateUserDetails): Promise<void> {
     const a = Object.values(details).filter((d) => d === undefined);
     if (a.length === Object.values(details).length)
       throw new HttpException('Empty data', HttpStatus.BAD_REQUEST);
+    if (details?.avatarURL) {
+      const user: UserEntity | null = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user._uuid = :uuid', { uuid: userId })
+        .select('user.avatarURL')
+        .getOne();
+      fs.unlink(`./uploads/avatars/${user?.avatarURL}`, (res) => {
+        console.log(res);
+      });
+    }
     await this.userRepository.update(userId, details);
   }
 
@@ -73,37 +83,29 @@ export class UserService implements IUserService {
     userId: string,
     details: UpdateUserPasswordDetails,
   ): Promise<void> {
-    try {
-      const user: UserEntity | null = await this.findOne(userId);
-      if (!user?._uuid)
-        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-      if (!(await verifyPassword(details.currentPassword, user.password)))
-        throw new HttpException(
-          'The old password is incorrect',
-          HttpStatus.BAD_REQUEST,
-        );
-
-      if (details.currentPassword === details.newPassword)
-        throw new HttpException(
-          'The old and new passwords are the same',
-          HttpStatus.BAD_REQUEST,
-        );
-
-      if (details.newPassword !== details.repeatNewPassword)
-        throw new HttpException(
-          'The new password repeat is incorrect',
-          HttpStatus.BAD_REQUEST,
-        );
-
-      await this.userRepository.update(userId, {
-        password: await hashPassword(details.newPassword),
-      });
-    } catch (error) {
-      if (error instanceof HttpException) throw error;
+    const user: UserEntity | null = await this.findOne(userId);
+    if (!user?._uuid)
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    if (!(await verifyPassword(details.currentPassword, user.password)))
       throw new HttpException(
-        'Internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        'The old password is incorrect',
+        HttpStatus.BAD_REQUEST,
       );
-    }
+
+    if (details.currentPassword === details.newPassword)
+      throw new HttpException(
+        'The old and new passwords are the same',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    if (details.newPassword !== details.repeatNewPassword)
+      throw new HttpException(
+        'The new password repeat is incorrect',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    await this.userRepository.update(userId, {
+      password: await hashPassword(details.newPassword),
+    });
   }
 }

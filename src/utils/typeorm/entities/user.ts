@@ -6,7 +6,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { CartEntity } from './cart';
+import { UserCartEntity } from './userCart';
 import { ProductCategoryEntity } from './productCategory';
 import { ProductEntity } from './product';
 import { Exclude } from 'class-transformer';
@@ -35,9 +35,9 @@ export class UserEntity {
   @Column({ nullable: true })
   avatarURL: string;
 
-  @OneToOne(() => CartEntity, (cart) => cart.user)
+  @OneToOne(() => UserCartEntity, (cart) => cart.user)
   @JoinColumn()
-  cart: CartEntity;
+  cart: UserCartEntity;
 
   @OneToMany(() => ProductCategoryEntity, (category) => category.user)
   categories: ProductCategoryEntity[];
