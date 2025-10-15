@@ -1,5 +1,5 @@
 import { Services } from 'src/utils/const';
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { ProductService } from './services/product.service';
 import { ProductController } from './controllers/product.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -17,7 +17,7 @@ import { AuthModule } from 'src/auth/auth.module';
       ProductImageEntity,
       ProductCategoryEntity,
     ]),
-    UserModule,
+    forwardRef(() => UserModule),
     AuthModule,
   ],
   providers: [
@@ -25,5 +25,6 @@ import { AuthModule } from 'src/auth/auth.module';
     { provide: Services.category, useClass: CategoryService },
   ],
   controllers: [ProductController, CategoryController],
+  exports: [{ provide: Services.product, useClass: ProductService }],
 })
 export class ProductModule {}

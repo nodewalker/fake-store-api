@@ -1,8 +1,10 @@
 import {
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Inject,
+  ParseUUIDPipe,
   Post,
   Query,
   Req,
@@ -11,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Controllers, Services } from 'src/utils/const';
+import { PaginationQueryDto } from 'src/utils/dto';
 import { AuthGuard } from 'src/utils/Guards/AuthGuard';
 import { ICartService } from 'src/utils/interfaces';
 
@@ -22,15 +25,16 @@ export class CartController {
 
   @UseGuards(AuthGuard)
   @Get('/')
-  async getCart(@Req() req: Request) {
-    return await this.cartService.getUserCart(req.user._uuid);
+  async getCart(@Query() dto: PaginationQueryDto, @Req() req: Request) {
+    return await this.cartService.getUserCart(req.user._uuid, dto);
   }
 
   @UseGuards(AuthGuard)
   @Post('/')
   async addProductToUserCart(
     @Req() req: Request,
-    @Query('pid') productId: string,
+    @Query('pid', new ParseUUIDPipe())
+    productId: string,
     @Res() res: Response,
   ) {
     await this.cartService.addProductToUserCart(req.user._uuid, productId);
@@ -38,10 +42,10 @@ export class CartController {
   }
 
   @UseGuards(AuthGuard)
-  @Post('/')
+  @Delete('/')
   async removeProductFromCart(
     @Req() req: Request,
-    @Query('pid') productId: string,
+    @Query('pid', new ParseUUIDPipe()) productId: string,
     @Res() res: Response,
   ) {
     await this.cartService.removeProductFromUserCart(req.user._uuid, productId);

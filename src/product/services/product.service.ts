@@ -11,6 +11,7 @@ import {
 } from 'src/utils/types';
 import { Repository } from 'typeorm';
 import * as fs from 'fs';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class ProductService implements IProductService {
@@ -31,6 +32,11 @@ export class ProductService implements IProductService {
       details.categoryId,
       true,
     );
+    if (!category.isEditable)
+      throw new HttpException(
+        'You cannot create a product for this category',
+        HttpStatus.FORBIDDEN,
+      );
     const product: ProductEntity = await this.productRepository.save({
       name: details.name,
       price: details.price,
@@ -38,13 +44,12 @@ export class ProductService implements IProductService {
       category,
       user: { _uuid: userId },
     });
-    for (let i = 0; i < details.images.length; i++)
+    for (let i = 0; i < details.images.length; i++) {
       await this.productImageEntity.save({
         product,
         _uuid: details.images[i],
       });
-
-    // TODO:
+    }
     return (await this.productRepository
       .createQueryBuilder('product')
       .where('product._uuid = :uuid', { uuid: product._uuid })
@@ -54,27 +59,41 @@ export class ProductService implements IProductService {
   }
 
   async getProducts(details: GetProductsDetails): Promise<GetProductsReturn> {
+    console.log(details);
     const qb = this.productRepository
       .createQueryBuilder('product')
-      .take(details.limit)
-      .offset((details.page - 1) * details.limit)
       .leftJoinAndSelect('product.category', 'category')
       .leftJoinAndSelect('product.images', 'images');
-    if (details.name)
-      qb.andWhere('product.name LIKE :name', { name: details.name });
-    if (details.categoryName)
-      qb.andWhere('product.category.name = :name', {
-        name: details.categoryName,
-      });
-    if (details.orderBy && details.sortBy)
-      qb.orderBy(`product.${details.orderBy}`, details.sortBy);
+    if (details.name) {
+      const names = details.name?.split(' ');
+      names.forEach((name, index) =>
+        qb.andWhere(`product.name ILIKE :name${index}`, {
+          [`name${index}`]: `%${name}%`,
+        }),
+      );
+    }
+    if (details.categoryName) {
+      const categoryName = details.categoryName.split(' ');
+      categoryName.forEach((cn, index) =>
+        qb.andWhere(`category.name ILIKE :name${index}`, {
+          [`name${index}`]: `%${cn}%`,
+        }),
+      );
+    }
+    if (details.categoryId)
+      qb.andWhere('category._uuid = :uuid', { uuid: details.categoryId });
     if (details.priceFrom)
       qb.andWhere('product.price >= :pfrom', { pfrom: details.priceFrom });
     if (details.priceTo)
-      qb.andWhere('product.price <= :pto', { pfrom: details.priceTo });
-    const [data, total]: [ProductEntity[], number] = await qb.getManyAndCount();
+      qb.andWhere('product.price <= :pto', { pto: details.priceTo });
+    if (details.orderBy && details.sort)
+      qb.orderBy(`product.${details.orderBy}`, details.sort);
+    const [data, total]: [ProductEntity[], number] = await qb
+      .take(details.limit)
+      .skip((details.page - 1) * details.limit)
+      .getManyAndCount();
     return {
-      data,
+      data: plainToInstance(ProductEntity, data),
       pagination: {
         total,
         page: details.page,
@@ -99,6 +118,11 @@ export class ProductService implements IProductService {
 
   async removeProduct(productId: string): Promise<void> {
     const product: ProductEntity = await this.getProductById(productId);
+    if (!product.category?.isEditable)
+      throw new HttpException(
+        'You cannot remove a product from this category',
+        HttpStatus.FORBIDDEN,
+      );
     const images: ProductImageEntity[] = await this.productImageEntity
       .createQueryBuilder('images')
       .where('images.product._uuid = :uuid', { uuid: product._uuid })

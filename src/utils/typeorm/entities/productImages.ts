@@ -6,6 +6,8 @@ export class ProductImageEntity {
   @PrimaryColumn({ unique: true })
   _uuid: string;
 
-  @ManyToOne(() => ProductEntity, (product) => product.images)
+  @ManyToOne(() => ProductEntity, (product) => product.images, {
+    onDelete: 'CASCADE',
+  })
   product: ProductEntity;
 }

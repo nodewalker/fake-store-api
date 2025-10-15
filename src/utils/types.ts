@@ -72,10 +72,11 @@ export type GetProductsDetails = {
   page: number;
   name?: string;
   orderBy?: OrderBy;
-  sortBy?: SortType;
+  sort?: SortType;
   priceFrom?: number;
   priceTo?: number;
   categoryName?: string;
+  categoryId?: string;
 };
 export type GetProductsReturn = {
   data: ProductEntity[];

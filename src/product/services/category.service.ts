@@ -37,6 +37,11 @@ export class CategoryService implements ICategoryService {
           'Parent category not found',
           HttpStatus.NOT_FOUND,
         );
+      if (!parentCategory.isEditable)
+        throw new HttpException(
+          'You cannot create a subcategory for this category',
+          HttpStatus.FORBIDDEN,
+        );
     }
 
     // OK
@@ -171,7 +176,6 @@ export class CategoryService implements ICategoryService {
         'Parent category not found',
         HttpStatus.NOT_FOUND,
       );
-    console.log(parentCategory);
     const categories = await this.categoryRepository
       .createQueryBuilder('category')
       .select(['category._uuid', 'category.name'])
@@ -222,6 +226,11 @@ export class CategoryService implements ICategoryService {
       .leftJoinAndSelect('category.products', 'products')
       .leftJoinAndSelect('category.children', 'children')
       .getOne();
+    if (!category?.isEditable)
+      throw new HttpException(
+        'You cannot remove this category',
+        HttpStatus.FORBIDDEN,
+      );
     if (!category?._uuid)
       throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
     if (

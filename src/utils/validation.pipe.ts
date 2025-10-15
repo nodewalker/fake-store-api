@@ -14,10 +14,11 @@ export class CustomValidationPipe extends ValidationPipe {
     super({
       transform: true,
       whitelist: true,
-      forbidNonWhitelisted: true,
+      forbidNonWhitelisted: false,
+      transformOptions: { enableImplicitConversion: true },
       exceptionFactory: (errors: ValidationError[]) => {
         const messages = CustomValidationPipe.formatErrors(errors);
-        return new BadRequestException(messages);
+        return new HttpException(messages, HttpStatus.BAD_REQUEST);
       },
     });
   }

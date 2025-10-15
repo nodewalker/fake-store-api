@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
   HttpStatus,
   Inject,
   Param,
@@ -46,14 +47,18 @@ export class CategoryController {
   }
 
   @Get('/:id/children')
-  async getChildrenByParentId(@Param('id', new ParseUUIDPipe()) id: string) {
+  async getChildrenByParentId(
+    @Param('id', new ParseUUIDPipe())
+    id: string,
+  ) {
     return await this.categoryServcie.getChildrenByParentId(id);
   }
 
   @UseGuards(AuthGuard)
   @Delete('/:id')
   async removeCategory(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('id', new ParseUUIDPipe())
+    id: string,
     @Res() res: Response,
     @Query('all') all?: boolean,
   ) {

@@ -1,3 +1,4 @@
+import { ProductEntity } from 'src/utils/typeorm';
 import {
   Body,
   Controller,
@@ -18,6 +19,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { plainToInstance } from 'class-transformer';
 import { Request, Response } from 'express';
 import { diskStorage } from 'multer';
 import { Controllers, Services } from 'src/utils/const';
@@ -35,7 +37,6 @@ export class ProductController {
     @Inject(Services.product) private readonly productServcie: IProductService,
   ) {}
 
-  // TEST: TRY TO SORT
   @Get('/')
   async getProducts(
     @Query() paginationDto: PaginationQueryDto,
@@ -45,8 +46,14 @@ export class ProductController {
   }
 
   @Get('/:id')
-  getOneById(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.productServcie.getProductById(id);
+  getOneById(
+    @Param('id', new ParseUUIDPipe())
+    id: string,
+  ) {
+    return plainToInstance(
+      ProductEntity,
+      this.productServcie.getProductById(id),
+    );
   }
 
   @UseGuards(AuthGuard)
@@ -82,21 +89,23 @@ export class ProductController {
   async createProduct(
     @Req() req: Request,
     @Body() dto: CreateProductDto,
-    @UploadedFiles(
-      new ParseFilePipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
-    )
+    @UploadedFiles(new ParseFilePipe())
     images: Express.Multer.File[],
   ) {
-    return await this.productServcie.createProduct(req.user._uuid, {
-      ...dto,
-      images: images.map((image) => image.filename),
-    });
+    return plainToInstance(
+      ProductEntity,
+      await this.productServcie.createProduct(req.user._uuid, {
+        ...dto,
+        images: images.map((image) => image.filename),
+      }),
+    );
   }
 
   @UseGuards(AuthGuard)
   @Delete('/:id')
   async removeProduct(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('id', new ParseUUIDPipe())
+    id: string,
     @Res() res: Response,
   ) {
     await this.productServcie.removeProduct(id);

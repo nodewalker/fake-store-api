@@ -17,6 +17,7 @@ export enum Controllers {
 export enum OrderBy {
   PRICE = 'price',
   DISCOUNT = 'discount',
+  NAME = 'name',
 }
 
 export enum SortType {

@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { ProductEntity } from './product';
 import { UserEntity } from './user';
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'product_category' })
 export class ProductCategoryEntity {
@@ -25,13 +26,17 @@ export class ProductCategoryEntity {
   user?: UserEntity;
 
   @ManyToOne(() => ProductCategoryEntity, (category) => category.children, {
-    nullable: true,
     onDelete: 'CASCADE',
   })
   parent?: ProductCategoryEntity;
 
   @OneToMany(() => ProductCategoryEntity, (category) => category.parent, {
+    cascade: true,
     onDelete: 'CASCADE',
   })
   children?: ProductCategoryEntity[];
+
+  @Exclude()
+  @Column({ default: true })
+  isEditable?: boolean;
 }

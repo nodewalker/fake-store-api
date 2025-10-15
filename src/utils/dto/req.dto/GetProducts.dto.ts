@@ -4,6 +4,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  IsUUID,
   Min,
 } from 'class-validator';
 import { OrderBy, SortType } from '../../const';
@@ -46,4 +47,10 @@ export class GetProductsDto {
   @IsString()
   @Transform(({ value }: { value: string }) => value?.trim())
   categoryName?: string;
+
+  @Expose({ name: 'cnid' })
+  @IsOptional()
+  @Transform(({ value }: { value: string }) => value?.trim())
+  @IsUUID()
+  categoryId?: string;
 }
