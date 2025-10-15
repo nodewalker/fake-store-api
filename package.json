@@ -6,6 +6,9 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "generate:swagger": "nest start --entryFile=docs/generateSwagger.js",
+    "generate:docs": "ts-node src/docs/generateDocs.ts",
+    "generate:gitbook": "npm run generate:swagger && npm run generate:docs",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -52,7 +55,7 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/multer": "^2.0.0",
-    "@types/node": "^22.10.7",
+    "@types/node": "^22.18.10",
     "@types/supertest": "^6.0.2",
     "dotenv": "^17.2.3",
     "eslint": "^9.18.0",

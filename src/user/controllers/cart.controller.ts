@@ -17,6 +17,7 @@ import {
   ApiBearerAuth,
   ApiResponse,
   ApiQuery,
+  ApiTags,
 } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { Controllers, Services } from 'src/utils/const';
@@ -24,6 +25,7 @@ import { CartDetails, PaginationQueryDto } from 'src/utils/dto';
 import { AuthGuard } from 'src/utils/Guards/AuthGuard';
 import { ICartService } from 'src/utils/interfaces';
 
+@ApiTags('Cart')
 @Controller(Controllers.cart)
 export class CartController {
   constructor(

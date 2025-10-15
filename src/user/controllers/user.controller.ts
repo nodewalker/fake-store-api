@@ -19,6 +19,7 @@ import {
   ApiBearerAuth,
   ApiResponse,
   ApiBody,
+  ApiTags,
 } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Request, Response } from 'express';
@@ -32,6 +33,7 @@ import {
 import { AuthGuard } from 'src/utils/Guards/AuthGuard';
 import { IUserService } from 'src/utils/interfaces/IUserService';
 
+@ApiTags('User')
 @Controller(Controllers.user)
 export class UserController {
   constructor(

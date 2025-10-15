@@ -1,60 +1,33 @@
-# 🛒 Fake Store API
+# Fake Store API
 
-**Fake Store API** is a learning and demo REST API that simulates an online store. It is perfect for testing frontend applications, demonstrating API integration, and debugging client code without the need for a full backend.
+Welcome to the **Fake Store API** documentation.  
+This documentation is automatically generated from NestJS controllers and DTOs using Swagger and Widdershins, and published via GitBook.
 
----
+The API provides functionality for:
 
-## 🚀 Features
+- User authentication (`Auth`)
+- User (`User`)
+- Products (`Products`)
+- Categories (`Categories`)
+- Cart (`Cart`)
 
-- Fetch products, categories, and users
-- CRUD operations for products and carts
-- Simple authentication system (for demonstration purposes)
-- Fully compatible with `fetch`, `axios`, and any HTTP client
-- Supports JSON data and CORS
+> Use the sidebar to navigate to the desired API section.  
+> Each section corresponds to an `@ApiTags` tag in the NestJS controllers.
 
----
+## How to Use the Documentation
 
-## 🔗 Base URL
+1. Select the desired section from the sidebar.
+2. View the list of endpoints and their descriptions.
+3. For each endpoint, examples of requests and responses are available in **JavaScript** and **TypeScript**.
+4. All fields and object structures are documented through DTOs and `@ApiProperty` decorators.
 
-https://fakestoreapi.ru
+## Project Purpose
 
----
+The Fake Store API is designed for testing and learning:
 
-## 📦 Example Requests
-
-- **Get all products:** `/products`
-- **Get a single product:** `/products/1`
-- **Create a product:** `/products` with JSON body
-- **Login:** `/auth/login` with username and password
-
----
-
-## 🧰 Frontend Usage
-
-You can fetch data using `fetch` or `axios` by sending requests to the API endpoints and handling JSON responses.
+- Can be used for frontend development without a custom backend
+- A great base for learning NestJS, Swagger, TypeORM, and GitBook integration
 
 ---
 
-## 🧪 Local Setup (if using code repository)
-
-Clone the repo, install dependencies, and run the server locally. The API will be available at `http://localhost:3000`.
-
----
-
-## 🤝 Contributing
-
-Pull requests are welcome. If you want to add endpoints or improve data structures, feel free to open an issue.
-
----
-
-## ⚖️ License
-
-This project is licensed under the [MIT License](./LICENSE).  
-Use freely, but remember—this is a **fake store**.
-
----
-
-## 🧭 Note
-
-Fake Store API is not a real e-commerce service.  
-It exists for developers to experiment with requests and responses, train integrations, and build interfaces without extra infrastructure.
+> Automatically generated using NestJS + Swagger + Widdershins

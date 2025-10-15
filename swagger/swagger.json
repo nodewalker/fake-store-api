@@ -1,233 +1,6 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/user": {
-      "get": {
-        "operationId": "UserController_getUserProfile",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "User info recived",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ReturnUserProfileDetails"
-                }
-              }
-            }
-          },
-          "5XX": {
-            "description": "Server error"
-          },
-          "4XX": {
-            "description": "Check response message"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Get user info",
-        "tags": [
-          "User"
-        ]
-      },
-      "patch": {
-        "operationId": "UserController_updateUser",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateUserDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "User info updated"
-          },
-          "5XX": {
-            "description": "Server error"
-          },
-          "4XX": {
-            "description": "Check response message"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Update user info",
-        "tags": [
-          "User"
-        ]
-      }
-    },
-    "/user/password": {
-      "patch": {
-        "operationId": "UserController_updateUserPassword",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateUserPasswordDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "User password updated"
-          },
-          "5XX": {
-            "description": "Server error"
-          },
-          "4XX": {
-            "description": "Check response message"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Update user password",
-        "tags": [
-          "User"
-        ]
-      }
-    },
-    "/user/cart": {
-      "get": {
-        "operationId": "CartController_getCart",
-        "parameters": [
-          {
-            "name": "limit",
-            "required": false,
-            "in": "query",
-            "description": "Items limit on page ( from 1 to 50 )",
-            "schema": {
-              "default": 10,
-              "example": 15,
-              "type": "number"
-            }
-          },
-          {
-            "name": "page",
-            "required": false,
-            "in": "query",
-            "description": "Items page ( min 1 )",
-            "schema": {
-              "default": 1,
-              "example": 2,
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "User cart recived",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CartDetails"
-                }
-              }
-            }
-          },
-          "5XX": {
-            "description": "Server error"
-          },
-          "4XX": {
-            "description": "Check response message"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Get user cart",
-        "tags": [
-          "Cart"
-        ]
-      },
-      "post": {
-        "operationId": "CartController_addProductToUserCart",
-        "parameters": [
-          {
-            "name": "pid",
-            "required": true,
-            "in": "query",
-            "description": "Product id",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success added"
-          },
-          "5XX": {
-            "description": "Server error"
-          },
-          "4XX": {
-            "description": "Check response message"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Add product to user cart",
-        "tags": [
-          "Cart"
-        ]
-      },
-      "delete": {
-        "operationId": "CartController_removeProductFromCart",
-        "parameters": [
-          {
-            "name": "pid",
-            "required": true,
-            "in": "query",
-            "description": "Product id",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success removed"
-          },
-          "5XX": {
-            "description": "Server error"
-          },
-          "4XX": {
-            "description": "Check response message"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Remove product from user cart",
-        "tags": [
-          "Cart"
-        ]
-      }
-    },
     "/auth/signup": {
       "post": {
         "operationId": "AuthController_signup",
@@ -744,6 +517,233 @@
           "Category"
         ]
       }
+    },
+    "/user": {
+      "get": {
+        "operationId": "UserController_getUserProfile",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "User info recived",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReturnUserProfileDetails"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Server error"
+          },
+          "4XX": {
+            "description": "Check response message"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get user info",
+        "tags": [
+          "User"
+        ]
+      },
+      "patch": {
+        "operationId": "UserController_updateUser",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User info updated"
+          },
+          "5XX": {
+            "description": "Server error"
+          },
+          "4XX": {
+            "description": "Check response message"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update user info",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/user/password": {
+      "patch": {
+        "operationId": "UserController_updateUserPassword",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User password updated"
+          },
+          "5XX": {
+            "description": "Server error"
+          },
+          "4XX": {
+            "description": "Check response message"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update user password",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/user/cart": {
+      "get": {
+        "operationId": "CartController_getCart",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items limit on page ( from 1 to 50 )",
+            "schema": {
+              "default": 10,
+              "example": 15,
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Items page ( min 1 )",
+            "schema": {
+              "default": 1,
+              "example": 2,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User cart recived",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CartDetails"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Server error"
+          },
+          "4XX": {
+            "description": "Check response message"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get user cart",
+        "tags": [
+          "Cart"
+        ]
+      },
+      "post": {
+        "operationId": "CartController_addProductToUserCart",
+        "parameters": [
+          {
+            "name": "pid",
+            "required": true,
+            "in": "query",
+            "description": "Product id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success added"
+          },
+          "5XX": {
+            "description": "Server error"
+          },
+          "4XX": {
+            "description": "Check response message"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Add product to user cart",
+        "tags": [
+          "Cart"
+        ]
+      },
+      "delete": {
+        "operationId": "CartController_removeProductFromCart",
+        "parameters": [
+          {
+            "name": "pid",
+            "required": true,
+            "in": "query",
+            "description": "Product id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success removed"
+          },
+          "5XX": {
+            "description": "Server error"
+          },
+          "4XX": {
+            "description": "Check response message"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remove product from user cart",
+        "tags": [
+          "Cart"
+        ]
+      }
     }
   },
   "info": {
@@ -763,44 +763,7 @@
       }
     },
     "schemas": {
-      "ReturnUserProfileDetails": {
-        "type": "object",
-        "properties": {
-          "uuid": {
-            "type": "string",
-            "description": "User id"
-          },
-          "firstName": {
-            "type": "string",
-            "description": "User first name"
-          },
-          "lastName": {
-            "type": "string",
-            "description": "User last name"
-          },
-          "login": {
-            "type": "string",
-            "description": "User login"
-          },
-          "email": {
-            "type": "string",
-            "description": "User email"
-          },
-          "avatarURL": {
-            "type": "string",
-            "description": "User avatar url"
-          }
-        },
-        "required": [
-          "uuid",
-          "firstName",
-          "lastName",
-          "login",
-          "email",
-          "avatarURL"
-        ]
-      },
-      "UpdateUserDto": {
+      "CreateUserDto": {
         "type": "object",
         "properties": {
           "firstName": {
@@ -823,36 +786,54 @@
             "description": "User email",
             "example": "nodewalker@yandex.com"
           },
-          "avatar": {
+          "password": {
             "type": "string",
-            "format": "binary",
-            "description": "User avatar"
-          }
-        }
-      },
-      "UpdateUserPasswordDto": {
-        "type": "object",
-        "properties": {
-          "currentPassword": {
-            "type": "string",
-            "description": "User old password ( from 8 to 32 symbols )",
-            "example": "**********"
-          },
-          "newPassword": {
-            "type": "string",
-            "description": "User new password ( from 8 to 32 symbols )",
-            "example": "**********"
-          },
-          "repeatNewPassword": {
-            "type": "string",
-            "description": "Repeat new password ( from 8 to 32 symbols )",
+            "description": "User password ( from 8 to 32 symbols )",
             "example": "**********"
           }
         },
         "required": [
-          "currentPassword",
-          "newPassword",
-          "repeatNewPassword"
+          "firstName",
+          "lastName",
+          "login",
+          "email",
+          "password"
+        ]
+      },
+      "TokensDetails": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "access token"
+          },
+          "refresh_token": {
+            "type": "string",
+            "description": "refresh token"
+          }
+        },
+        "required": [
+          "access_token",
+          "refresh_token"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string",
+            "description": "User login ( from 3 to 24 symbols )",
+            "example": "nodewalker"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password ( from 8 to 32 symbols )",
+            "example": "**********"
+          }
+        },
+        "required": [
+          "login",
+          "password"
         ]
       },
       "ProductImageEntity": {
@@ -934,99 +915,6 @@
           "discount",
           "images",
           "category"
-        ]
-      },
-      "CartDetails": {
-        "type": "object",
-        "properties": {
-          "uuid": {
-            "type": "string",
-            "description": "Cart id"
-          },
-          "products": {
-            "description": "Products from cart",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ProductDetails"
-            }
-          }
-        },
-        "required": [
-          "uuid",
-          "products"
-        ]
-      },
-      "CreateUserDto": {
-        "type": "object",
-        "properties": {
-          "firstName": {
-            "type": "string",
-            "description": "User first name ( from 1 to 20 symbols )",
-            "example": "Evgeny"
-          },
-          "lastName": {
-            "type": "string",
-            "description": "User last name ( from 1 to 20 symbols )",
-            "example": "Smirnov"
-          },
-          "login": {
-            "type": "string",
-            "description": "User login ( from 3 to 24 symbols )",
-            "example": "nodewalker"
-          },
-          "email": {
-            "type": "string",
-            "description": "User email",
-            "example": "nodewalker@yandex.com"
-          },
-          "password": {
-            "type": "string",
-            "description": "User password ( from 8 to 32 symbols )",
-            "example": "**********"
-          }
-        },
-        "required": [
-          "firstName",
-          "lastName",
-          "login",
-          "email",
-          "password"
-        ]
-      },
-      "TokensDetails": {
-        "type": "object",
-        "properties": {
-          "access_token": {
-            "type": "string",
-            "description": "access token"
-          },
-          "refresh_token": {
-            "type": "string",
-            "description": "refresh token"
-          }
-        },
-        "required": [
-          "access_token",
-          "refresh_token"
-        ]
-      },
-      "LoginDto": {
-        "type": "object",
-        "properties": {
-          "login": {
-            "type": "string",
-            "description": "User login ( from 3 to 24 symbols )",
-            "example": "nodewalker"
-          },
-          "password": {
-            "type": "string",
-            "description": "User password ( from 8 to 32 symbols )",
-            "example": "**********"
-          }
-        },
-        "required": [
-          "login",
-          "password"
         ]
       },
       "PaginationDetails": {
@@ -1166,6 +1054,118 @@
         "required": [
           "tree",
           "pagination"
+        ]
+      },
+      "ReturnUserProfileDetails": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "description": "User id"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "User first name"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "User last name"
+          },
+          "login": {
+            "type": "string",
+            "description": "User login"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email"
+          },
+          "avatarURL": {
+            "type": "string",
+            "description": "User avatar url"
+          }
+        },
+        "required": [
+          "uuid",
+          "firstName",
+          "lastName",
+          "login",
+          "email",
+          "avatarURL"
+        ]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "description": "User first name ( from 1 to 20 symbols )",
+            "example": "Evgeny"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "User last name ( from 1 to 20 symbols )",
+            "example": "Smirnov"
+          },
+          "login": {
+            "type": "string",
+            "description": "User login ( from 3 to 24 symbols )",
+            "example": "nodewalker"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "example": "nodewalker@yandex.com"
+          },
+          "avatar": {
+            "type": "string",
+            "format": "binary",
+            "description": "User avatar"
+          }
+        }
+      },
+      "UpdateUserPasswordDto": {
+        "type": "object",
+        "properties": {
+          "currentPassword": {
+            "type": "string",
+            "description": "User old password ( from 8 to 32 symbols )",
+            "example": "**********"
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "User new password ( from 8 to 32 symbols )",
+            "example": "**********"
+          },
+          "repeatNewPassword": {
+            "type": "string",
+            "description": "Repeat new password ( from 8 to 32 symbols )",
+            "example": "**********"
+          }
+        },
+        "required": [
+          "currentPassword",
+          "newPassword",
+          "repeatNewPassword"
+        ]
+      },
+      "CartDetails": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "description": "Cart id"
+          },
+          "products": {
+            "description": "Products from cart",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductDetails"
+            }
+          }
+        },
+        "required": [
+          "uuid",
+          "products"
         ]
       }
     }
