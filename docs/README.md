@@ -1,7 +1,19 @@
-# Fake Store API
+<h1 id="fake-store-api">Fake Store API v1.0</h1>
+
+> Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
 
 Welcome to the **Fake Store API** documentation.  
-This documentation is automatically generated from NestJS controllers and DTOs using Swagger and Widdershins, and published via GitBook.
+A simple REST API that simulates an online store — provides fake products, categories, and users for testing, prototyping, and learning purposes.
+
+Base URLs:
+
+    api.fakestoreapi.ru
+
+# Authentication
+
+- HTTP Authentication, scheme: bearer
+
+---
 
 The API provides functionality for:
 

@@ -9,22 +9,9 @@ includes: []
 search: true
 highlight_theme: darkula
 headingLevel: 2
-
 ---
 
 <!-- Generator: Widdershins v4.0.1 -->
-
-<h1 id="fake-store-api">Fake Store API v1.0</h1>
-
-> Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
-
-A simple REST API that simulates an online store — provides fake products, categories, and users for testing, prototyping, and learning purposes.
-
-Base URLs:
-
-# Authentication
-
-- HTTP Authentication, scheme: bearer 
 
 <h1 id="fake-store-api-product">Product</h1>
 
@@ -35,40 +22,38 @@ Base URLs:
 > Code samples
 
 ```javascript
-
 const headers = {
-  'Accept':'application/json'
+  Accept: 'application/json',
 };
 
-fetch('/product',
-{
+fetch('/product', {
   method: 'GET',
 
-  headers: headers
+  headers: headers,
 })
-.then(function(res) {
+  .then(function (res) {
     return res.json();
-}).then(function(body) {
+  })
+  .then(function (body) {
     console.log(body);
-});
-
+  });
 ```
 
 `GET /product`
 
 <h3 id="get-list-of-products-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|limit|query|number|false|Items limit on page ( from 1 to 50 )|
-|page|query|number|false|Items page ( min 1 )|
-|name|query|string|false|Product name|
-|orderBy|query|string|false|Sort by ( name, price, discount )|
-|sort|query|string|false|Sort method ( ASC | DESC )|
-|priceFrom|query|number|false|Product price from ( min 0 )|
-|priceTo|query|number|false|Product price to ( min 1 )|
-|categoryName|query|string|false|Product category name|
-|categoryId|query|string|false|Product category id|
+| Name         | In    | Type   | Required | Description                          |
+| ------------ | ----- | ------ | -------- | ------------------------------------ | ------ |
+| limit        | query | number | false    | Items limit on page ( from 1 to 50 ) |
+| page         | query | number | false    | Items page ( min 1 )                 |
+| name         | query | string | false    | Product name                         |
+| orderBy      | query | string | false    | Sort by ( name, price, discount )    |
+| sort         | query | string | false    | Sort method ( ASC                    | DESC ) |
+| priceFrom    | query | number | false    | Product price from ( min 0 )         |
+| priceTo      | query | number | false    | Product price to ( min 1 )           |
+| categoryName | query | string | false    | Product category name                |
+| categoryId   | query | string | false    | Product category id                  |
 
 > Example responses
 
@@ -107,11 +92,11 @@ fetch('/product',
 
 <h3 id="get-list-of-products-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Products recived|[ProductsListDetails](#schemaproductslistdetails)|
-|5XX|Unknown|Server error|None|
-|4XX|Unknown|Check response message|None|
+| Status | Meaning                                                 | Description            | Schema                                            |
+| ------ | ------------------------------------------------------- | ---------------------- | ------------------------------------------------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Products recived       | [ProductsListDetails](#schemaproductslistdetails) |
+| 5XX    | Unknown                                                 | Server error           | None                                              |
+| 4XX    | Unknown                                                 | Check response message | None                                              |
 
 <aside class="success">
 This operation does not require authentication
@@ -164,14 +149,13 @@ categoryId: string
 discount: 25
 images:
   - string
-
 ```
 
 <h3 id="create-product-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[CreateProductDto](#schemacreateproductdto)|true|none|
+| Name | In   | Type                                        | Required | Description |
+| ---- | ---- | ------------------------------------------- | -------- | ----------- |
+| body | body | [CreateProductDto](#schemacreateproductdto) | true     | none        |
 
 > Example responses
 
@@ -199,11 +183,11 @@ images:
 
 <h3 id="create-product-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Product created|[ProductDetails](#schemaproductdetails)|
-|5XX|Unknown|Server error|None|
-|4XX|Unknown|Check response message|None|
+| Status | Meaning                                                      | Description            | Schema                                  |
+| ------ | ------------------------------------------------------------ | ---------------------- | --------------------------------------- |
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2) | Product created        | [ProductDetails](#schemaproductdetails) |
+| 5XX    | Unknown                                                      | Server error           | None                                    |
+| 4XX    | Unknown                                                      | Check response message | None                                    |
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -217,32 +201,30 @@ bearer
 > Code samples
 
 ```javascript
-
 const headers = {
-  'Accept':'application/json'
+  Accept: 'application/json',
 };
 
-fetch('/product/{id}',
-{
+fetch('/product/{id}', {
   method: 'GET',
 
-  headers: headers
+  headers: headers,
 })
-.then(function(res) {
+  .then(function (res) {
     return res.json();
-}).then(function(body) {
+  })
+  .then(function (body) {
     console.log(body);
-});
-
+  });
 ```
 
 `GET /product/{id}`
 
 <h3 id="get-product-by-id-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|id|path|string|true|Product id|
+| Name | In   | Type   | Required | Description |
+| ---- | ---- | ------ | -------- | ----------- |
+| id   | path | string | true     | Product id  |
 
 > Example responses
 
@@ -270,11 +252,11 @@ fetch('/product/{id}',
 
 <h3 id="get-product-by-id-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Product recived|[ProductDetails](#schemaproductdetails)|
-|5XX|Unknown|Server error|None|
-|4XX|Unknown|Check response message|None|
+| Status | Meaning                                                 | Description            | Schema                                  |
+| ------ | ------------------------------------------------------- | ---------------------- | --------------------------------------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Product recived        | [ProductDetails](#schemaproductdetails) |
+| 5XX    | Unknown                                                 | Server error           | None                                    |
+| 4XX    | Unknown                                                 | Check response message | None                                    |
 
 <aside class="success">
 This operation does not require authentication
@@ -287,40 +269,38 @@ This operation does not require authentication
 > Code samples
 
 ```javascript
-
 const headers = {
-  'Authorization':'Bearer {access-token}'
+  Authorization: 'Bearer {access-token}',
 };
 
-fetch('/product/{id}',
-{
+fetch('/product/{id}', {
   method: 'DELETE',
 
-  headers: headers
+  headers: headers,
 })
-.then(function(res) {
+  .then(function (res) {
     return res.json();
-}).then(function(body) {
+  })
+  .then(function (body) {
     console.log(body);
-});
-
+  });
 ```
 
 `DELETE /product/{id}`
 
 <h3 id="remove-product-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|id|path|string|true|Product id|
+| Name | In   | Type   | Required | Description |
+| ---- | ---- | ------ | -------- | ----------- |
+| id   | path | string | true     | Product id  |
 
 <h3 id="remove-product-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Product removed|None|
-|5XX|Unknown|Server error|None|
-|4XX|Unknown|Check response message|None|
+| Status | Meaning                                                 | Description            | Schema |
+| ------ | ------------------------------------------------------- | ---------------------- | ------ |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Product removed        | None   |
+| 5XX    | Unknown                                                 | Server error           | None   |
+| 4XX    | Unknown                                                 | Check response message | None   |
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -344,18 +324,17 @@ bearer
   "email": "nodewalker@yandex.com",
   "password": "**********"
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|firstName|string|true|none|User first name ( from 1 to 20 symbols )|
-|lastName|string|true|none|User last name ( from 1 to 20 symbols )|
-|login|string|true|none|User login ( from 3 to 24 symbols )|
-|email|string|true|none|User email|
-|password|string|true|none|User password ( from 8 to 32 symbols )|
+| Name      | Type   | Required | Restrictions | Description                              |
+| --------- | ------ | -------- | ------------ | ---------------------------------------- |
+| firstName | string | true     | none         | User first name ( from 1 to 20 symbols ) |
+| lastName  | string | true     | none         | User last name ( from 1 to 20 symbols )  |
+| login     | string | true     | none         | User login ( from 3 to 24 symbols )      |
+| email     | string | true     | none         | User email                               |
+| password  | string | true     | none         | User password ( from 8 to 32 symbols )   |
 
 <h2 id="tocS_TokensDetails">TokensDetails</h2>
 <!-- backwards compatibility -->
@@ -369,15 +348,14 @@ bearer
   "access_token": "string",
   "refresh_token": "string"
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|access_token|string|true|none|access token|
-|refresh_token|string|true|none|refresh token|
+| Name          | Type   | Required | Restrictions | Description   |
+| ------------- | ------ | -------- | ------------ | ------------- |
+| access_token  | string | true     | none         | access token  |
+| refresh_token | string | true     | none         | refresh token |
 
 <h2 id="tocS_LoginDto">LoginDto</h2>
 <!-- backwards compatibility -->
@@ -391,15 +369,14 @@ bearer
   "login": "nodewalker",
   "password": "**********"
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|login|string|true|none|User login ( from 3 to 24 symbols )|
-|password|string|true|none|User password ( from 8 to 32 symbols )|
+| Name     | Type   | Required | Restrictions | Description                            |
+| -------- | ------ | -------- | ------------ | -------------------------------------- |
+| login    | string | true     | none         | User login ( from 3 to 24 symbols )    |
+| password | string | true     | none         | User password ( from 8 to 32 symbols ) |
 
 <h2 id="tocS_ProductImageEntity">ProductImageEntity</h2>
 <!-- backwards compatibility -->
@@ -412,14 +389,13 @@ bearer
 {
   "uuid": "string"
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|uuid|string|true|none|Image url|
+| Name | Type   | Required | Restrictions | Description |
+| ---- | ------ | -------- | ------------ | ----------- |
+| uuid | string | true     | none         | Image url   |
 
 <h2 id="tocS_CategoryDetails">CategoryDetails</h2>
 <!-- backwards compatibility -->
@@ -435,17 +411,16 @@ bearer
   "hasChildren": true,
   "hasProduct": true
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|uuid|string|true|none|Category id|
-|name|string|true|none|Category name|
-|hasChildren|boolean|false|none|Is category has children|
-|hasProduct|boolean|false|none|Is category has product|
+| Name        | Type    | Required | Restrictions | Description              |
+| ----------- | ------- | -------- | ------------ | ------------------------ |
+| uuid        | string  | true     | none         | Category id              |
+| name        | string  | true     | none         | Category name            |
+| hasChildren | boolean | false    | none         | Is category has children |
+| hasProduct  | boolean | false    | none         | Is category has product  |
 
 <h2 id="tocS_ProductDetails">ProductDetails</h2>
 <!-- backwards compatibility -->
@@ -472,19 +447,18 @@ bearer
     "hasProduct": true
   }
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|uuid|string|true|none|Product id|
-|name|string|true|none|Product name|
-|price|string|true|none|Product price|
-|discount|string|true|none|Product discount|
-|images|[[ProductImageEntity](#schemaproductimageentity)]|true|none|Product images|
-|category|[CategoryDetails](#schemacategorydetails)|true|none|Product category|
+| Name     | Type                                              | Required | Restrictions | Description      |
+| -------- | ------------------------------------------------- | -------- | ------------ | ---------------- |
+| uuid     | string                                            | true     | none         | Product id       |
+| name     | string                                            | true     | none         | Product name     |
+| price    | string                                            | true     | none         | Product price    |
+| discount | string                                            | true     | none         | Product discount |
+| images   | [[ProductImageEntity](#schemaproductimageentity)] | true     | none         | Product images   |
+| category | [CategoryDetails](#schemacategorydetails)         | true     | none         | Product category |
 
 <h2 id="tocS_PaginationDetails">PaginationDetails</h2>
 <!-- backwards compatibility -->
@@ -501,18 +475,17 @@ bearer
   "totalPage": 0,
   "isLastPage": true
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|total|number|true|none|Total items|
-|page|number|true|none|Current page|
-|limit|number|true|none|Current limit|
-|totalPage|number|true|none|Total page count|
-|isLastPage|boolean|true|none|is last page?|
+| Name       | Type    | Required | Restrictions | Description      |
+| ---------- | ------- | -------- | ------------ | ---------------- |
+| total      | number  | true     | none         | Total items      |
+| page       | number  | true     | none         | Current page     |
+| limit      | number  | true     | none         | Current limit    |
+| totalPage  | number  | true     | none         | Total page count |
+| isLastPage | boolean | true     | none         | is last page?    |
 
 <h2 id="tocS_ProductsListDetails">ProductsListDetails</h2>
 <!-- backwards compatibility -->
@@ -550,15 +523,14 @@ bearer
     "isLastPage": true
   }
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|data|[[ProductDetails](#schemaproductdetails)]|true|none|Product list|
-|pagintaion|[PaginationDetails](#schemapaginationdetails)|true|none|Paggination info|
+| Name       | Type                                          | Required | Restrictions | Description      |
+| ---------- | --------------------------------------------- | -------- | ------------ | ---------------- |
+| data       | [[ProductDetails](#schemaproductdetails)]     | true     | none         | Product list     |
+| pagintaion | [PaginationDetails](#schemapaginationdetails) | true     | none         | Paggination info |
 
 <h2 id="tocS_CreateProductDto">CreateProductDto</h2>
 <!-- backwards compatibility -->
@@ -573,22 +545,19 @@ bearer
   "price": 1000,
   "categoryId": "string",
   "discount": 25,
-  "images": [
-    "string"
-  ]
+  "images": ["string"]
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|true|none|Name of product ( from 2 to 50 symbols )|
-|price|number|true|none|Price of product ( min 1 )|
-|categoryId|string|true|none|Category id|
-|discount|number|true|none|Discount of product ( from 0 to 100 )|
-|images|[string]|true|none|Product images|
+| Name       | Type     | Required | Restrictions | Description                              |
+| ---------- | -------- | -------- | ------------ | ---------------------------------------- |
+| name       | string   | true     | none         | Name of product ( from 2 to 50 symbols ) |
+| price      | number   | true     | none         | Price of product ( min 1 )               |
+| categoryId | string   | true     | none         | Category id                              |
+| discount   | number   | true     | none         | Discount of product ( from 0 to 100 )    |
+| images     | [string] | true     | none         | Product images                           |
 
 <h2 id="tocS_CreateCategoryDto">CreateCategoryDto</h2>
 <!-- backwards compatibility -->
@@ -602,15 +571,14 @@ bearer
   "name": "Shoes",
   "parentId": "string"
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|true|none|Name of category ( from 2 to 50 symbols )|
-|parentId|string|false|none|Parent category id|
+| Name     | Type   | Required | Restrictions | Description                               |
+| -------- | ------ | -------- | ------------ | ----------------------------------------- |
+| name     | string | true     | none         | Name of category ( from 2 to 50 symbols ) |
+| parentId | string | false    | none         | Parent category id                        |
 
 <h2 id="tocS_RootCategoriesDetail">RootCategoriesDetail</h2>
 <!-- backwards compatibility -->
@@ -637,15 +605,14 @@ bearer
     "isLastPage": true
   }
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|tree|[[CategoryDetails](#schemacategorydetails)]|true|none|Root categories tree|
-|pagination|[PaginationDetails](#schemapaginationdetails)|true|none|Paggination info|
+| Name       | Type                                          | Required | Restrictions | Description          |
+| ---------- | --------------------------------------------- | -------- | ------------ | -------------------- |
+| tree       | [[CategoryDetails](#schemacategorydetails)]   | true     | none         | Root categories tree |
+| pagination | [PaginationDetails](#schemapaginationdetails) | true     | none         | Paggination info     |
 
 <h2 id="tocS_ReturnUserProfileDetails">ReturnUserProfileDetails</h2>
 <!-- backwards compatibility -->
@@ -663,19 +630,18 @@ bearer
   "email": "string",
   "avatarURL": "string"
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|uuid|string|true|none|User id|
-|firstName|string|true|none|User first name|
-|lastName|string|true|none|User last name|
-|login|string|true|none|User login|
-|email|string|true|none|User email|
-|avatarURL|string|true|none|User avatar url|
+| Name      | Type   | Required | Restrictions | Description     |
+| --------- | ------ | -------- | ------------ | --------------- |
+| uuid      | string | true     | none         | User id         |
+| firstName | string | true     | none         | User first name |
+| lastName  | string | true     | none         | User last name  |
+| login     | string | true     | none         | User login      |
+| email     | string | true     | none         | User email      |
+| avatarURL | string | true     | none         | User avatar url |
 
 <h2 id="tocS_UpdateUserDto">UpdateUserDto</h2>
 <!-- backwards compatibility -->
@@ -692,18 +658,17 @@ bearer
   "email": "nodewalker@yandex.com",
   "avatar": "string"
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|firstName|string|false|none|User first name ( from 1 to 20 symbols )|
-|lastName|string|false|none|User last name ( from 1 to 20 symbols )|
-|login|string|false|none|User login ( from 3 to 24 symbols )|
-|email|string|false|none|User email|
-|avatar|string(binary)|false|none|User avatar|
+| Name      | Type           | Required | Restrictions | Description                              |
+| --------- | -------------- | -------- | ------------ | ---------------------------------------- |
+| firstName | string         | false    | none         | User first name ( from 1 to 20 symbols ) |
+| lastName  | string         | false    | none         | User last name ( from 1 to 20 symbols )  |
+| login     | string         | false    | none         | User login ( from 3 to 24 symbols )      |
+| email     | string         | false    | none         | User email                               |
+| avatar    | string(binary) | false    | none         | User avatar                              |
 
 <h2 id="tocS_UpdateUserPasswordDto">UpdateUserPasswordDto</h2>
 <!-- backwards compatibility -->
@@ -718,16 +683,15 @@ bearer
   "newPassword": "**********",
   "repeatNewPassword": "**********"
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|currentPassword|string|true|none|User old password ( from 8 to 32 symbols )|
-|newPassword|string|true|none|User new password ( from 8 to 32 symbols )|
-|repeatNewPassword|string|true|none|Repeat new password ( from 8 to 32 symbols )|
+| Name              | Type   | Required | Restrictions | Description                                  |
+| ----------------- | ------ | -------- | ------------ | -------------------------------------------- |
+| currentPassword   | string | true     | none         | User old password ( from 8 to 32 symbols )   |
+| newPassword       | string | true     | none         | User new password ( from 8 to 32 symbols )   |
+| repeatNewPassword | string | true     | none         | Repeat new password ( from 8 to 32 symbols ) |
 
 <h2 id="tocS_CartDetails">CartDetails</h2>
 <!-- backwards compatibility -->
@@ -759,13 +723,11 @@ bearer
     }
   ]
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|uuid|string|true|none|Cart id|
-|products|[[ProductDetails](#schemaproductdetails)]|true|none|Products from cart|
-
+| Name     | Type                                      | Required | Restrictions | Description        |
+| -------- | ----------------------------------------- | -------- | ------------ | ------------------ |
+| uuid     | string                                    | true     | none         | Cart id            |
+| products | [[ProductDetails](#schemaproductdetails)] | true     | none         | Products from cart |
