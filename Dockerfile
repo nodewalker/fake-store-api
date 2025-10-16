@@ -24,8 +24,6 @@ RUN npm ci --only=production --silent
 
 COPY --from=builder /app/dist ./dist
 
-COPY --from=builder /app/public ./public
-
 RUN nginx -T
 
 EXPOSE 5000

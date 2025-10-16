@@ -36,9 +36,7 @@ jobs:
 
       #   - name: Run tests
       #     run: npm test
-  generate-docs:
-    runs-on: ubuntu-latest
-    steps:
+
       - name: Generate GitBook
         run: npm run generate:gitbook
 
@@ -52,6 +50,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    needs: check
     steps:
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.1
