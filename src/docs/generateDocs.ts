@@ -31,7 +31,6 @@ function generateDocs() {
   const summaryContent: string[] = [
     ...summaryInit.matchAll(/(##\s+.+?(?=(\n##\s)|$))/gs),
   ].map((m) => m[1]);
-  console.log(summaryContent);
   let i = 0;
   for (const tag of tags) {
     const filteredDoc: any = { ...document, paths: {} };
@@ -54,7 +53,6 @@ function generateDocs() {
       { stdio: 'inherit' },
     );
     const str: string = fs.readFileSync(mdFile, 'utf8');
-    console.log(str);
     const replacedFile = str
       .replace(
         /\[?\[([^\]]+)\]\(#schema([^\)]+)\)\]?/gi,

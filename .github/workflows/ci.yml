@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 jobs:
-  build-test-docs:
+  check:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -36,7 +36,9 @@ jobs:
 
       #   - name: Run tests
       #     run: npm test
-
+  generate-docs:
+    runs-on: ubuntu-latest
+    steps:
       - name: Generate GitBook
         run: npm run generate:gitbook
 
@@ -48,26 +50,28 @@ jobs:
           git commit -m "Update GitBook" || echo "No changes to commit"
           git push
 
-      - name: Create files
-        run: |
-          echo "DATABASE_USER=${{ secrets.DATABASE_USER }}" >> .env.prod
-          echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> .env.prod
-          echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" >> .env.prod
-          echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" >> .env.prod
-          echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> .env.prod
-          echo "JWT_SECRET=${{ secrets.DATABASE_NAME }}" >> .env.prod
-          echo "JWT_SECRET=${{ secrets.SSL_CRT }}" >> fakestoreapi.crt
-          echo "JWT_SECRET=${{ secrets.SSL_KEY }}" >> fakestoreapi.key
-
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
       - name: Deploy on server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
             cd /home/pets/fake-store-api
             git pull
+            echo "DATABASE_USER=${{ secrets.DATABASE_USER }}" >> .env.prod
+            echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> .env.prod
+            echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" >> .env.prod
+            echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" >> .env.prod
+            echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> .env.prod
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.prod
+            echo "${{ secrets.SSL_CRT }}" >> fakestoreapi.crt
+            echo "${{ secrets.SSL_KEY }}" >> fakestoreapi.key
             docker compose --env-file .env.prod up -d --build
+            rm .env.prod
+            rm fakestoreapi.crt
+            rm fakestoreapi.key
           EOF
