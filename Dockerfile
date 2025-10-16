@@ -10,7 +10,7 @@ COPY . .
 
 RUN npm run build
 
-FROM node:20-alpine AS production
+FROM nginx:alpine AS production
 
 WORKDIR /app
 
@@ -20,11 +20,11 @@ COPY fakestoreapi.key /etc/nginx/fakestoreapi.ru/fakestoreapi.key
 
 COPY package*.json ./
 
+RUN apk add --no-cache nodejs npm
+
 RUN npm ci --only=production --silent
 
 COPY --from=builder /app/dist ./dist
-
-RUN apk add --no-cache nginx
 
 RUN nginx -T
 
