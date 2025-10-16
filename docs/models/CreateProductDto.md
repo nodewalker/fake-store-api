@@ -22,16 +22,16 @@ search: true
   "price": 1000,
   "categoryId": "string",
   "discount": 25,
-  "images": ["string"]
+  "images": [[]]
 }
 ```
 
 ### Properties
 
-| Name       | Type     | Required | Restrictions | Description                              |
-| ---------- | -------- | -------- | ------------ | ---------------------------------------- |
-| name       | string   | true     | none         | Name of product ( from 2 to 50 symbols ) |
-| price      | number   | true     | none         | Price of product ( min 1 )               |
-| categoryId | string   | true     | none         | Category id                              |
-| discount   | number   | true     | none         | Discount of product ( from 0 to 100 )    |
-| images     | [string] | true     | none         | Product images                           |
+| Name       | Type    | Required | Restrictions | Description                              |
+| ---------- | ------- | -------- | ------------ | ---------------------------------------- |
+| name       | string  | true     | none         | Name of product ( from 2 to 50 symbols ) |
+| price      | number  | true     | none         | Price of product ( min 1 )               |
+| categoryId | string  | true     | none         | Category id                              |
+| discount   | number  | true     | none         | Discount of product ( from 0 to 100 )    |
+| images     | [array] | true     | none         | Product images                           |

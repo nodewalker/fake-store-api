@@ -29,20 +29,18 @@ search: true
   ],
   "category": {
     "uuid": "string",
-    "name": "string",
-    "hasChildren": true,
-    "hasProduct": true
+    "name": "string"
   }
 }
 ```
 
 ### Properties
 
-| Name     | Type                                                     | Required | Restrictions | Description      |
-| -------- | -------------------------------------------------------- | -------- | ------------ | ---------------- |
-| uuid     | string                                                   | true     | none         | Product id       |
-| name     | string                                                   | true     | none         | Product name     |
-| price    | string                                                   | true     | none         | Product price    |
-| discount | string                                                   | true     | none         | Product discount |
-| images   | [[ProductImageEntity](../models/[ProductImageEntity.md)] | true     | none         | Product images   |
-| category | [CategoryDetails](../models/CategoryDetails.md)          | true     | none         | Product category |
+| Name     | Type                                                          | Required | Restrictions | Description      |
+| -------- | ------------------------------------------------------------- | -------- | ------------ | ---------------- |
+| uuid     | string                                                        | true     | none         | Product id       |
+| name     | string                                                        | true     | none         | Product name     |
+| price    | string                                                        | true     | none         | Product price    |
+| discount | string                                                        | true     | none         | Product discount |
+| images   | [[ProductImageEntity](../models/[ProductImageEntity.md)]      | true     | none         | Product images   |
+| category | [ProductCategoryDetails](../models/ProductCategoryDetails.md) | true     | none         | Product category |

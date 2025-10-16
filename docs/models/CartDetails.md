@@ -32,9 +32,7 @@ search: true
       ],
       "category": {
         "uuid": "string",
-        "name": "string",
-        "hasChildren": true,
-        "hasProduct": true
+        "name": "string"
       }
     }
   ]

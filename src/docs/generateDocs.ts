@@ -1,3 +1,8 @@
+/* eslint-disable no-useless-escape */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import * as fs from 'fs';
 import { execSync } from 'child_process';
 
@@ -8,7 +13,7 @@ function generateDocs() {
 
   const tags = Array.from(
     new Set(
-      Object.values(document.paths)
+      Object.values(document.paths as object)
         .flatMap((pathItem) =>
           Object.values(pathItem as object).filter(Boolean),
         )
@@ -30,7 +35,7 @@ function generateDocs() {
   let i = 0;
   for (const tag of tags) {
     const filteredDoc: any = { ...document, paths: {} };
-    for (const [path, pathItem] of Object.entries(document.paths)) {
+    for (const [path, pathItem] of Object.entries(document.paths as object)) {
       const filteredPathItem: any = {};
       for (const method of Object.keys(pathItem as object)) {
         const op = (pathItem as any)[method];

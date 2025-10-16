@@ -73,9 +73,7 @@ xhr.send(data);
       ],
       "category": {
         "uuid": "string",
-        "name": "string",
-        "hasChildren": true,
-        "hasProduct": true
+        "name": "string"
       }
     }
   ],
@@ -117,7 +115,7 @@ price: 1000
 categoryId: string
 discount: 25
 images:
-  - string
+  - []
 ```
 
 <h3 id="create-product-parameters">Parameters</h3>
@@ -143,9 +141,7 @@ images:
   ],
   "category": {
     "uuid": "string",
-    "name": "string",
-    "hasChildren": true,
-    "hasProduct": true
+    "name": "string"
   }
 }
 ```
@@ -212,9 +208,7 @@ xhr.send(data);
   ],
   "category": {
     "uuid": "string",
-    "name": "string",
-    "hasChildren": true,
-    "hasProduct": true
+    "name": "string"
   }
 }
 ```

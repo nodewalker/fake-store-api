@@ -848,7 +848,7 @@
           "uuid"
         ]
       },
-      "CategoryDetails": {
+      "ProductCategoryDetails": {
         "type": "object",
         "properties": {
           "uuid": {
@@ -858,14 +858,6 @@
           "name": {
             "type": "string",
             "description": "Category name"
-          },
-          "hasChildren": {
-            "type": "boolean",
-            "description": "Is category has children"
-          },
-          "hasProduct": {
-            "type": "boolean",
-            "description": "Is category has product"
           }
         },
         "required": [
@@ -903,7 +895,7 @@
             "description": "Product category",
             "allOf": [
               {
-                "$ref": "#/components/schemas/CategoryDetails"
+                "$ref": "#/components/schemas/ProductCategoryDetails"
               }
             ]
           }
@@ -997,14 +989,13 @@
             "example": 25
           },
           "images": {
-            "type": "array",
             "items": {
-              "type": "string",
-              "format": "binary"
+              "type": "array"
             },
             "description": "Product images",
             "minItems": 1,
-            "maxItems": 3
+            "maxItems": 3,
+            "type": "array"
           }
         },
         "required": [
@@ -1029,6 +1020,31 @@
           }
         },
         "required": [
+          "name"
+        ]
+      },
+      "CategoryDetails": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "description": "Category id"
+          },
+          "name": {
+            "type": "string",
+            "description": "Category name"
+          },
+          "hasChildren": {
+            "type": "boolean",
+            "description": "Is category has children"
+          },
+          "hasProduct": {
+            "type": "boolean",
+            "description": "Is category has product"
+          }
+        },
+        "required": [
+          "uuid",
           "name"
         ]
       },
