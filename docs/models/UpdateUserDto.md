@@ -28,10 +28,10 @@ search: true
 
 ### Properties
 
-| Name      | Type           | Required | Restrictions | Description                              |
-| --------- | -------------- | -------- | ------------ | ---------------------------------------- |
-| firstName | string         | false    | none         | User first name ( from 1 to 20 symbols ) |
-| lastName  | string         | false    | none         | User last name ( from 1 to 20 symbols )  |
-| login     | string         | false    | none         | User login ( from 3 to 24 symbols )      |
-| email     | string         | false    | none         | User email                               |
-| avatar    | string(binary) | false    | none         | User avatar                              |
+| Name      | Type           | Required | Restrictions | Description                                            |
+| --------- | -------------- | -------- | ------------ | ------------------------------------------------------ |
+| firstName | string         | false    | none         | User first name ( from 1 to 20 symbols )               |
+| lastName  | string         | false    | none         | User last name ( from 1 to 20 symbols )                |
+| login     | string         | false    | none         | User login ( from 3 to 24 symbols )                    |
+| email     | string         | false    | none         | User email                                             |
+| avatar    | string(binary) | false    | none         | User avatar ( /files/avatars/:id for get user avatar ) |

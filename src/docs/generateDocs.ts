@@ -53,11 +53,11 @@ function generateDocs() {
       `npx widdershins ${tmpJsonFile} -o ${mdFile} --summary --httpsnippet --language_tabs javascript:JavaScript,typescript:TypeScript`,
       { stdio: 'inherit' },
     );
-
     const str: string = fs.readFileSync(mdFile, 'utf8');
+    console.log(str);
     const replacedFile = str
       .replace(
-        /\[([^\]]+)\]\(#schema([^\)]+)\)/gi,
+        /\[?\[([^\]]+)\]\(#schema([^\)]+)\)\]?/gi,
         (_match, name) => `[${name}](../models/${name}.md)`,
       )
       .replace(/title:\s*(.+)/g, (_, name) => `title: ${tag}`);

@@ -885,7 +885,7 @@
             "description": "Product discount"
           },
           "images": {
-            "description": "Product images",
+            "description": "Product images ( /files/products/:id for get product image )",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ProductImageEntity"
@@ -1135,7 +1135,7 @@
           "avatar": {
             "type": "string",
             "format": "binary",
-            "description": "User avatar"
+            "description": "User avatar ( /files/avatars/:id for get user avatar )"
           }
         }
       },

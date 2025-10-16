@@ -55,7 +55,7 @@ export class ProductDetails {
 
   @ApiProperty({
     name: 'images',
-    description: 'Product images',
+    description: 'Product images ( /files/products/:id for get product image )',
     isArray: true,
     type: ProductImageEntity,
   })

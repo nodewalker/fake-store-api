@@ -200,13 +200,13 @@ xhr.send(data);
 
 Status Code **200**
 
-| Name          | Type                                               | Required | Restrictions | Description              |
-| ------------- | -------------------------------------------------- | -------- | ------------ | ------------------------ |
-| _anonymous_   | [[CategoryDetails](../models/[CategoryDetails.md)] | false    | none         | none                     |
-| » uuid        | string                                             | true     | none         | Category id              |
-| » name        | string                                             | true     | none         | Category name            |
-| » hasChildren | boolean                                            | false    | none         | Is category has children |
-| » hasProduct  | boolean                                            | false    | none         | Is category has product  |
+| Name          | Type                                            | Required | Restrictions | Description              |
+| ------------- | ----------------------------------------------- | -------- | ------------ | ------------------------ |
+| _anonymous_   | [CategoryDetails](../models/CategoryDetails.md) | false    | none         | none                     |
+| » uuid        | string                                          | true     | none         | Category id              |
+| » name        | string                                          | true     | none         | Category name            |
+| » hasChildren | boolean                                         | false    | none         | Is category has children |
+| » hasProduct  | boolean                                         | false    | none         | Is category has product  |
 
 <aside class="success">
 This operation does not require authentication

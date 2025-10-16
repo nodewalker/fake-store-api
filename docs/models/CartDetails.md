@@ -41,7 +41,7 @@ search: true
 
 ### Properties
 
-| Name     | Type                                             | Required | Restrictions | Description        |
-| -------- | ------------------------------------------------ | -------- | ------------ | ------------------ |
-| uuid     | string                                           | true     | none         | Cart id            |
-| products | [[ProductDetails](../models/[ProductDetails.md)] | true     | none         | Products from cart |
+| Name     | Type                                          | Required | Restrictions | Description        |
+| -------- | --------------------------------------------- | -------- | ------------ | ------------------ |
+| uuid     | string                                        | true     | none         | Cart id            |
+| products | [ProductDetails](../models/ProductDetails.md) | true     | none         | Products from cart |

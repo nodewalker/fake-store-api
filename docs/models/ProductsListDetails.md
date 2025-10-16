@@ -49,5 +49,5 @@ search: true
 
 | Name       | Type                                                | Required | Restrictions | Description      |
 | ---------- | --------------------------------------------------- | -------- | ------------ | ---------------- |
-| data       | [[ProductDetails](../models/[ProductDetails.md)]    | true     | none         | Product list     |
+| data       | [ProductDetails](../models/ProductDetails.md)       | true     | none         | Product list     |
 | pagintaion | [PaginationDetails](../models/PaginationDetails.md) | true     | none         | Paggination info |

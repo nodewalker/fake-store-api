@@ -43,7 +43,7 @@ jobs:
           git config user.email "github-actions@github.com"
           git add ./docs  
           git commit -m "Update GitBook" || echo "No changes to commit"
-          git push origin gitbook --force
+          git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

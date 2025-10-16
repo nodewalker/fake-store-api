@@ -62,7 +62,7 @@ export class UpdateUserDto {
     name: 'avatar',
     type: 'string',
     format: 'binary',
-    description: 'User avatar',
+    description: 'User avatar ( /files/avatars/:id for get user avatar )',
     required: false,
   })
   avatar?: any;

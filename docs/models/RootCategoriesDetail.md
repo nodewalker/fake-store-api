@@ -40,5 +40,5 @@ search: true
 
 | Name       | Type                                                | Required | Restrictions | Description          |
 | ---------- | --------------------------------------------------- | -------- | ------------ | -------------------- |
-| tree       | [[CategoryDetails](../models/[CategoryDetails.md)]  | true     | none         | Root categories tree |
+| tree       | [CategoryDetails](../models/CategoryDetails.md)     | true     | none         | Root categories tree |
 | pagination | [PaginationDetails](../models/PaginationDetails.md) | true     | none         | Paggination info     |
