@@ -1,98 +1,136 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Fake Store API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/nodewalker/fake-store-api)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+A feature-rich, NestJS-based REST API that simulates an e-commerce backend. It provides a complete set of features including user authentication, product and category management, and a shopping cart system. This project is built with a focus on best practices and serves as an excellent learning resource for building scalable server-side applications with TypeScript, TypeORM, and creating automated API documentation workflows.
 
-## Description
+## Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Authentication**: Secure user registration, login, and token refresh using JWT and Argon2 for password hashing.
+- **Product Management**: Full CRUD operations for products, including multi-image uploads, advanced filtering, and sorting capabilities.
+- **Category Management**: Create and manage a hierarchical category structure.
+- **User & Cart**: User profile management (including avatar uploads) and a persistent shopping cart for each user.
+- **API Documentation**: Automatically generated, detailed API documentation using Swagger and Widdershins.
+- **Validation**: Robust request validation using `class-validator` and `class-transformer`.
+- **Security**: Hardened with `helmet`, request rate-limiting, and global exception filtering for consistent error handling.
+- **Logging**: Configured with `winston` for structured, rotating logs.
 
-## Project setup
+## Tech Stack
+
+- **Framework**: [NestJS](https://nestjs.com/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Database**: [PostgreSQL](https://www.postgresql.org/) with [TypeORM](https://typeorm.io/)
+- **Authentication**: [JWT (JSON Web Tokens)](https://jwt.io/)
+- **API Specification**: [Swagger (OpenAPI)](https://swagger.io/)
+- **Logging**: [Winston](https://github.com/winstonjs/winston)
+
+## Getting Started
+
+Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
+
+### Prerequisites
+
+- Node.js (v18 or higher recommended)
+- npm or another package manager
+- A running instance of PostgreSQL
+
+### Installation & Setup
+
+1.  **Clone the repository:**
+
+    ```bash
+    git clone https://github.com/nodewalker/fake-store-api.git
+    cd fake-store-api
+    ```
+
+2.  **Install dependencies:**
+
+    ```bash
+    npm install
+    ```
+
+3.  **Configure Environment Variables:**
+    Create a `.env` file in the root directory by copying the example file:
+
+    ```bash
+    cp .env.dev .env
+    ```
+
+    Update the `.env` file with your local configuration, especially your database credentials and a secure `JWT_SECRET`.
+
+    ```env
+    # SERVER
+    PORT=3000
+
+    # DATABASE
+    DB_HOST='localhost'
+    DB_PORT=5432
+    DB_USERNAME='your_postgres_user'
+    DB_PASSWORD='your_postgres_password'
+    DB_NAME='fake-store-api'
+
+    # JWT
+    JWT_SECRET='a_very_strong_and_long_secret_key'
+    ```
+
+4.  **Database Setup:**
+    Ensure your PostgreSQL server is running and you have created a database with the name specified in your `.env` file (e.g., `fake-store-api`). The application uses TypeORM's `synchronize: true` feature for development, which will automatically create the database schema on startup.
+
+## Running the Application
+
+- **Development mode (with hot-reload):**
+
+  ```bash
+  npm run start:dev
+  ```
+
+  The server will start on the port specified in your `.env` file (default: `3000`).
+
+- **Production mode:**
+  First, build the project:
+  ```bash
+  npm run build
+  ```
+  Then, start the compiled application:
+  ```bash
+  npm run start:prod
+  ```
+
+## API Documentation
+
+This repository includes a comprehensive, pre-generated API reference located in the `/docs` directory. You can browse the files directly on GitHub to understand all available endpoints, request parameters, and response models.
+
+To regenerate the documentation after making changes to API controllers or DTOs, run the following command:
 
 ```bash
-$ npm install
+npm run generate:gitbook
 ```
 
-## Compile and run the project
+This script will:
 
-```bash
-# development
-$ npm run start
+1.  Generate an up-to-date `swagger.json` file.
+2.  Convert the OpenAPI specification into detailed Markdown files for each API resource.
+3.  Organize the documentation structure and navigation in `docs/SUMMARY.md`.
 
-# watch mode
-$ npm run start:dev
+## Running Tests
 
-# production mode
-$ npm run start:prod
-```
+- **Unit Tests:**
 
-## Run tests
+  ```bash
+  npm run test
+  ```
 
-```bash
-# unit tests
-$ npm run test
+- **End-to-End (E2E) Tests:**
 
-# e2e tests
-$ npm run test:e2e
+  ```bash
+  npm run test:e2e
+  ```
 
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- **Test Coverage:**
+  ```bash
+  npm run test:cov
+  ```
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

@@ -1,5 +1,6 @@
 - update category and product
 - get all subcategories by parent
+- github && google auth
 
 # gitbook
 - request models and response models ( ./models/request && ./models/response )
