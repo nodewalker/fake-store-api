@@ -20,6 +20,7 @@ async function generateSwagger() {
   const document = SwaggerModule.createDocument(app, config);
   if (!fs.existsSync('./swagger')) fs.mkdirSync('./swagger');
   fs.writeFileSync('./swagger/swagger.json', JSON.stringify(document, null, 2));
+  await app.close();
 }
 
 void generateSwagger();
