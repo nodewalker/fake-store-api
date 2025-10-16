@@ -1,3 +1,12 @@
+---
+title: CreateProductDto
+language_tabs:
+  - javascript: JavaScript,typescript
+language_clients:
+  - javascript: TypeScript
+search: true
+---
+
 <h2 id="tocS_CreateProductDto">CreateProductDto</h2>
 
 <!-- backwards compatibility -->

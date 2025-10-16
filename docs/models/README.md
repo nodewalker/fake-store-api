@@ -1,3 +1,8 @@
+---
+title: Models
+search: true
+---
+
 # Models
 
 This section contains all **data models and DTOs** used in the Fake Store API v1.0.  

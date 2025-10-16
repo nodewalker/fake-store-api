@@ -1,3 +1,12 @@
+---
+title: ProductDetails
+language_tabs:
+  - javascript: JavaScript,typescript
+language_clients:
+  - javascript: TypeScript
+search: true
+---
+
 <h2 id="tocS_ProductDetails">ProductDetails</h2>
 
 <!-- backwards compatibility -->

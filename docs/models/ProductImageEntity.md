@@ -1,3 +1,12 @@
+---
+title: ProductImageEntity
+language_tabs:
+  - javascript: JavaScript,typescript
+language_clients:
+  - javascript: TypeScript
+search: true
+---
+
 <h2 id="tocS_ProductImageEntity">ProductImageEntity</h2>
 
 <!-- backwards compatibility -->

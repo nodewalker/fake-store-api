@@ -40,7 +40,7 @@ function generateDocs() {
         filteredDoc.paths[path] = filteredPathItem;
     }
 
-    const tmpJsonFile = `./swagger-${tag}.json`;
+    const tmpJsonFile = `./swagger/swagger-${tag}.json`;
     fs.writeFileSync(tmpJsonFile, JSON.stringify(filteredDoc, null, 2));
 
     const mdFile = `./docs/api/api-${tag.toLowerCase()}.md`;
@@ -50,10 +50,12 @@ function generateDocs() {
     );
 
     const str: string = fs.readFileSync(mdFile, 'utf8');
-    const replacedFile = str.replace(
-      /\[([^\]]+)\]\(#schema([^\)]+)\)/gi,
-      (_match, name) => `[${name}](../models/${name}.md)`,
-    );
+    const replacedFile = str
+      .replace(
+        /\[([^\]]+)\]\(#schema([^\)]+)\)/gi,
+        (_match, name) => `[${name}](../models/${name}.md)`,
+      )
+      .replace(/title:\s*(.+)/g, (_, name) => `title: ${tag}`);
     const lines: string[] = replacedFile.split('\n');
     const res: string[] = [];
     res.push(...lines.slice(0, 15));
@@ -67,7 +69,17 @@ function generateDocs() {
         const name = d[j].split(/<h2 id="tocS_([^<]+)">[^"]+<\/h2>/g);
         fs.writeFileSync(
           `./docs/models/${name[1]}.md`,
-          [d[j], d[j + 1]].join('\n'),
+          [
+            `---
+title: ${name[1]}
+language_tabs:
+  - javascript: JavaScript,typescript
+language_clients:
+  - javascript: TypeScript
+search: true
+---\n\n` + d[j],
+            d[j + 1],
+          ].join('\n'),
         );
         summaryContent[1] += `- [${name[1]}](models/${name[1]}.md)\n`;
       }

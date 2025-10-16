@@ -1,3 +1,12 @@
+---
+title: RootCategoriesDetail
+language_tabs:
+  - javascript: JavaScript,typescript
+language_clients:
+  - javascript: TypeScript
+search: true
+---
+
 <h2 id="tocS_RootCategoriesDetail">RootCategoriesDetail</h2>
 
 <!-- backwards compatibility -->

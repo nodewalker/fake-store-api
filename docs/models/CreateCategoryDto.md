@@ -1,3 +1,12 @@
+---
+title: CreateCategoryDto
+language_tabs:
+  - javascript: JavaScript,typescript
+language_clients:
+  - javascript: TypeScript
+search: true
+---
+
 <h2 id="tocS_CreateCategoryDto">CreateCategoryDto</h2>
 
 <!-- backwards compatibility -->

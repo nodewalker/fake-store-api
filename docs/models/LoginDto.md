@@ -1,3 +1,12 @@
+---
+title: LoginDto
+language_tabs:
+  - javascript: JavaScript,typescript
+language_clients:
+  - javascript: TypeScript
+search: true
+---
+
 <h2 id="tocS_LoginDto">LoginDto</h2>
 
 <!-- backwards compatibility -->

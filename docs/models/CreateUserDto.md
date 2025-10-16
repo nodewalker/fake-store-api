@@ -1,3 +1,12 @@
+---
+title: CreateUserDto
+language_tabs:
+  - javascript: JavaScript,typescript
+language_clients:
+  - javascript: TypeScript
+search: true
+---
+
 <h2 id="tocS_CreateUserDto">CreateUserDto</h2>
 
 <!-- backwards compatibility -->

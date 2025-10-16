@@ -1,3 +1,12 @@
+---
+title: TokensDetails
+language_tabs:
+  - javascript: JavaScript,typescript
+language_clients:
+  - javascript: TypeScript
+search: true
+---
+
 <h2 id="tocS_TokensDetails">TokensDetails</h2>
 
 <!-- backwards compatibility -->

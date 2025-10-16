@@ -1,5 +1,5 @@
 ---
-title: Fake Store API v1.0
+title: Product
 language_tabs:
   - javascript: JavaScript,typescript
 language_clients:

@@ -1,3 +1,8 @@
+---
+title: API Reference
+search: true
+---
+
 # API Reference
 
 This section documents all endpoints of the **Fake Store API v1.0**.  
