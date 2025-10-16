@@ -1,8 +1,11 @@
 # Fake Store API
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/nodewalker/fake-store-api)
-
 A feature-rich, NestJS-based REST API that simulates an e-commerce backend. It provides a complete set of features including user authentication, product and category management, and a shopping cart system. This project is built with a focus on best practices and serves as an excellent learning resource for building scalable server-side applications with TypeScript, TypeORM, and creating automated API documentation workflows.
+
+## Documentation
+
+[![GitBook](https://img.shields.io/badge/GitBook-%23000000.svg?style=for-the-badge&logo=gitbook&logoColor=white)](https://docs.fakestoreapi.ru)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/nodewalker/fake-store-api)
 
 ## Features
 

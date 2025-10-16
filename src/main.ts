@@ -17,9 +17,13 @@ async function bootstrap(): Promise<void> {
   app.useGlobalPipes(new CustomValidationPipe());
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
-    prefix: '/uploads/',
+    prefix: '/files/',
   });
 
+  app.use((req, res, next) => {
+    req.app.set('trust proxy', true);
+    next();
+  });
   app.use(helmet());
   app.enableCors({
     origin: true,

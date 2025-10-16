@@ -1,0 +1,41 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '5000:5000'
+    container_name: fakestoreapi
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+    networks:
+      - api_network
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+
+  db:
+    image: bitnami/postgresql:latest
+    container_name: api_db
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U root -d fake-store-api']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5m
+    networks:
+      - api_network
+
+networks:
+  api_network:
+    driver: bridge

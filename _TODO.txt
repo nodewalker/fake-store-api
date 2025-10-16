@@ -1,6 +1,12 @@
 - update category and product
 - get all subcategories by parent
-- github && google auth
+- github and google auth
+- fake payment
+- order and order history
+- delete products from cart
+- favorite
+- admin panel
+- only the creator can change the category and product
 
 # gitbook
 - request models and response models ( ./models/request && ./models/response )

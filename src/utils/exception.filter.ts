@@ -3,7 +3,6 @@ import {
   ExceptionFilter,
   ArgumentsHost,
   HttpException,
-  BadRequestException,
 } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 
@@ -11,17 +10,15 @@ import { Logger } from '@nestjs/common';
 export class AllExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name);
 
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const request = ctx.getRequest();
     const response = ctx.getResponse();
 
-    console.log(exception);
-
     const status =
       exception instanceof HttpException ? exception.getStatus() : 500;
     const message =
-      exception instanceof BadRequestException
+      typeof exception?.message === 'string'
         ? exception.message
         : exception instanceof HttpException
           ? exception.getResponse()

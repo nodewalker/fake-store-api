@@ -12,7 +12,9 @@ A simple REST API that simulates an online store — provides fake products, cat
 
 Base URLs:
 
-    api.fakestoreapi.ru
+    fakestoreapi.ru
+    fakestoreapi.ru/files/avatars/:id ( for avatars )
+    fakestoreapi.ru/files/products/:id ( for product images )
 
 # Authentication
 

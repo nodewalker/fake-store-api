@@ -112,6 +112,7 @@ export class AuthService implements IAuthService {
       refresh_token: this.jwtService.sign(
         {
           sub: user._uuid,
+          role: 'user',
         },
         { expiresIn: Config.JWT.REFRESH_TOKEN_EXPIRES },
       ),

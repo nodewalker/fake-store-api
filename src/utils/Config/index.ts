@@ -2,7 +2,9 @@ import type { StringValue } from 'ms';
 import { config } from 'dotenv';
 
 config({
-  path: `.env.${process.env?.NODE_ENV ? process.env?.NODE_ENV : 'dev'}`,
+  path: process.env?.NODE_ENV
+    ? `.env.${process.env.NODE_ENV.trim()}`
+    : '.env.dev',
 });
 
 export const Config = {
@@ -10,11 +12,11 @@ export const Config = {
     PORT: Number(process.env['PORT']),
   },
   DATABASE: {
-    HOST: process.env['DB_HOST'] as string,
-    PORT: Number(process.env['DB_PORT']),
-    USERNAME: process.env['DB_USERNAME'] as string,
-    PASSWORD: process.env['DB_PASSWORD'] as string,
-    NAME: process.env['DB_NAME'] as string,
+    HOST: process.env['DATABASE_HOST'] as string,
+    PORT: Number(process.env['DATABASE_PORT']),
+    USERNAME: process.env['DATABASE_USER'] as string,
+    PASSWORD: process.env['DATABASE_PASSWORD'] as string,
+    NAME: process.env['DATABASE_NAME'] as string,
   },
   JWT: {
     SECRET: process.env['JWT_SECRET'] as string,
