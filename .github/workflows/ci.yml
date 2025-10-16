@@ -8,6 +8,9 @@ on:
     branches:
       - master
 
+permissions:
+  contents: write
+
 jobs:
   build-test-docs:
     runs-on: ubuntu-latest
@@ -17,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -39,13 +42,11 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          git config user.name "Smirnov Evgeny"
+          git config user.email "85483574+nodewalker@users.noreply.github.com"
           git add ./docs  
           git commit -m "Update GitBook" || echo "No changes to commit"
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create files
         run: |
