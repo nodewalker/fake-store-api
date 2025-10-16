@@ -24,6 +24,8 @@ RUN npm ci --only=production --silent
 
 COPY --from=builder /app/dist ./dist
 
+RUN apk add --no-cache nginx
+
 RUN nginx -T
 
 EXPOSE 5000
