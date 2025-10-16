@@ -1,11 +1,4 @@
 import type { StringValue } from 'ms';
-import { config } from 'dotenv';
-
-config({
-  path: process.env?.NODE_ENV
-    ? `.env.${process.env.NODE_ENV.trim()}`
-    : '.env.dev',
-});
 
 export const Config = {
   SERVER: {

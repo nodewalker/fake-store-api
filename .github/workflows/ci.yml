@@ -70,7 +70,6 @@ jobs:
             echo "${{ secrets.SSL_CRT }}" >> fakestoreapi.crt
             echo "${{ secrets.SSL_KEY }}" >> fakestoreapi.key
             docker compose --env-file .env.prod up -d --build
-            rm .env.prod
             rm fakestoreapi.crt
             rm fakestoreapi.key
           EOF
