@@ -1,5 +1,5 @@
 ---
-title: Auth
+title: Auth Store API v1.0
 language_tabs:
   - javascript: JavaScript,typescript
 language_clients:
@@ -9,7 +9,6 @@ includes: []
 search: true
 highlight_theme: darkula
 headingLevel: 2
-
 ---
 
 <!-- Generator: Widdershins v4.0.1 -->
@@ -23,25 +22,25 @@ headingLevel: 2
 
 ```javascript
 const data = JSON.stringify({
-  "firstName": "Evgeny",
-  "lastName": "Smirnov",
-  "login": "nodewalker",
-  "email": "nodewalker@yandex.com",
-  "password": "**********"
+  firstName: 'Evgeny',
+  lastName: 'Smirnov',
+  login: 'nodewalker',
+  email: 'nodewalker@yandex.com',
+  password: '**********',
 });
 
 const xhr = new XMLHttpRequest();
 xhr.withCredentials = true;
 
-xhr.addEventListener("readystatechange", function () {
+xhr.addEventListener('readystatechange', function () {
   if (this.readyState === this.DONE) {
     console.log(this.responseText);
   }
 });
 
-xhr.open("POST", "https://example.com/auth/signup");
-xhr.setRequestHeader("Content-Type", "application/json");
-xhr.setRequestHeader("Accept", "application/json");
+xhr.open('POST', 'https://example.com/auth/signup');
+xhr.setRequestHeader('Content-Type', 'application/json');
+xhr.setRequestHeader('Accept', 'application/json');
 
 xhr.send(data);
 ```
@@ -62,9 +61,9 @@ xhr.send(data);
 
 <h3 id="user-registration-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[CreateUserDto](../models/CreateUserDto.md)|true|none|
+| Name | In   | Type                                        | Required | Description |
+| ---- | ---- | ------------------------------------------- | -------- | ----------- |
+| body | body | [CreateUserDto](../models/CreateUserDto.md) | true     | none        |
 
 > Example responses
 
@@ -79,11 +78,11 @@ xhr.send(data);
 
 <h3 id="user-registration-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|User registered success|[TokensDetails](../models/TokensDetails.md)|
-|5XX|Unknown|Server error|None|
-|4XX|Unknown|Check response message|None|
+| Status | Meaning                                                 | Description             | Schema                                      |
+| ------ | ------------------------------------------------------- | ----------------------- | ------------------------------------------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | User registered success | [TokensDetails](../models/TokensDetails.md) |
+| 5XX    | Unknown                                                 | Server error            | None                                        |
+| 4XX    | Unknown                                                 | Check response message  | None                                        |
 
 <aside class="success">
 This operation does not require authentication
@@ -97,22 +96,22 @@ This operation does not require authentication
 
 ```javascript
 const data = JSON.stringify({
-  "login": "nodewalker",
-  "password": "**********"
+  login: 'nodewalker',
+  password: '**********',
 });
 
 const xhr = new XMLHttpRequest();
 xhr.withCredentials = true;
 
-xhr.addEventListener("readystatechange", function () {
+xhr.addEventListener('readystatechange', function () {
   if (this.readyState === this.DONE) {
     console.log(this.responseText);
   }
 });
 
-xhr.open("POST", "https://example.com/auth/signin");
-xhr.setRequestHeader("Content-Type", "application/json");
-xhr.setRequestHeader("Accept", "application/json");
+xhr.open('POST', 'https://example.com/auth/signin');
+xhr.setRequestHeader('Content-Type', 'application/json');
+xhr.setRequestHeader('Accept', 'application/json');
 
 xhr.send(data);
 ```
@@ -130,9 +129,9 @@ xhr.send(data);
 
 <h3 id="user-login-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[LoginDto](../models/LoginDto.md)|true|none|
+| Name | In   | Type                              | Required | Description |
+| ---- | ---- | --------------------------------- | -------- | ----------- |
+| body | body | [LoginDto](../models/LoginDto.md) | true     | none        |
 
 > Example responses
 
@@ -147,11 +146,11 @@ xhr.send(data);
 
 <h3 id="user-login-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|User login success|[TokensDetails](../models/TokensDetails.md)|
-|5XX|Unknown|Server error|None|
-|4XX|Unknown|Check response message|None|
+| Status | Meaning                                                 | Description            | Schema                                      |
+| ------ | ------------------------------------------------------- | ---------------------- | ------------------------------------------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | User login success     | [TokensDetails](../models/TokensDetails.md) |
+| 5XX    | Unknown                                                 | Server error           | None                                        |
+| 4XX    | Unknown                                                 | Check response message | None                                        |
 
 <aside class="success">
 This operation does not require authentication
@@ -169,14 +168,14 @@ const data = null;
 const xhr = new XMLHttpRequest();
 xhr.withCredentials = true;
 
-xhr.addEventListener("readystatechange", function () {
+xhr.addEventListener('readystatechange', function () {
   if (this.readyState === this.DONE) {
     console.log(this.responseText);
   }
 });
 
-xhr.open("POST", "https://example.com/auth/refresh?rt=string");
-xhr.setRequestHeader("Accept", "application/json");
+xhr.open('POST', 'https://example.com/auth/refresh?rt=string');
+xhr.setRequestHeader('Accept', 'application/json');
 
 xhr.send(data);
 ```
@@ -185,9 +184,9 @@ xhr.send(data);
 
 <h3 id="refresh-auth-tokens-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|rt|query|string|true|Refresh token|
+| Name | In    | Type   | Required | Description   |
+| ---- | ----- | ------ | -------- | ------------- |
+| rt   | query | string | true     | Refresh token |
 
 > Example responses
 
@@ -202,13 +201,12 @@ xhr.send(data);
 
 <h3 id="refresh-auth-tokens-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Refresh tokens success|[TokensDetails](../models/TokensDetails.md)|
-|5XX|Unknown|Server error|None|
-|4XX|Unknown|Check response message|None|
+| Status | Meaning                                                 | Description            | Schema                                      |
+| ------ | ------------------------------------------------------- | ---------------------- | ------------------------------------------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Refresh tokens success | [TokensDetails](../models/TokensDetails.md) |
+| 5XX    | Unknown                                                 | Server error           | None                                        |
+| 4XX    | Unknown                                                 | Check response message | None                                        |
 
 <aside class="success">
 This operation does not require authentication
 </aside>
-

@@ -10,6 +10,7 @@ search: true
 <h2 id="tocS_ProductsListDetails">ProductsListDetails</h2>
 
 <!-- backwards compatibility -->
+
 <a id="schemaproductslistdetails"></a>
 <a id="schema_ProductsListDetails"></a>
 <a id="tocSproductslistdetails"></a>
@@ -44,13 +45,11 @@ search: true
     "isLastPage": true
   }
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|data|[[ProductDetails](../models/[ProductDetails.md)]|true|none|Product list|
-|pagintaion|[PaginationDetails](../models/PaginationDetails.md)|true|none|Paggination info|
-
+| Name       | Type                                                | Required | Restrictions | Description      |
+| ---------- | --------------------------------------------------- | -------- | ------------ | ---------------- |
+| data       | [[ProductDetails](../models/[ProductDetails.md)]    | true     | none         | Product list     |
+| pagintaion | [PaginationDetails](../models/PaginationDetails.md) | true     | none         | Paggination info |

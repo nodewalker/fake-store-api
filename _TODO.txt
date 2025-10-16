@@ -2,4 +2,5 @@
 - get all subcategories by parent
 
 # gitbook
-- 
+- request models and response models ( ./models/request && ./models/response )
+- auto update docs/readme.md

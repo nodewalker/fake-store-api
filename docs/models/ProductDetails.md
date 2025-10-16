@@ -10,6 +10,7 @@ search: true
 <h2 id="tocS_ProductDetails">ProductDetails</h2>
 
 <!-- backwards compatibility -->
+
 <a id="schemaproductdetails"></a>
 <a id="schema_ProductDetails"></a>
 <a id="tocSproductdetails"></a>
@@ -33,17 +34,15 @@ search: true
     "hasProduct": true
   }
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|uuid|string|true|none|Product id|
-|name|string|true|none|Product name|
-|price|string|true|none|Product price|
-|discount|string|true|none|Product discount|
-|images|[[ProductImageEntity](../models/[ProductImageEntity.md)]|true|none|Product images|
-|category|[CategoryDetails](../models/CategoryDetails.md)|true|none|Product category|
-
+| Name     | Type                                                     | Required | Restrictions | Description      |
+| -------- | -------------------------------------------------------- | -------- | ------------ | ---------------- |
+| uuid     | string                                                   | true     | none         | Product id       |
+| name     | string                                                   | true     | none         | Product name     |
+| price    | string                                                   | true     | none         | Product price    |
+| discount | string                                                   | true     | none         | Product discount |
+| images   | [[ProductImageEntity](../models/[ProductImageEntity.md)] | true     | none         | Product images   |
+| category | [CategoryDetails](../models/CategoryDetails.md)          | true     | none         | Product category |

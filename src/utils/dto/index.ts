@@ -1,6 +1,6 @@
 import { CartDetails } from './res.dto/Cart.dto';
 import { ProductsListDetails } from './res.dto/ProductsList.dto';
-import { ProductDetails } from './res.dto/Product.dto';
+import { ProductCategoryDetails, ProductDetails } from './res.dto/Product.dto';
 import { RootCategoriesDetail } from './res.dto/RootCategories.dto';
 import { CategoryDetails } from './res.dto/Caregory.dto';
 import { TokensDetails } from './res.dto/Tokens.dt';
@@ -31,6 +31,7 @@ export {
 
 // RES
 export {
+  ProductCategoryDetails,
   PaginationDetails,
   CartDetails,
   ProductDetails,

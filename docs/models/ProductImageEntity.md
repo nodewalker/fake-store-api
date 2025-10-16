@@ -10,6 +10,7 @@ search: true
 <h2 id="tocS_ProductImageEntity">ProductImageEntity</h2>
 
 <!-- backwards compatibility -->
+
 <a id="schemaproductimageentity"></a>
 <a id="schema_ProductImageEntity"></a>
 <a id="tocSproductimageentity"></a>
@@ -19,12 +20,10 @@ search: true
 {
   "uuid": "string"
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|uuid|string|true|none|Image url|
-
+| Name | Type   | Required | Restrictions | Description |
+| ---- | ------ | -------- | ------------ | ----------- |
+| uuid | string | true     | none         | Image url   |

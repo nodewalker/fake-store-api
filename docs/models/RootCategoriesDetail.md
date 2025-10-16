@@ -10,6 +10,7 @@ search: true
 <h2 id="tocS_RootCategoriesDetail">RootCategoriesDetail</h2>
 
 <!-- backwards compatibility -->
+
 <a id="schemarootcategoriesdetail"></a>
 <a id="schema_RootCategoriesDetail"></a>
 <a id="tocSrootcategoriesdetail"></a>
@@ -33,13 +34,11 @@ search: true
     "isLastPage": true
   }
 }
-
 ```
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|tree|[[CategoryDetails](../models/[CategoryDetails.md)]|true|none|Root categories tree|
-|pagination|[PaginationDetails](../models/PaginationDetails.md)|true|none|Paggination info|
-
+| Name       | Type                                                | Required | Restrictions | Description          |
+| ---------- | --------------------------------------------------- | -------- | ------------ | -------------------- |
+| tree       | [[CategoryDetails](../models/[CategoryDetails.md)]  | true     | none         | Root categories tree |
+| pagination | [PaginationDetails](../models/PaginationDetails.md) | true     | none         | Paggination info     |

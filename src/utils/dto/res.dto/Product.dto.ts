@@ -1,7 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { ProductImageEntity } from 'src/utils/typeorm';
-import { CategoryDetails } from './Caregory.dto';
+
+export class ProductCategoryDetails {
+  @ApiProperty({
+    name: 'uuid',
+    description: 'Category id',
+    type: String,
+  })
+  @Expose()
+  _uuid: string;
+
+  @ApiProperty({
+    name: 'name',
+    description: 'Category name',
+    type: String,
+  })
+  @Expose()
+  name: string;
+}
 
 export class ProductDetails {
   @ApiProperty({
@@ -48,8 +65,8 @@ export class ProductDetails {
   @ApiProperty({
     name: 'category',
     description: 'Product category',
-    type: CategoryDetails,
+    type: ProductCategoryDetails,
   })
   @Expose()
-  category?: CategoryDetails;
+  category?: ProductCategoryDetails;
 }

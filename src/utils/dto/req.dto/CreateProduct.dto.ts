@@ -60,10 +60,11 @@ export class CreateProductDto {
   @ApiProperty({
     name: 'images',
     type: 'array',
+    isArray: true,
     items: { type: 'string', format: 'binary' },
     description: 'Product images',
     minItems: 1,
     maxItems: 3,
   })
-  images?: any;
+  images?: Express.Multer.File[];
 }
