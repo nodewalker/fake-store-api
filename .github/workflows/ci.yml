@@ -72,10 +72,6 @@ jobs:
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.prod
             echo "${{ secrets.SSL_CRT }}" >> fakestoreapi.crt
             echo "${{ secrets.SSL_KEY }}" >> fakestoreapi.key
-            set -a
-            source .env.prod
-            set +a
-            envsubst '${SERVER_HOST}' < nginx.conf.template > nginx.conf
             docker compose --env-file .env.prod up -d --build
             rm fakestoreapi.crt
             rm fakestoreapi.key
