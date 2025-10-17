@@ -75,7 +75,7 @@ jobs:
             set -a
             source .env.prod
             set +a
-            envsubst < nginx.conf.template > nginx.conf
+            envsubst '${SERVER_HOST}' < nginx.conf.template > nginx.conf
             docker compose --env-file .env.prod up -d --build
             rm fakestoreapi.crt
             rm fakestoreapi.key
