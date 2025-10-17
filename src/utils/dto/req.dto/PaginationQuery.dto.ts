@@ -4,7 +4,7 @@ import { IsOptional, IsNumber, Min, Max } from 'class-validator';
 
 export class PaginationQueryDto {
   @ApiProperty({
-    name: 'limit',
+    name: 'l',
     description: 'Items limit on page ( from 1 to 50 )',
     type: Number,
     default: 10,
@@ -23,7 +23,7 @@ export class PaginationQueryDto {
   limit: number;
 
   @ApiProperty({
-    name: 'page',
+    name: 'p',
     description: 'Items page ( min 1 )',
     type: Number,
     default: 1,

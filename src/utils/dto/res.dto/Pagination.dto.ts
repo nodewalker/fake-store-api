@@ -5,6 +5,7 @@ export class PaginationDetails {
   @ApiProperty({
     name: 'total',
     description: 'Total items',
+    example: 240,
     type: Number,
   })
   @Expose()
@@ -13,6 +14,7 @@ export class PaginationDetails {
   @ApiProperty({
     name: 'page',
     description: 'Current page',
+    example: 1,
     type: Number,
   })
   @Expose()
@@ -21,6 +23,7 @@ export class PaginationDetails {
   @ApiProperty({
     name: 'limit',
     description: 'Current limit',
+    example: 10,
     type: Number,
   })
   @Expose()
@@ -29,6 +32,7 @@ export class PaginationDetails {
   @ApiProperty({
     name: 'totalPage',
     description: 'Total page count',
+    example: 24,
     type: Number,
   })
   @Expose()
@@ -37,6 +41,7 @@ export class PaginationDetails {
   @ApiProperty({
     name: 'isLastPage',
     description: 'is last page?',
+    example: false,
     type: Boolean,
   })
   @Expose()
