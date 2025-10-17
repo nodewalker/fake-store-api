@@ -62,6 +62,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
             cd /home/pets/fake-store-api
             git pull
+            echo "SERVER_HOST=${{ secrets.SERVER_HOST }}" >> .env.prod
             echo "PORT=${{ secrets.API_PORT }}" >> .env.prod
             echo "DATABASE_USER=${{ secrets.DATABASE_USER }}" >> .env.prod
             echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> .env.prod
@@ -71,6 +72,10 @@ jobs:
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.prod
             echo "${{ secrets.SSL_CRT }}" >> fakestoreapi.crt
             echo "${{ secrets.SSL_KEY }}" >> fakestoreapi.key
+            set -a
+            source .env.prod
+            set +a
+            envsubst < nginx.conf.template > nginx.conf
             docker compose --env-file .env.prod up -d --build
             rm fakestoreapi.crt
             rm fakestoreapi.key
