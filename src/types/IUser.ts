@@ -2,6 +2,7 @@ export interface IUser {
     readonly _uid: string;
     username: string;
     balance: IBalance;
+    avatarUrl: string;
 }
 
 export interface IBalance {
