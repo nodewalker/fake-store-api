@@ -67,9 +67,8 @@ jobs:
             rm fakestoreapi.crt
             rm fakestoreapi.key
             rm .env.prod
-            git switch gitbook
             npm run generate:gitbook
             git add .
             git commit -m "[Action commit] Update GitBook" || echo "No changes to commit"
-            git push
+            git push origin gitbook
           EOF
