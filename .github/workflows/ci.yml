@@ -73,4 +73,5 @@ jobs:
             docker compose --env-file .env.prod up -d --build
             rm fakestoreapi.crt
             rm fakestoreapi.key
+            rm .env.prod
           EOF
