@@ -8,6 +8,9 @@ on:
     branches:
       - master
 
+permissions:
+  contents: write
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -48,7 +51,7 @@ jobs:
           git add -f swagger
           GIT_COMMIT_HASH=$(git rev-parse --short HEAD@{u} || git rev-parse --short HEAD)
           git commit -m "[ACTION COMMIT] update docs master (${GIT_COMMIT_HASH})" || echo "no changes"
-          git push -u origin gitbook --force
+          git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/nodewalker/fake-store-api.git gitbook --force
 
   deploy:
     runs-on: ubuntu-latest
