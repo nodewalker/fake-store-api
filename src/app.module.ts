@@ -12,6 +12,7 @@ import { Config } from './utils/Config';
 import { ProductModule } from './product/product.module';
 import { ProductCategoryEntity } from './utils/typeorm/entities/productCategory';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -45,7 +46,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     AuthModule,
     ProductModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [Logger],
 })
 export class AppModule {}
