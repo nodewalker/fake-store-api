@@ -8,9 +8,6 @@ on:
     branches:
       - master
 
-permissions:
-  contents: write
-
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -21,6 +18,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -36,6 +35,19 @@ jobs:
 
       #   - name: Run tests
       #     run: npm test
+
+      - name: Generate gitbook pages
+        run: npm run generate:gitbook
+
+      - name: push docs to gitbook
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -B gitbook
+          git add docs
+          GIT_COMMIT_HASH=$(git rev-parse --short HEAD@{u})
+          git commit -m "[ACTION COMMIT] update docs master (${GIT_COMMIT_HASH})" || echo "no changes"
+          git push origin gitbook --force
 
   deploy:
     runs-on: ubuntu-latest
@@ -67,8 +79,4 @@ jobs:
             rm fakestoreapi.crt
             rm fakestoreapi.key
             rm .env.prod
-            npm run generate:gitbook
-            git add .
-            git commit -m "[Action commit] Update GitBook" || echo "No changes to commit"
-            git push origin gitbook
           EOF
