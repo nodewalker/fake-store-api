@@ -7,4 +7,3 @@ until curl -sf http://$host/health > /dev/null; do
   echo "Waiting for $host..."
   sleep 2
 done
-exec "$@"

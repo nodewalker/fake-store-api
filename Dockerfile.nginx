@@ -9,9 +9,9 @@ COPY fakestoreapi.crt /etc/nginx/fakestoreapi.ru/fakestoreapi.crt
 COPY fakestoreapi.key /etc/nginx/fakestoreapi.ru/fakestoreapi.key
 
 
-ENTRYPOINT ["./wait-api.sh", "api:5000", "--timeout=30", "--", "nginx", "-T"]
+ENTRYPOINT ["/wait-api.sh", "api:5000", "--timeout=30"]
 
-# RUN nginx -T
+RUN nginx -T
 
 EXPOSE 80 443
 
