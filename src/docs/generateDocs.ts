@@ -93,14 +93,17 @@ search: true
     fs.unlinkSync(tmpJsonFile);
   }
 
-  fs.writeFileSync('./docs/README.md', fs.readFileSync('./main.md', 'utf-8'));
+  fs.writeFileSync(
+    './docs/README.md',
+    fs.readFileSync(__dirname + '/readme/main.md', 'utf-8'),
+  );
   fs.writeFileSync(
     './docs/api/README.md',
-    fs.readFileSync('./api.md', 'utf-8'),
+    fs.readFileSync(__dirname + '/readme/api.md', 'utf-8'),
   );
   fs.writeFileSync(
     './docs/models/README.md',
-    fs.readFileSync('./models.md', 'utf-8'),
+    fs.readFileSync(__dirname + '/readme/models.md', 'utf-8'),
   );
 
   fs.writeFileSync(

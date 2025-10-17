@@ -45,6 +45,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -B gitbook
           git add -f docs
+          git add -f swagger
           GIT_COMMIT_HASH=$(git rev-parse --short HEAD@{u} || git rev-parse --short HEAD)
           git commit -m "[ACTION COMMIT] update docs master (${GIT_COMMIT_HASH})" || echo "no changes"
           git push -u origin gitbook --force
