@@ -20,6 +20,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.nginx
+    entrypoint: ['/wait.sh', 'api:5000', 'nginx', '-g', 'daemon off;']
     container_name: nginx
     ports:
       - '80:80'
