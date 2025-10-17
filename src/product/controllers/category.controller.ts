@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpException,
   HttpStatus,
   Inject,
   Param,
@@ -127,10 +128,14 @@ export class CategoryController {
     id: string,
     @Query('all') getAllSubcategories: boolean,
   ) {
-    return await this.categoryServcie.getChildrenByParentId(
+    const res = await this.categoryServcie.getChildrenByParentId(
       id,
       getAllSubcategories,
     );
+    // TODO:
+    if (!res.length)
+      throw new HttpException('Categories not found', HttpStatus.NOT_FOUND);
+    return res;
   }
 
   @ApiOperation({ summary: 'Remove category by id' })

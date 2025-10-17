@@ -42,17 +42,17 @@ jobs:
         run: npm run generate:gitbook
 
       - name: Commit and push changes
-        run: |
-          git config user.name "Smirnov Evgeny"
-          git config user.email "85483574+nodewalker@users.noreply.github.com"
-          git switch gitbook --merge
-          git add .
-          git commit -m "[Action commit] Update GitBook" || echo "No changes to commit"
-          git push
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: '.'
+          author_name: 'Smirnov Evgeny'
+          author_email: '85483574+nodewalker@users.noreply.github.com'
+          commit: '[Action commit] Update GitBook'
+          push: 'origin gitbook'
 
   deploy:
     runs-on: ubuntu-latest
-    # needs: check
+    needs: check
     steps:
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.1
