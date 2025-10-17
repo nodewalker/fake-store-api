@@ -6,6 +6,9 @@
 # upload files
 /uploads
 
+# docs
+/docs
+
 # Logs
 logs
 *.log
