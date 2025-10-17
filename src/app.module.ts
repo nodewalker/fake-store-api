@@ -16,7 +16,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `.env.${process.env.NODE_ENV?.trim() ? process.env.NODE_ENV?.trim() : 'dev'}`,
+      envFilePath: `.env.${process.env.NODE_ENV?.trim() ? process.env.NODE_ENV?.trim() : 'prod'}`,
       isGlobal: true,
       load: [Config],
     }),
