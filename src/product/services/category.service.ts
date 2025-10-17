@@ -5,9 +5,9 @@ import {
   Inject,
   Injectable,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
-import { Config } from 'src/utils/Config';
 import { Services } from 'src/utils/const';
 import { CategoryDetails, RootCategoriesDetail } from 'src/utils/dto';
 import {
@@ -27,6 +27,7 @@ export class CategoryService implements ICategoryService {
     @Inject(Services.user) private readonly userService: IUserService,
     @Inject(forwardRef(() => Services.product))
     private readonly productService: IProductService,
+    private readonly configService: ConfigService,
   ) {}
 
   async createCategory(
@@ -73,17 +74,23 @@ export class CategoryService implements ICategoryService {
         );
 
       // check depth
+      const MAX_DEEP = this.configService.get<number>(
+        'category_max_deep',
+      ) as number;
       const depth: number = await this.getCategoryDepth(parentCategory);
-      if (depth + 1 >= Config.CATEGORY.MAX_DEEP)
+      if (depth + 1 >= MAX_DEEP)
         throw new HttpException(
-          `Cannot create subcategory deeper than level ${Config.CATEGORY.MAX_DEEP}`,
+          `Cannot create subcategory deeper than level ${MAX_DEEP}`,
           HttpStatus.BAD_REQUEST,
         );
 
       // check children length
-      if (parentCategory?.children!.length >= Config.CATEGORY.MAX_CHILDREN)
+      const MAX_CHILD = this.configService.get<number>(
+        'category_max_children',
+      ) as number;
+      if (parentCategory?.children!.length >= MAX_CHILD)
         throw new HttpException(
-          `Cannot have more than ${Config.CATEGORY.MAX_CHILDREN} subcategories`,
+          `Cannot have more than ${MAX_CHILD} subcategories`,
           HttpStatus.BAD_REQUEST,
         );
     } else {

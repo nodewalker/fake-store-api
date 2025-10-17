@@ -1,3 +1,5 @@
+import type { StringValue } from 'ms';
+import { ConfigService } from '@nestjs/config';
 import { plainToInstance } from 'class-transformer';
 import { JwtService } from '@nestjs/jwt';
 import { verifyPassword } from './../../utils/security/password';
@@ -6,7 +8,6 @@ import { Services } from 'src/utils/const';
 import { IAuthService, IUserService } from 'src/utils/interfaces';
 import { UserEntity } from 'src/utils/typeorm';
 import { CreateUserDetails, JWTPayload, LoginDetails } from 'src/utils/types';
-import { Config } from 'src/utils/Config';
 import {
   JwtTokensDetails,
   ReturnCreateUserDetails,
@@ -18,6 +19,7 @@ export class AuthService implements IAuthService {
   constructor(
     @Inject(Services.user) private readonly userService: IUserService,
     private jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async signup(details: CreateUserDetails): Promise<TokensDetails> {
@@ -107,14 +109,22 @@ export class AuthService implements IAuthService {
         {
           sub: user._uuid,
         },
-        { expiresIn: Config.JWT.ACCESS_TOKEN_EXPIRES },
+        {
+          expiresIn: this.configService.get<StringValue>(
+            'access_token_expires',
+          ),
+        },
       ),
       refresh_token: this.jwtService.sign(
         {
           sub: user._uuid,
           role: 'user',
         },
-        { expiresIn: Config.JWT.REFRESH_TOKEN_EXPIRES },
+        {
+          expiresIn: this.configService.get<StringValue>(
+            'refresh_token_expires',
+          ),
+        },
       ),
     };
   }

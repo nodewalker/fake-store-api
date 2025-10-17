@@ -1,33 +1,20 @@
 import type { StringValue } from 'ms';
-import { config } from 'dotenv';
 
-config({
-  path: process.env?.NODE_ENV
-    ? `.env.${process.env.NODE_ENV.trim()}`
-    : '.env.dev',
+export const Config = () => ({
+  port: Number(process.env['PORT']),
+
+  db_host: process.env['DATABASE_HOST'] as string,
+  db_port: Number(process.env['DATABASE_PORT']),
+  db_user: process.env['DATABASE_USER'] as string,
+  db_password: process.env['DATABASE_PASSWORD'] as string,
+  db_name: process.env['DATABASE_NAME'] as string,
+
+  jwt_secret: process.env['JWT_SECRET'] as string,
+  access_token_expires: '20m' as StringValue,
+  refresh_token_expires: '30d' as StringValue,
+
+  category_max_children: 8,
+  category_max_deep: 4,
+
+  cart_max_size: 50,
 });
-
-export const Config = {
-  SERVER: {
-    PORT: Number(process.env['PORT']),
-  },
-  DATABASE: {
-    HOST: process.env['DATABASE_HOST'] as string,
-    PORT: Number(process.env['DATABASE_PORT']),
-    USERNAME: process.env['DATABASE_USER'] as string,
-    PASSWORD: process.env['DATABASE_PASSWORD'] as string,
-    NAME: process.env['DATABASE_NAME'] as string,
-  },
-  JWT: {
-    SECRET: process.env['JWT_SECRET'] as string,
-    ACCESS_TOKEN_EXPIRES: '20m' as StringValue,
-    REFRESH_TOKEN_EXPIRES: '30d' as StringValue,
-  },
-  CATEGORY: {
-    MAX_CHILDREN: 8,
-    MAX_DEEP: 4,
-  },
-  CART: {
-    SIZE: 50,
-  },
-};

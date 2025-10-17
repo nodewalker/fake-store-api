@@ -1,19 +1,21 @@
+import 'reflect-metadata';
 import { LoggerInstance } from './logger';
 import { NestApplication, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Config } from './utils/Config';
 import { join } from 'path';
 import { WinstonModule } from 'nest-winston';
 import { AllExceptionsFilter } from './utils/exception.filter';
 import { CustomValidationPipe } from './utils/validation.pipe';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestApplication>(AppModule, {
     logger: WinstonModule.createLogger(LoggerInstance),
   });
-  const port: number = Config.SERVER.PORT;
+  const configService = app.get(ConfigService);
+  const port: number = configService.get<number>('port') as number;
   app.useGlobalPipes(new CustomValidationPipe());
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {

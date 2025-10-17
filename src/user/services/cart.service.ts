@@ -1,13 +1,13 @@
 import { plainToInstance } from 'class-transformer';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Config } from 'src/utils/Config';
 import { Services } from 'src/utils/const';
 import { CartDetails } from 'src/utils/dto';
 import { ICartService, IProductService } from 'src/utils/interfaces';
 import { ProductEntity, UserCartEntity } from 'src/utils/typeorm';
 import { PaginationDetails } from 'src/utils/types';
 import { Repository } from 'typeorm';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CartService implements ICartService {
@@ -15,6 +15,7 @@ export class CartService implements ICartService {
     @InjectRepository(UserCartEntity)
     private readonly cartRepository: Repository<UserCartEntity>,
     @Inject(Services.product) private readonly productService: IProductService,
+    private readonly configService: ConfigService,
   ) {}
 
   async getUserCart(
@@ -41,9 +42,12 @@ export class CartService implements ICartService {
       .leftJoinAndSelect('cart.products', 'products')
       .where('user._uuid = :uuid', { uuid: userId })
       .getOne()) as UserCartEntity;
-    if (cart.products.length >= Config.CART.SIZE)
+    const CART_MAX_SIZE = this.configService.get<number>(
+      'cart_max_size',
+    ) as number;
+    if (cart.products.length >= CART_MAX_SIZE)
       throw new HttpException(
-        `The maximum cart size is ${Config.CART.SIZE}`,
+        `The maximum cart size is ${CART_MAX_SIZE}`,
         HttpStatus.BAD_REQUEST,
       );
     const product: ProductEntity =
