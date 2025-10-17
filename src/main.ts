@@ -23,7 +23,7 @@ async function bootstrap(): Promise<void> {
   });
 
   app.use((req, res, next) => {
-    req.app.set('trust proxy', true);
+    req.app.set('trust proxy', 1);
     next();
   });
   app.use(helmet());
