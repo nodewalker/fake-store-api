@@ -9,3 +9,5 @@ export interface IBalance {
     type: string;
     amout: number;
 }
+
+export type BalanceType = 'money' | 'gem';
