@@ -19,6 +19,16 @@ export class CategoryDetails {
   name: string;
 
   @ApiProperty({
+    name: 'Childrens',
+    description: 'Field for retrieve subcategories at all level',
+    required: false,
+    isArray: true,
+    type: CategoryDetails,
+  })
+  @Expose()
+  children?: CategoryDetails[];
+
+  @ApiProperty({
     name: 'hasChildren',
     description: 'Is category has children',
     type: Boolean,

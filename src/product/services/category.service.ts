@@ -146,47 +146,26 @@ export class CategoryService implements ICategoryService {
   async getRootCategories(
     details: PaginationDetails,
   ): Promise<RootCategoriesDetail> {
-    const [categories, total] = await Promise.all([
-      this.categoryRepository
-        .createQueryBuilder('category')
-        .where('category.parent._uuid IS NULL')
-        .select(['category._uuid', 'category.name'])
-        .addSelect((subQuery) => {
-          return subQuery
-            .select('COUNT(*) > 0', 'hasChildren')
-            .from(ProductCategoryEntity, 'child')
-            .where('child.parent._uuid = category._uuid');
-        }, 'hasChildren')
-        .orderBy('category.name', 'ASC')
-        .offset((details.page - 1) * details.limit)
-        .limit(details.limit)
-        .getRawMany(),
-      this.categoryRepository
-        .createQueryBuilder('category')
-        .where('category.parent IS NULL')
-        .getCount(),
-    ]);
-    console.log(
-      categories.map(async (cat) => ({
-        _uuid: cat.category__uuid,
-        name: cat.category_name,
-        hasChildren: cat.hasChildren,
-        hasProduct: await this.productService.isCategoryhasProducts(
-          cat.category__uuid as string,
-        ),
-      })),
-    );
-    console.log(categories);
+    const [categories, total] = await this.categoryRepository
+      .createQueryBuilder('category')
+      .where('category.parent._uuid IS NULL')
+      .select(['category._uuid', 'category.name'])
+      .leftJoinAndSelect('category.children', 'children')
+      .orderBy('category.name', 'ASC')
+      .offset((details.page - 1) * details.limit)
+      .limit(details.limit)
+      .getManyAndCount();
+
     return plainToInstance(
       RootCategoriesDetail,
       {
         tree: await Promise.all(
           categories.map(async (cat) => ({
-            _uuid: cat.category__uuid,
-            name: cat.category_name,
-            hasChildren: cat.hasChildren,
+            _uuid: cat._uuid,
+            name: cat.name,
+            hasChildren: !!cat.children?.length,
             hasProduct: await this.productService.isCategoryhasProducts(
-              cat.category__uuid as string,
+              cat._uuid,
             ),
           })),
         ),
@@ -202,48 +181,54 @@ export class CategoryService implements ICategoryService {
     );
   }
 
-  async getChildrenByParentId(uuid: string): Promise<CategoryDetails[]> {
-    const parentCategory: ProductCategoryEntity | null =
-      await this.categoryRepository
-        .createQueryBuilder('category')
-        .where('category._uuid = :uuid', { uuid })
-        .getOne();
-    if (!parentCategory?._uuid)
-      throw new HttpException(
-        'Parent category not found',
-        HttpStatus.NOT_FOUND,
-      );
-    const categories = await this.categoryRepository
+  // TODO: Recursion
+  async getChildrenByParentId(
+    uuid: string,
+    getAllSubcategories: boolean,
+  ): Promise<CategoryDetails[]> {
+    const category = await this.categoryRepository
       .createQueryBuilder('category')
       .select(['category._uuid', 'category.name'])
-      .addSelect((subQuery) => {
-        return subQuery
-          .select('COUNT(*) > 0', 'hasChildren')
-          .from(ProductCategoryEntity, 'child')
-          .where('child.parent._uuid = category._uuid');
-      }, 'hasChildren')
-      .where('category.parent._uuid = :parentId', {
-        parentId: parentCategory._uuid,
+      .leftJoinAndSelect('category.children', 'children')
+      .where('category.parent._uuid = :uuid', {
+        uuid,
       })
-      .getRawMany();
+      .getMany();
 
+    if (!getAllSubcategories) {
+      return plainToInstance(
+        CategoryDetails,
+        await Promise.all(
+          category.map(async (child) => ({
+            _uuid: child._uuid,
+            name: child.name,
+            hasChildren: !!child.children?.length,
+            hasProduct: await this.productService.isCategoryhasProducts(
+              child._uuid,
+            ),
+          })),
+        ),
+        {
+          excludeExtraneousValues: true,
+        },
+      );
+    }
     return plainToInstance(
       CategoryDetails,
       await Promise.all(
-        categories.map(
-          async (cat) => ({
-            _uuid: cat.category__uuid,
-            name: cat.category_name,
-            hasChildren: cat.hasChildren,
-            hasProduct: await this.productService.isCategoryhasProducts(
-              cat.category__uuid as string,
-            ),
-          }),
-          {
-            excludeExtraneousValues: true,
-          },
-        ),
+        category.map(async (child) => ({
+          _uuid: child._uuid,
+          name: child.name,
+          children: await this.getChildrenByParentId(child._uuid, true),
+          hasChildren: !!child.children?.length,
+          hasProduct: await this.productService.isCategoryhasProducts(
+            child._uuid,
+          ),
+        })),
       ),
+      {
+        excludeExtraneousValues: true,
+      },
     );
   }
 

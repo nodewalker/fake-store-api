@@ -6,7 +6,10 @@ import { CategoryDetails, RootCategoriesDetail } from '../dto';
 export interface ICategoryService {
   createCategory(userId: string, details: CreateCategoryDetails): Promise<void>;
   getRootCategories(details: PaginationDetails): Promise<RootCategoriesDetail>;
-  getChildrenByParentId(uuid: string): Promise<CategoryDetails[]>;
+  getChildrenByParentId(
+    uuid: string,
+    getAllSubcategories: boolean,
+  ): Promise<CategoryDetails[]>;
   getCategoryById(
     uuid: string,
     isCanCreateProduct: boolean,

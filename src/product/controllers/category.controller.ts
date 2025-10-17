@@ -19,6 +19,7 @@ import {
   ApiBody,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -97,6 +98,14 @@ export class CategoryController {
     type: String,
     description: 'Parent category id',
   })
+  @ApiQuery({
+    name: 'all',
+    required: false,
+    default: false,
+    type: Boolean,
+    description:
+      'Retrieve all subcategories at all levels, or just the current one.',
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Subcategories received',
@@ -116,8 +125,12 @@ export class CategoryController {
   async getChildrenByParentId(
     @Param('id', new ParseUUIDPipe())
     id: string,
+    @Query('all') getAllSubcategories: boolean,
   ) {
-    return await this.categoryServcie.getChildrenByParentId(id);
+    return await this.categoryServcie.getChildrenByParentId(
+      id,
+      getAllSubcategories,
+    );
   }
 
   @ApiOperation({ summary: 'Remove category by id' })

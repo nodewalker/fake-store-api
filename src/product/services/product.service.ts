@@ -59,6 +59,7 @@ export class ProductService implements IProductService {
     );
   }
 
+  // TODO: category id men's: {shoes, jeans} => get shoes and jeans by men's category id
   async getProducts(details: GetProductsDetails): Promise<ProductsListDetails> {
     console.log(details);
     const qb = this.productRepository
