@@ -1,0 +1,41 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  deployOnServer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Deploy on server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+            cd /home/pets/fake-store-api
+            git switch master
+            git pull
+            echo "SERVER_HOST=${{ secrets.SERVER_HOST }}" >> .env.prod
+            echo "PORT=${{ secrets.API_PORT }}" >> .env.prod
+            echo "DATABASE_USER=${{ secrets.DATABASE_USER }}" >> .env.prod
+            echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> .env.prod
+            echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" >> .env.prod
+            echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" >> .env.prod
+            echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> .env.prod
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.prod
+            echo "${{ secrets.SSL_CRT }}" >> fakestoreapi.crt
+            echo "${{ secrets.SSL_KEY }}" >> fakestoreapi.key
+            docker compose --env-file .env.prod up -d db 
+            docker compose --env-file .env.prod up -d api --build 
+            docker compose --env-file .env.prod up -d nginx --build 
+            rm fakestoreapi.crt
+            rm fakestoreapi.key
+            rm .env.prod
+          EOF
