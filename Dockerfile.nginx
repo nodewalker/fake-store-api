@@ -2,15 +2,10 @@ FROM nginx:alpine
 
 WORKDIR /app
 
-COPY wait-api.sh /wait-api.sh
-RUN chmod +x /wait-api.sh
-RUN apk add --no-cache bash
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 COPY fakestoreapi.crt /etc/nginx/fakestoreapi.ru/fakestoreapi.crt
 COPY fakestoreapi.key /etc/nginx/fakestoreapi.ru/fakestoreapi.key
-
-ENTRYPOINT ["/wait-api.sh", "api:5000", "--timeout=30", "--", "echo", "API is up!"]
 
 RUN nginx -T
 

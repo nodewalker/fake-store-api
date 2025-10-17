@@ -72,7 +72,9 @@ jobs:
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.prod
             echo "${{ secrets.SSL_CRT }}" >> fakestoreapi.crt
             echo "${{ secrets.SSL_KEY }}" >> fakestoreapi.key
-            docker compose --env-file .env.prod up -d --build
+            docker compose up -d db --env-file .env.prod --build
+            docker compose up -d api --env-file .env.prod --build
+            docker compose up -d nginx --env-file .env.prod --build
             rm fakestoreapi.crt
             rm fakestoreapi.key
             rm .env.prod
