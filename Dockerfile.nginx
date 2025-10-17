@@ -9,7 +9,7 @@ COPY fakestoreapi.crt /etc/nginx/fakestoreapi.ru/fakestoreapi.crt
 COPY fakestoreapi.key /etc/nginx/fakestoreapi.ru/fakestoreapi.key
 
 
-ENTRYPOINT ["/wait-api.sh", "api:5000", "--timeout=30"]
+ENTRYPOINT ["/wait-api.sh", "api:5000", "--timeout=30", "--", "echo", "API is up!"]
 
 RUN nginx -T
 
