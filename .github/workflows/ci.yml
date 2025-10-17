@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - dev
   pull_request:
     branches:
       - master
@@ -38,18 +37,6 @@ jobs:
       #   - name: Run tests
       #     run: npm test
 
-      - name: Generate GitBook
-        run: npm run generate:gitbook
-
-      - name: Commit and push changes
-        uses: EndBug/add-and-commit@v9
-        with:
-          add: '.'
-          author_name: 'Smirnov Evgeny'
-          author_email: '85483574+nodewalker@users.noreply.github.com'
-          commit: '[Action commit] Update GitBook'
-          push: 'origin gitbook'
-
   deploy:
     runs-on: ubuntu-latest
     needs: check
@@ -62,6 +49,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
             cd /home/pets/fake-store-api
+            git switch master
             git pull
             echo "SERVER_HOST=${{ secrets.SERVER_HOST }}" >> .env.prod
             echo "PORT=${{ secrets.API_PORT }}" >> .env.prod
@@ -79,4 +67,9 @@ jobs:
             rm fakestoreapi.crt
             rm fakestoreapi.key
             rm .env.prod
+            git switch gitbook
+            npm run generate:gitbook
+            git add .
+            git commit -m "[Action commit] Update GitBook" || echo "No changes to commit"
+            git push
           EOF
