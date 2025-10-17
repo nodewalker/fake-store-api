@@ -93,6 +93,16 @@ search: true
     fs.unlinkSync(tmpJsonFile);
   }
 
+  fs.writeFileSync('./docs/README.md', fs.readFileSync('./main.md', 'utf-8'));
+  fs.writeFileSync(
+    './docs/api/README.md',
+    fs.readFileSync('./api.md', 'utf-8'),
+  );
+  fs.writeFileSync(
+    './docs/models/README.md',
+    fs.readFileSync('./models.md', 'utf-8'),
+  );
+
   fs.writeFileSync(
     './docs/SUMMARY.md',
     '# Summary\n\n- [Overview](README.md)\n\n' + summaryContent.join('\n'),
