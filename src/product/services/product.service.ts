@@ -24,7 +24,7 @@ export class ProductService implements IProductService {
   async createProduct(
     userId: string,
     details: CreateProductDetails,
-  ): Promise<ProductEntity> {
+  ): Promise<ProductDetails> {
     const category = await this.categoryService.getCategoryById(
       details.categoryId,
       true,
@@ -59,9 +59,7 @@ export class ProductService implements IProductService {
     );
   }
 
-  // TODO: category id men's: {shoes, jeans} => get shoes and jeans by men's category id
   async getProducts(details: GetProductsDetails): Promise<ProductsListDetails> {
-    console.log(details);
     const qb = this.productRepository
       .createQueryBuilder('product')
       .leftJoinAndSelect('product.category', 'category')
@@ -82,8 +80,19 @@ export class ProductService implements IProductService {
         }),
       );
     }
-    if (details.categoryId)
-      qb.andWhere('category._uuid = :uuid', { uuid: details.categoryId });
+    if (details.categoryId) {
+      const categories = await this.categoryService.getSubcategoriesList(
+        details.categoryId,
+      );
+      // console.log('categories: ', categories.flat());
+      if (categories.length) {
+        categories.forEach((cat) => {
+          if (cat?._uuid)
+            qb.andWhere('category._uuid = :uuid', { uuid: cat._uuid });
+        });
+      } else
+        qb.andWhere('category._uuid = :uuid', { uuid: details.categoryId });
+    }
     if (details.priceFrom)
       qb.andWhere('product.price >= :pfrom', { pfrom: details.priceFrom });
     if (details.priceTo)
@@ -95,6 +104,7 @@ export class ProductService implements IProductService {
       .skip((details.page - 1) * details.limit)
       .getManyAndCount();
 
+    console.log(data);
     return plainToInstance(
       ProductsListDetails,
       {
@@ -107,7 +117,7 @@ export class ProductService implements IProductService {
           isLastPage: details.page >= Math.ceil(total / details.limit),
         },
       },
-      { excludeExtraneousValues: true },
+      // { excludeExtraneousValues: true },
     );
   }
 

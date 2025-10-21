@@ -232,6 +232,37 @@ export class CategoryService implements ICategoryService {
     );
   }
 
+  async getSubcategoriesList(uuid: string): Promise<CategoryDetails[]> {
+    const category = await this.categoryRepository
+      .createQueryBuilder('category')
+      .select(['category._uuid', 'category.name'])
+      .leftJoinAndSelect('category.children', 'children')
+      .leftJoinAndSelect('category.products', 'products')
+      .where('category.parent._uuid = :uuid', {
+        uuid,
+      })
+      .getMany();
+    return plainToInstance(
+      CategoryDetails,
+      await Promise.all(
+        category.map(async (child) => {
+          if (!child.children?.length) {
+            if (child.products?.length)
+              return {
+                _uuid: child._uuid,
+                name: child.name,
+              };
+          } else {
+            return await this.getSubcategoriesList(child._uuid);
+          }
+        }),
+      ),
+      {
+        excludeExtraneousValues: true,
+      },
+    );
+  }
+
   async getCategoryById(
     uuid: string,
     isCanCreateProduct: boolean,

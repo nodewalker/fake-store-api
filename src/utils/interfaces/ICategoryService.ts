@@ -15,4 +15,5 @@ export interface ICategoryService {
     isCanCreateProduct: boolean,
   ): Promise<ProductCategoryEntity>;
   removeCategory(categoryId: string, isRemoveAll: boolean): Promise<void>;
+  getSubcategoriesList(uuid: string): Promise<CategoryDetails[]>;
 }
