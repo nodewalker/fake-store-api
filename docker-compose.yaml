@@ -54,4 +54,3 @@ services:
 networks:
   api-network:
     driver: bridge
-    external: true
