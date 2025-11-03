@@ -1,0 +1,48 @@
+name: gen docs
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  contents: write
+
+jobs:
+  genDocs:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate gitbook pages
+        run: npm run generate:gitbook
+
+      - name: push docs to gitbook
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -B gitbook
+          git add -f docs
+          git add -f swagger
+          GIT_COMMIT_HASH=$(git rev-parse --short HEAD@{u} || git rev-parse --short HEAD)
+          git commit -m "[ACTION COMMIT] update docs master (${GIT_COMMIT_HASH})" || echo "no changes"
+          git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/nodewalker/fake-store-api.git gitbook --force

@@ -6,6 +6,10 @@
 # upload files
 /uploads
 
+# docs
+/docs
+/swagger
+
 # Logs
 logs
 *.log

@@ -5,6 +5,7 @@ export class ReturnUserProfileDetails {
   @ApiProperty({
     name: 'uuid',
     description: 'User id',
+    example: '17a54659-a06a-464f-a914-190cee7d4b1a',
     type: String,
   })
   @Expose()
@@ -13,6 +14,7 @@ export class ReturnUserProfileDetails {
   @ApiProperty({
     name: 'firstName',
     description: 'User first name',
+    example: 'Evgeny',
     type: String,
   })
   @Expose()
@@ -21,6 +23,7 @@ export class ReturnUserProfileDetails {
   @ApiProperty({
     name: 'lastName',
     description: 'User last name',
+    example: 'Smirnov',
     type: String,
   })
   @Expose()
@@ -29,6 +32,7 @@ export class ReturnUserProfileDetails {
   @ApiProperty({
     name: 'login',
     description: 'User login',
+    example: 'nodewalker',
     type: String,
   })
   @Expose()
@@ -37,6 +41,7 @@ export class ReturnUserProfileDetails {
   @ApiProperty({
     name: 'email',
     description: 'User email',
+    example: 'nodewalker@yandex.com',
     type: String,
   })
   @Expose()

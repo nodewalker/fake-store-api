@@ -120,7 +120,7 @@
         "operationId": "ProductController_getProducts",
         "parameters": [
           {
-            "name": "limit",
+            "name": "l",
             "required": false,
             "in": "query",
             "description": "Items limit on page ( from 1 to 50 )",
@@ -131,7 +131,7 @@
             }
           },
           {
-            "name": "page",
+            "name": "p",
             "required": false,
             "in": "query",
             "description": "Items page ( min 1 )",
@@ -142,7 +142,7 @@
             }
           },
           {
-            "name": "name",
+            "name": "n",
             "required": false,
             "in": "query",
             "description": "Product name",
@@ -172,7 +172,7 @@
             }
           },
           {
-            "name": "priceFrom",
+            "name": "pfrom",
             "required": false,
             "in": "query",
             "description": "Product price from ( min 0 )",
@@ -182,7 +182,7 @@
             }
           },
           {
-            "name": "priceTo",
+            "name": "pto",
             "required": false,
             "in": "query",
             "description": "Product price to ( min 1 )",
@@ -192,7 +192,7 @@
             }
           },
           {
-            "name": "categoryName",
+            "name": "cn",
             "required": false,
             "in": "query",
             "description": "Product category name",
@@ -202,11 +202,12 @@
             }
           },
           {
-            "name": "categoryId",
+            "name": "cid",
             "required": false,
             "in": "query",
             "description": "Product category id",
             "schema": {
+              "example": "17a54659-a06a-464f-a914-190cee7d4b1a",
               "type": "string"
             }
           }
@@ -387,7 +388,7 @@
         "operationId": "CategoryController_getRootCategories",
         "parameters": [
           {
-            "name": "limit",
+            "name": "l",
             "required": false,
             "in": "query",
             "description": "Items limit on page ( from 1 to 50 )",
@@ -398,7 +399,7 @@
             }
           },
           {
-            "name": "page",
+            "name": "p",
             "required": false,
             "in": "query",
             "description": "Items page ( min 1 )",
@@ -444,6 +445,16 @@
             "description": "Parent category id",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "all",
+            "required": false,
+            "in": "query",
+            "description": "Retrieve all subcategories at all levels, or just the current one.",
+            "schema": {
+              "default": false,
+              "type": "boolean"
             }
           }
         ],
@@ -626,7 +637,7 @@
         "operationId": "CartController_getCart",
         "parameters": [
           {
-            "name": "limit",
+            "name": "l",
             "required": false,
             "in": "query",
             "description": "Items limit on page ( from 1 to 50 )",
@@ -637,7 +648,7 @@
             }
           },
           {
-            "name": "page",
+            "name": "p",
             "required": false,
             "in": "query",
             "description": "Items page ( min 1 )",
@@ -805,11 +816,13 @@
         "properties": {
           "access_token": {
             "type": "string",
-            "description": "access token"
+            "description": "access token",
+            "example": "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJzdWIiOiIxN2E1NDY1OS1hMDZhLTQ2NGYtYTkxNC0xOTBjZWU3ZDRiMWEiLCJsb2dpbiI6Im5vZGV3YWxrZXIifQ.4k3a3M1kDJEay6JLsUlwwYtm33xNsnmqRco2Uveyq9M"
           },
           "refresh_token": {
             "type": "string",
-            "description": "refresh token"
+            "description": "refresh token",
+            "example": "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJzdWIiOiIxN2E1NDY1OS1hMDZhLTQ2NGYtYTkxNC0xOTBjZWU3ZDRiMWEiLCJsb2dpbiI6Im5vZGV3YWxrZXIifQ.4k3a3M1kDJEay6JLsUlwwYtm33xNsnmqRco2Uveyq9M"
           }
         },
         "required": [
@@ -853,11 +866,13 @@
         "properties": {
           "uuid": {
             "type": "string",
-            "description": "Category id"
+            "description": "Category id",
+            "example": "17a54659-a06a-464f-a914-190cee7d4b1a"
           },
           "name": {
             "type": "string",
-            "description": "Category name"
+            "description": "Category name",
+            "example": "Shoes"
           }
         },
         "required": [
@@ -870,19 +885,23 @@
         "properties": {
           "uuid": {
             "type": "string",
-            "description": "Product id"
+            "description": "Product id",
+            "example": "17a54659-a06a-464f-a914-190cee7d4b1a"
           },
           "name": {
             "type": "string",
-            "description": "Product name"
+            "description": "Product name",
+            "example": "Nike"
           },
           "price": {
             "type": "string",
-            "description": "Product price"
+            "description": "Product price",
+            "example": 250
           },
           "discount": {
             "type": "string",
-            "description": "Product discount"
+            "description": "Product discount",
+            "example": 15
           },
           "images": {
             "description": "Product images ( /files/products/:id for get product image )",
@@ -914,23 +933,28 @@
         "properties": {
           "total": {
             "type": "number",
-            "description": "Total items"
+            "description": "Total items",
+            "example": 240
           },
           "page": {
             "type": "number",
-            "description": "Current page"
+            "description": "Current page",
+            "example": 1
           },
           "limit": {
             "type": "number",
-            "description": "Current limit"
+            "description": "Current limit",
+            "example": 10
           },
           "totalPage": {
             "type": "number",
-            "description": "Total page count"
+            "description": "Total page count",
+            "example": 24
           },
           "isLastPage": {
             "type": "boolean",
-            "description": "is last page?"
+            "description": "is last page?",
+            "example": false
           }
         },
         "required": [
@@ -980,7 +1004,8 @@
           },
           "categoryId": {
             "type": "string",
-            "description": "Category id"
+            "description": "Category id",
+            "example": "17a54659-a06a-464f-a914-190cee7d4b1a"
           },
           "discount": {
             "type": "number",
@@ -1016,7 +1041,8 @@
           },
           "parentId": {
             "type": "string",
-            "description": "Parent category id"
+            "description": "Parent category id",
+            "example": "17a54659-a06a-464f-a914-190cee7d4b1a"
           }
         },
         "required": [
@@ -1028,19 +1054,30 @@
         "properties": {
           "uuid": {
             "type": "string",
-            "description": "Category id"
+            "description": "Category id",
+            "example": "17a54659-a06a-464f-a914-190cee7d4b1a"
           },
           "name": {
             "type": "string",
-            "description": "Category name"
+            "description": "Category name",
+            "example": "Shoes"
+          },
+          "Childrens": {
+            "description": "Field for retrieve subcategories at all level",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CategoryDetails"
+            }
           },
           "hasChildren": {
             "type": "boolean",
-            "description": "Is category has children"
+            "description": "Is category has children",
+            "example": true
           },
           "hasProduct": {
             "type": "boolean",
-            "description": "Is category has product"
+            "description": "Is category has product",
+            "example": false
           }
         },
         "required": [
@@ -1077,23 +1114,28 @@
         "properties": {
           "uuid": {
             "type": "string",
-            "description": "User id"
+            "description": "User id",
+            "example": "17a54659-a06a-464f-a914-190cee7d4b1a"
           },
           "firstName": {
             "type": "string",
-            "description": "User first name"
+            "description": "User first name",
+            "example": "Evgeny"
           },
           "lastName": {
             "type": "string",
-            "description": "User last name"
+            "description": "User last name",
+            "example": "Smirnov"
           },
           "login": {
             "type": "string",
-            "description": "User login"
+            "description": "User login",
+            "example": "nodewalker"
           },
           "email": {
             "type": "string",
-            "description": "User email"
+            "description": "User email",
+            "example": "nodewalker@yandex.com"
           },
           "avatarURL": {
             "type": "string",
@@ -1169,7 +1211,8 @@
         "properties": {
           "uuid": {
             "type": "string",
-            "description": "Cart id"
+            "description": "Cart id",
+            "example": "17a54659-a06a-464f-a914-190cee7d4b1a"
           },
           "products": {
             "description": "Products from cart",

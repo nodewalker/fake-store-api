@@ -14,6 +14,7 @@ import { PaginationQueryDto } from './PaginationQuery.dto';
 
 export class GetProductsDto extends PaginationQueryDto {
   @ApiProperty({
+    name: 'n',
     description: 'Product name',
     example: 'nike',
     required: false,
@@ -26,6 +27,7 @@ export class GetProductsDto extends PaginationQueryDto {
   name?: string;
 
   @ApiProperty({
+    name: 'orderBy',
     description: 'Sort by ( name, price, discount )',
     example: 'price',
     required: false,
@@ -47,6 +49,7 @@ export class GetProductsDto extends PaginationQueryDto {
   sort?: SortType;
 
   @ApiProperty({
+    name: 'pfrom',
     description: 'Product price from ( min 0 )',
     example: 500,
     required: false,
@@ -59,6 +62,7 @@ export class GetProductsDto extends PaginationQueryDto {
   priceFrom?: number;
 
   @ApiProperty({
+    name: 'pto',
     description: 'Product price to ( min 1 )',
     example: 1000,
     required: false,
@@ -71,6 +75,7 @@ export class GetProductsDto extends PaginationQueryDto {
   priceTo?: number;
 
   @ApiProperty({
+    name: 'cn',
     description: 'Product category name',
     example: 'Shoes',
     required: false,
@@ -82,7 +87,9 @@ export class GetProductsDto extends PaginationQueryDto {
   categoryName?: string;
 
   @ApiProperty({
+    name: 'cid',
     description: 'Product category id',
+    example: '17a54659-a06a-464f-a914-190cee7d4b1a',
     required: false,
   })
   @Expose({ name: 'cid' })

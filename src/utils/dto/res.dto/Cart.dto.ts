@@ -6,6 +6,7 @@ export class CartDetails {
   @ApiProperty({
     name: 'uuid',
     description: 'Cart id',
+    example: '17a54659-a06a-464f-a914-190cee7d4b1a',
     type: String,
   })
   @Expose()

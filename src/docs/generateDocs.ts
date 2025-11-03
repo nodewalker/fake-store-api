@@ -94,6 +94,19 @@ search: true
   }
 
   fs.writeFileSync(
+    './docs/README.md',
+    fs.readFileSync(__dirname + '/readme/main.md', 'utf-8'),
+  );
+  fs.writeFileSync(
+    './docs/api/README.md',
+    fs.readFileSync(__dirname + '/readme/api.md', 'utf-8'),
+  );
+  fs.writeFileSync(
+    './docs/models/README.md',
+    fs.readFileSync(__dirname + '/readme/models.md', 'utf-8'),
+  );
+
+  fs.writeFileSync(
     './docs/SUMMARY.md',
     '# Summary\n\n- [Overview](README.md)\n\n' + summaryContent.join('\n'),
   );

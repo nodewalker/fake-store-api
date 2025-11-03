@@ -5,6 +5,7 @@ export class CategoryDetails {
   @ApiProperty({
     name: 'uuid',
     description: 'Category id',
+    example: '17a54659-a06a-464f-a914-190cee7d4b1a',
     type: String,
   })
   @Expose()
@@ -13,6 +14,7 @@ export class CategoryDetails {
   @ApiProperty({
     name: 'name',
     description: 'Category name',
+    example: 'Shoes',
     type: String,
   })
   @Expose()
@@ -31,6 +33,7 @@ export class CategoryDetails {
   @ApiProperty({
     name: 'hasChildren',
     description: 'Is category has children',
+    example: true,
     type: Boolean,
     required: false,
   })
@@ -40,6 +43,7 @@ export class CategoryDetails {
   @ApiProperty({
     name: 'hasProduct',
     description: 'Is category has product',
+    example: false,
     type: Boolean,
     required: false,
   })

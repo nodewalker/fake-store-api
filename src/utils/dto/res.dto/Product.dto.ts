@@ -6,6 +6,7 @@ export class ProductCategoryDetails {
   @ApiProperty({
     name: 'uuid',
     description: 'Category id',
+    example: '17a54659-a06a-464f-a914-190cee7d4b1a',
     type: String,
   })
   @Expose()
@@ -14,6 +15,7 @@ export class ProductCategoryDetails {
   @ApiProperty({
     name: 'name',
     description: 'Category name',
+    example: 'Shoes',
     type: String,
   })
   @Expose()
@@ -24,6 +26,7 @@ export class ProductDetails {
   @ApiProperty({
     name: 'uuid',
     description: 'Product id',
+    example: '17a54659-a06a-464f-a914-190cee7d4b1a',
     type: String,
   })
   @Expose()
@@ -32,6 +35,7 @@ export class ProductDetails {
   @ApiProperty({
     name: 'name',
     description: 'Product name',
+    example: 'Nike',
     type: String,
   })
   @Expose()
@@ -40,6 +44,7 @@ export class ProductDetails {
   @ApiProperty({
     name: 'price',
     description: 'Product price',
+    example: 250,
     type: String,
   })
   @Expose()
@@ -48,6 +53,7 @@ export class ProductDetails {
   @ApiProperty({
     name: 'discount',
     description: 'Product discount',
+    example: 15,
     type: String,
   })
   @Expose()
