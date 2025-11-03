@@ -34,6 +34,7 @@ jobs:
             docker compose --env-file .env.prod up -d db 
             docker compose --env-file .env.prod up -d api --build 
             rm .env.prod
+            docker system prune -a
           EOF
 
 # echo "${{ secrets.SSL_CRT }}" >> fakestoreapi.crt

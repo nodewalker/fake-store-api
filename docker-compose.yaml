@@ -9,7 +9,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    restart: always
+    restart: on-failure
     volumes:
       - ./uploads:/app/uploads
       - ./logs:/app/logs
@@ -47,10 +47,11 @@ services:
       timeout: 5s
       retries: 5
       start_period: 5m
-    restart: always
+    restart: on-failure
     networks:
       - api-network
 
 networks:
   api-network:
     driver: bridge
+    external: true
