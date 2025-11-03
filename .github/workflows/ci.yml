@@ -59,13 +59,8 @@ jobs:
             echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" >> .env.prod
             echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> .env.prod
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.prod
-            echo "${{ secrets.SSL_CRT }}" >> fakestoreapi.crt
-            echo "${{ secrets.SSL_KEY }}" >> fakestoreapi.key
             docker compose --env-file .env.prod up -d db 
             docker compose --env-file .env.prod up -d api --build 
-            docker compose --env-file .env.prod up -d nginx --build 
-            rm fakestoreapi.crt
-            rm fakestoreapi.key
             rm .env.prod
             git switch gitbook
             npm run generate:gitbook
@@ -73,3 +68,9 @@ jobs:
             git commit -m "[Action commit] Update GitBook" || echo "No changes to commit"
             git push
           EOF
+
+# echo "${{ secrets.SSL_CRT }}" >> fakestoreapi.crt
+# echo "${{ secrets.SSL_KEY }}" >> fakestoreapi.key
+# docker compose --env-file .env.prod up -d nginx --build
+# rm fakestoreapi.crt
+# rm fakestoreapi.key

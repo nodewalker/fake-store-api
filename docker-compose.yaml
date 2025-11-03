@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: fakestoreapi
     expose:
-      - '5000'
+      - '5000:5000'
     depends_on:
       db:
         condition: service_healthy
@@ -16,19 +16,19 @@ services:
     networks:
       - api-network
 
-  nginx:
-    build:
-      context: .
-      dockerfile: Dockerfile.nginx
-    container_name: nginx
-    ports:
-      - '80:80'
-      - '443:443'
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-    restart: always
-    networks:
-      - api-network
+  # nginx:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.nginx
+  #   container_name: nginx
+  #   ports:
+  #     - '80:80'
+  #     - '443:443'
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/conf.d/default.conf
+  #   restart: always
+  #   networks:
+  #     - api-network
 
   db:
     image: bitnami/postgresql:latest
