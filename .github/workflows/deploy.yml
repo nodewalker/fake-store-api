@@ -35,9 +35,3 @@ jobs:
             rm .env.prod
             docker system prune -a -y
           EOF
-
-# echo "${{ secrets.SSL_CRT }}" >> fakestoreapi.crt
-# echo "${{ secrets.SSL_KEY }}" >> fakestoreapi.key
-# docker compose --env-file .env.prod up -d nginx --build
-# rm fakestoreapi.crt
-# rm fakestoreapi.key
