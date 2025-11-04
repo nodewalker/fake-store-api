@@ -7,7 +7,9 @@ import {
   Inject,
   Post,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
+import { NoFilesInterceptor } from '@nestjs/platform-express';
 import {
   ApiBody,
   ApiOperation,
@@ -42,6 +44,7 @@ export class AuthController {
     description: 'Server error',
   })
   @Post('signup')
+  @UseInterceptors(NoFilesInterceptor())
   @HttpCode(HttpStatus.OK)
   async signup(@Body() dto: CreateUserDto) {
     return await this.authService.signup(dto);
@@ -63,6 +66,7 @@ export class AuthController {
     description: 'Server error',
   })
   @Post('signin')
+  @UseInterceptors(NoFilesInterceptor())
   @HttpCode(HttpStatus.OK)
   async signin(@Body() dto: LoginDto) {
     return await this.authService.signin(dto);

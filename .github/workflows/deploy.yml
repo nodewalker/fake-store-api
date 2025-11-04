@@ -31,10 +31,9 @@ jobs:
             echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" >> .env.prod
             echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> .env.prod
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.prod
-            docker compose --env-file .env.prod up -d db 
-            docker compose --env-file .env.prod up -d api --build 
+            docker compose --env-file .env.prod up -d --build
             rm .env.prod
-            docker system prune -a
+            docker system prune -a -y
           EOF
 
 # echo "${{ secrets.SSL_CRT }}" >> fakestoreapi.crt

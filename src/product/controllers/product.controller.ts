@@ -18,7 +18,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor, NoFilesInterceptor } from '@nestjs/platform-express';
 import { plainToInstance } from 'class-transformer';
 import { Request, Response } from 'express';
 import { diskStorage } from 'multer';
@@ -100,6 +100,7 @@ export class ProductController {
       { excludeExtraneousValues: true },
     );
   }
+
   @ApiOperation({ summary: 'Create product' })
   @ApiBearerAuth()
   @ApiConsumes('multipart/form-data')
@@ -180,6 +181,7 @@ export class ProductController {
     status: '5XX',
     description: 'Server error',
   })
+  @UseInterceptors(NoFilesInterceptor())
   @UseGuards(AuthGuard)
   @Delete('/:id')
   async removeProduct(
