@@ -13,7 +13,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, NoFilesInterceptor } from '@nestjs/platform-express';
 import {
   ApiOperation,
   ApiBearerAuth,
@@ -139,6 +139,7 @@ export class UserController {
     status: '5XX',
     description: 'Server error',
   })
+  @UseInterceptors(NoFilesInterceptor())
   @UseGuards(AuthGuard)
   @Patch('/password')
   async updateUserPassword(

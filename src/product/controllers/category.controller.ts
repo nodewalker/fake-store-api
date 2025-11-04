@@ -14,7 +14,9 @@ import {
   Req,
   Res,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { NoFilesInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -58,6 +60,7 @@ export class CategoryController {
     status: '5XX',
     description: 'Server error',
   })
+  @UseInterceptors(NoFilesInterceptor())
   @UseGuards(AuthGuard)
   @Post('/')
   async createCategory(
