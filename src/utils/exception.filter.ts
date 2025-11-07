@@ -18,10 +18,15 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const status =
       exception instanceof HttpException ? exception.getStatus() : 500;
 
+    const r = exception.getResponse();
+
     const message =
       exception instanceof HttpException
-        ? exception.getResponse()
+        ? r?.message
+          ? exception.message
+          : r
         : 'Internal server error';
+    console.log(exception, message, r);
 
     if (exception instanceof HttpException)
       this.logger.warn(exception.message, exception.stack);
