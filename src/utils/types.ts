@@ -82,6 +82,22 @@ export type GetProductsReturn = {
   data: ProductEntity[];
   pagination: PaginationReturn;
 };
+export type CreateReviewDetails = {
+  userId: string;
+  productId: string;
+  content: string;
+  rating: number;
+};
+export type UpdateReviewDetails = {
+  userId: string;
+  productId: string;
+  content?: string;
+  rating?: number;
+};
+export type RemoveReviewDetails = {
+  userId: string;
+  productId: string;
+};
 
 // utils
 export type PaginationDetails = {

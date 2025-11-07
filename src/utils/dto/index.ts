@@ -1,6 +1,7 @@
+import { ReviewDetails } from './res.dto/Review.dto';
 import { CartDetails } from './res.dto/Cart.dto';
 import { ProductsListDetails } from './res.dto/ProductsList.dto';
-import { ProductCategoryDetails, ProductDetails } from './res.dto/Product.dto';
+import { ProductDetails } from './res.dto/Product.dto';
 import { RootCategoriesDetail } from './res.dto/RootCategories.dto';
 import { CategoryDetails } from './res.dto/Caregory.dto';
 import { TokensDetails } from './res.dto/Tokens.dt';
@@ -16,6 +17,11 @@ import { UpdateUserDto } from './req.dto/UpdateUser.dto';
 import { CreateUserDto } from './req.dto/CreateUser.dto';
 import { LoginDto } from './req.dto/Login.dto';
 import { PaginationDetails } from './res.dto/Pagination.dto';
+import { CreateReviewDto } from './req.dto/CreateReview.dto';
+import { ReviewUserDetails } from './res.dto/ReviewUser.dto';
+import { ReviewListDetails } from './res.dto/ReviewList.dto';
+import { UpdateReviewDto } from './req.dto/UpdateReview.dto';
+import { ProductCategoryDetails } from './res.dto/ProductCategory.dto';
 
 // REQ
 export {
@@ -27,6 +33,8 @@ export {
   GetProductsDto,
   PaginationQueryDto,
   CreateProductDto,
+  CreateReviewDto,
+  UpdateReviewDto,
 };
 
 // RES
@@ -42,4 +50,7 @@ export {
   ReturnCreateUserDetails,
   JwtTokensDetails,
   ReturnUserProfileDetails,
+  ReviewUserDetails,
+  ReviewDetails,
+  ReviewListDetails,
 };

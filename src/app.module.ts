@@ -7,6 +7,7 @@ import {
   ProductEntity,
   ProductImageEntity,
   UserEntity,
+  ReviewEntity,
 } from './utils/typeorm';
 import { Config } from './utils/Config';
 import { ProductModule } from './product/product.module';
@@ -36,6 +37,7 @@ import { AppController } from './app.controller';
           ProductEntity,
           ProductImageEntity,
           ProductCategoryEntity,
+          ReviewEntity,
         ],
         logging: false,
         synchronize: true,

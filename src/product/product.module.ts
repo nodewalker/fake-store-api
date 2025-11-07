@@ -5,8 +5,12 @@ import { ProductController } from './controllers/product.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoryService } from './services/category.service';
 import { CategoryController } from './controllers/category.controller';
-import { ProductEntity, ProductImageEntity } from 'src/utils/typeorm';
-import { ProductCategoryEntity } from 'src/utils/typeorm/entities/productCategory';
+import {
+  ProductEntity,
+  ProductImageEntity,
+  ProductCategoryEntity,
+  ReviewEntity,
+} from 'src/utils/typeorm';
 import { UserModule } from 'src/user/user.module';
 import { AuthModule } from 'src/auth/auth.module';
 
@@ -16,6 +20,7 @@ import { AuthModule } from 'src/auth/auth.module';
       ProductEntity,
       ProductImageEntity,
       ProductCategoryEntity,
+      ReviewEntity,
     ]),
     forwardRef(() => UserModule),
     AuthModule,

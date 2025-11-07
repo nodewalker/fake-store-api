@@ -33,5 +33,5 @@ jobs:
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.prod
             docker compose --env-file .env.prod up -d --build
             rm .env.prod
-            docker system prune -a -y
+            echo y | docker system prune -fa
           EOF

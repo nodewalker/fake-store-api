@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
-export class ReturnUserProfileDetails {
+export class ReviewUserDetails {
   @ApiProperty({
     name: '_uuid',
     description: 'User id',
@@ -28,24 +28,6 @@ export class ReturnUserProfileDetails {
   })
   @Expose()
   lastName: string;
-
-  @ApiProperty({
-    name: 'login',
-    description: 'User login',
-    example: 'nodewalker',
-    type: String,
-  })
-  @Expose()
-  login: string;
-
-  @ApiProperty({
-    name: 'email',
-    description: 'User email',
-    example: 'nodewalker@yandex.com',
-    type: String,
-  })
-  @Expose()
-  email: string;
 
   @ApiProperty({
     name: 'avatarURL',

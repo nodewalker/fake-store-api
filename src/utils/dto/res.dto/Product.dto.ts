@@ -1,26 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { ProductImageEntity } from 'src/utils/typeorm';
-
-export class ProductCategoryDetails {
-  @ApiProperty({
-    name: 'uuid',
-    description: 'Category id',
-    example: '17a54659-a06a-464f-a914-190cee7d4b1a',
-    type: String,
-  })
-  @Expose()
-  _uuid: string;
-
-  @ApiProperty({
-    name: 'name',
-    description: 'Category name',
-    example: 'Shoes',
-    type: String,
-  })
-  @Expose()
-  name: string;
-}
+import { ProductCategoryEntity, ProductImageEntity } from 'src/utils/typeorm';
+import { ProductCategoryDetails } from './ProductCategory.dto';
 
 export class ProductDetails {
   @ApiProperty({
@@ -69,10 +50,26 @@ export class ProductDetails {
   images?: ProductImageEntity[];
 
   @ApiProperty({
+    name: 'rating',
+    description: 'Product rating',
+    type: Number,
+  })
+  @Expose()
+  rating: number;
+
+  @ApiProperty({
+    name: 'review_count',
+    description: 'Product review count',
+    type: Number,
+  })
+  @Expose()
+  review_count: number;
+
+  @ApiProperty({
     name: 'category',
     description: 'Product category',
     type: ProductCategoryDetails,
   })
   @Expose()
-  category?: ProductCategoryDetails;
+  category: ProductCategoryEntity;
 }

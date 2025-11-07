@@ -10,6 +10,7 @@ import { UserCartEntity } from './userCart';
 import { ProductCategoryEntity } from './productCategory';
 import { ProductEntity } from './product';
 import { Exclude } from 'class-transformer';
+import { ReviewEntity } from './review';
 
 @Entity('user')
 export class UserEntity {
@@ -44,4 +45,7 @@ export class UserEntity {
 
   @OneToMany(() => ProductEntity, (product) => product.user)
   products: ProductEntity[];
+
+  @OneToMany(() => ReviewEntity, (review) => review.user)
+  reviews: ReviewEntity[];
 }

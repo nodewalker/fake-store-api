@@ -1,15 +1,16 @@
 import { Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 import { ProductEntity } from './product';
 import { ApiProperty } from '@nestjs/swagger';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 
 @Entity({ name: 'product_image' })
 export class ProductImageEntity {
   @ApiProperty({
-    name: 'uuid',
+    name: '_uuid',
     description: 'Image url',
     type: String,
   })
+  @Expose()
   @PrimaryColumn({ unique: true })
   _uuid: string;
 

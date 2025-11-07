@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserEntity } from './user';
+import { ReviewEntity } from './review';
 
 @Entity({ name: 'product' })
 export class ProductEntity {
@@ -37,4 +38,7 @@ export class ProductEntity {
 
   @ManyToOne(() => UserEntity, (user) => user.products)
   user?: UserEntity;
+
+  @OneToMany(() => ReviewEntity, (review) => review.product)
+  reviews?: ReviewEntity[];
 }

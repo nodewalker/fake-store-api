@@ -7,14 +7,16 @@ import {
 } from 'typeorm';
 import { ProductEntity } from './product';
 import { UserEntity } from './user';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 
 @Entity({ name: 'product_category' })
 export class ProductCategoryEntity {
   @PrimaryGeneratedColumn('uuid')
+  @Expose()
   _uuid: string;
 
   @Column()
+  @Expose()
   name: string;
 
   @OneToMany(() => ProductEntity, (product) => product.category, {
