@@ -127,9 +127,15 @@ export class ProductService implements IProductService {
       qb.orderBy(`product.${details.orderBy}`, details.sort);
 
     const [temp, total]: [ProductEntity[], number] = await qb.getManyAndCount();
+    const priceLength: [number, number] = [
+      temp[0]?.price ? temp[0]?.price : 0,
+      temp[0]?.price ? temp[0]?.price : 0,
+    ];
     const res = temp.map((pr: ProductEntity) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { reviews, ...r } = pr;
+      priceLength[0] = Math.min(priceLength[0], pr.price);
+      priceLength[1] = Math.max(priceLength[1], pr.price);
       return {
         ...r,
         rating:
@@ -150,6 +156,7 @@ export class ProductService implements IProductService {
       ProductsListDetails,
       {
         data: res,
+        price_range: { min: priceLength[0], max: priceLength[1] },
         pagination: {
           total,
           page: details.page,
