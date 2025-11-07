@@ -128,18 +128,24 @@ export class ProductService implements IProductService {
 
     const [temp, total]: [ProductEntity[], number] = await qb.getManyAndCount();
     const res = temp.map((pr: ProductEntity) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { reviews, ...r } = pr;
       return {
         ...r,
         rating:
           (pr.reviews &&
-            pr.reviews.reduce((prev, curr) => prev + curr.rating, 0) /
-              pr.reviews.length) ||
+            Number(
+              Number.parseFloat(
+                (
+                  pr.reviews.reduce((prev, curr) => prev + curr.rating, 0) /
+                  pr.reviews.length
+                ).toString(),
+              ).toFixed(1),
+            )) ||
           0,
         review_count: pr.reviews?.length || 0,
       } as ProductDetails;
     });
-    console.log(res);
     return plainToInstance(
       ProductsListDetails,
       {
@@ -177,11 +183,11 @@ export class ProductService implements IProductService {
       await this.productReviewRepository
         .createQueryBuilder('review')
         .leftJoin('review.product', 'product')
+        .leftJoinAndSelect('review.user', 'user')
         .where('product._uuid = :uuid', { uuid: product._uuid })
         .take(pagination.limit)
         .skip((pagination.page - 1) * pagination.limit)
         .getManyAndCount();
-
     return plainToInstance(
       ReviewListDetails,
       {
@@ -213,8 +219,8 @@ export class ProductService implements IProductService {
       .createQueryBuilder('review')
       .leftJoin('review.product', 'product')
       .leftJoin('review.user', 'user')
-      .where('product._uuid = :uuid', { uuid: product._uuid })
-      .andWhere('user._uuid = :uuid', { uuid: user._uuid })
+      .where('product._uuid = :product_uuid', { product_uuid: product._uuid })
+      .andWhere('user._uuid = :user_uuid', { user_uuid: user._uuid })
       .getOne();
     if (reviewExist?._uuid)
       throw new HttpException(
@@ -246,15 +252,21 @@ export class ProductService implements IProductService {
       .createQueryBuilder('review')
       .leftJoin('review.product', 'product')
       .leftJoin('review.user', 'user')
-      .where('product._uuid = :uuid', { uuid: product._uuid })
-      .andWhere('user._uuid = :uuid', { uuid: user._uuid })
+      .where('product._uuid = :product_uuid', { product_uuid: product._uuid })
+      .andWhere('review._uuid = :review_uuid', {
+        review_uuid: details.reviewId,
+      })
+      .andWhere('user._uuid = :user_uuid', { user_uuid: user._uuid })
       .getOne();
     if (!review?._uuid)
       throw new HttpException('Review not found', HttpStatus.NOT_FOUND);
-    await this.productReviewRepository.update(review, {
-      content: details?.content,
-      rating: details?.rating,
-    });
+    await this.productReviewRepository.update(
+      { _uuid: review._uuid },
+      {
+        content: details?.content,
+        rating: details?.rating,
+      },
+    );
   }
 
   async removeProductReview(details: RemoveReviewDetails): Promise<void> {
@@ -268,8 +280,11 @@ export class ProductService implements IProductService {
       .createQueryBuilder('review')
       .leftJoin('review.product', 'product')
       .leftJoin('review.user', 'user')
-      .where('product._uuid = :uuid', { uuid: product._uuid })
-      .andWhere('user._uuid = :uuid', { uuid: user._uuid })
+      .where('product._uuid = :product_uuid', { product_uuid: product._uuid })
+      .andWhere('review._uuid = :review_uuid', {
+        review_uuid: details.reviewId,
+      })
+      .andWhere('user._uuid = :user_uuid', { user_uuid: user._uuid })
       .getOne();
     if (!review?._uuid)
       throw new HttpException('Review not found', HttpStatus.NOT_FOUND);

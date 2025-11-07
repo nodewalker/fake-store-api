@@ -5,7 +5,7 @@ import { Services } from 'src/utils/const';
 import { CartDetails } from 'src/utils/dto';
 import { ICartService, IProductService } from 'src/utils/interfaces';
 import { ProductEntity, UserCartEntity } from 'src/utils/typeorm';
-import { PaginationDetails } from 'src/utils/types';
+import { PaginationDetails, SelectedCartItemDetails } from 'src/utils/types';
 import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 
@@ -63,7 +63,7 @@ export class CartService implements ICartService {
 
   async removeProductFromUserCart(
     userId: string,
-    productId: string,
+    details: SelectedCartItemDetails,
   ): Promise<void> {
     const cart: UserCartEntity = (await this.cartRepository
       .createQueryBuilder('cart')
@@ -71,14 +71,15 @@ export class CartService implements ICartService {
       .leftJoinAndSelect('cart.products', 'products')
       .where('user._uuid = :uuid', { uuid: userId })
       .getOne()) as UserCartEntity;
-    const product: ProductEntity =
-      await this.productService.getProductById(productId);
-    if (!cart.products.filter((p) => p._uuid === product._uuid).length)
+
+    if (!cart.products.filter((p) => details.selected.includes(p._uuid)).length)
       throw new HttpException(
         'The product in your cart could not be found',
         HttpStatus.NOT_FOUND,
       );
-    cart.products = cart.products.filter((p) => p._uuid !== product._uuid);
+    cart.products = cart.products.filter(
+      (p) => !details.selected.includes(p._uuid),
+    );
     await this.cartRepository.save(cart);
   }
 }

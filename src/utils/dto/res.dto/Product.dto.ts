@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
-import { ProductCategoryEntity, ProductImageEntity } from 'src/utils/typeorm';
+import { Expose, Type } from 'class-transformer';
+import { ProductImageEntity } from 'src/utils/typeorm';
 import { ProductCategoryDetails } from './ProductCategory.dto';
 
 export class ProductDetails {
@@ -71,5 +71,6 @@ export class ProductDetails {
     type: ProductCategoryDetails,
   })
   @Expose()
-  category: ProductCategoryEntity;
+  @Type(() => ProductCategoryDetails)
+  category: ProductCategoryDetails;
 }

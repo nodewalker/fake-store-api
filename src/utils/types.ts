@@ -32,9 +32,7 @@ export type FindUserOptions = {
   selectAll: boolean;
   isAuth: boolean;
 };
-
 export type ReturnUserDetails = Omit<UserEntity, 'password'>;
-
 export type UpdateUserDetails = {
   firstName?: string;
   lastName?: string;
@@ -42,6 +40,7 @@ export type UpdateUserDetails = {
   email?: string;
   avatarURL?: string;
 };
+export type SelectedCartItemDetails = { selected: string[] };
 
 export type UpdateUserPasswordDetails = {
   currentPassword: string;
@@ -90,6 +89,7 @@ export type CreateReviewDetails = {
 };
 export type UpdateReviewDetails = {
   userId: string;
+  reviewId: string;
   productId: string;
   content?: string;
   rating?: number;
@@ -97,6 +97,7 @@ export type UpdateReviewDetails = {
 export type RemoveReviewDetails = {
   userId: string;
   productId: string;
+  reviewId: string;
 };
 
 // utils

@@ -219,7 +219,7 @@ export class ProductController {
     description: 'Server error',
   })
   @UseGuards(AuthGuard)
-  @Post(':id')
+  @Post(':id/review')
   async createProductReview(
     @Req() req: Request,
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -252,17 +252,19 @@ export class ProductController {
     description: 'Server error',
   })
   @UseGuards(AuthGuard)
-  @Patch(':id/review')
+  @Patch(':prodid/review/:reviewid')
   async updateProductReview(
     @Req() req: Request,
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('prodid', new ParseUUIDPipe()) productId: string,
+    @Param('reviewid', new ParseUUIDPipe()) reviewId: string,
     @Body() dto: UpdateReviewDto,
     @Res() res: Response,
   ) {
     await this.productServcie.updateProductReview({
       ...dto,
       userId: req.user._uuid,
-      productId: id,
+      productId,
+      reviewId,
     });
     return res.sendStatus(HttpStatus.OK);
   }
@@ -287,14 +289,16 @@ export class ProductController {
     description: 'Server error',
   })
   @UseGuards(AuthGuard)
-  @Delete(':id/review')
+  @Delete(':prodid/review/:reviewid')
   async DeleteProductReview(
     @Req() req: Request,
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('prodid', new ParseUUIDPipe()) productId: string,
+    @Param('reviewid', new ParseUUIDPipe()) reviewId: string,
     @Res() res: Response,
   ) {
     await this.productServcie.removeProductReview({
-      productId: id,
+      reviewId,
+      productId,
       userId: req.user._uuid,
     });
     return res.sendStatus(HttpStatus.OK);

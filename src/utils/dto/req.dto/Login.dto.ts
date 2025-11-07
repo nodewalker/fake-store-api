@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsString, Length } from 'class-validator';
 
 export class LoginDto {
@@ -8,6 +9,7 @@ export class LoginDto {
     example: 'nodewalker',
     required: true,
   })
+  @Transform(({ value }: { value: string }) => value?.trim())
   @IsString()
   @Length(3, 24)
   login: string;
@@ -18,6 +20,7 @@ export class LoginDto {
     example: '**********',
     required: true,
   })
+  @Transform(({ value }: { value: string }) => value?.trim())
   @IsString()
   @Length(8, 32)
   password: string;

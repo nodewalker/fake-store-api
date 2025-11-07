@@ -1,5 +1,5 @@
 import { ProductDetails } from './Product.dto';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { PaginationDetails } from './Pagination.dto';
 
@@ -11,6 +11,7 @@ export class ProductsListDetails {
     type: ProductDetails,
   })
   @Expose()
+  @Type(() => ProductDetails)
   data: ProductDetails[];
 
   @ApiProperty({

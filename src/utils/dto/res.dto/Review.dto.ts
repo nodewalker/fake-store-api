@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { ReviewUserDetails } from './ReviewUser.dto';
 
 export class ReviewDetails {
@@ -37,5 +37,6 @@ export class ReviewDetails {
     type: ReviewUserDetails,
   })
   @Expose()
+  @Type(() => ReviewUserDetails)
   user: ReviewUserDetails;
 }

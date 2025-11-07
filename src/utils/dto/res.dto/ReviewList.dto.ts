@@ -1,4 +1,4 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { PaginationDetails } from './Pagination.dto';
 import { ReviewDetails } from './Review.dto';
@@ -11,6 +11,7 @@ export class ReviewListDetails {
     type: ReviewDetails,
   })
   @Expose()
+  @Type(() => ReviewDetails)
   data: ReviewDetails[];
 
   @ApiProperty({

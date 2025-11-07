@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -18,10 +19,15 @@ import {
   ApiResponse,
   ApiQuery,
   ApiTags,
+  ApiBody,
 } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { Controllers, Services } from 'src/utils/const';
-import { CartDetails, PaginationQueryDto } from 'src/utils/dto';
+import {
+  CartDetails,
+  PaginationQueryDto,
+  SelectCartItemDto,
+} from 'src/utils/dto';
 import { AuthGuard } from 'src/utils/Guards/AuthGuard';
 import { ICartService } from 'src/utils/interfaces';
 
@@ -86,13 +92,10 @@ export class CartController {
     return res.sendStatus(HttpStatus.OK);
   }
 
-  @ApiOperation({ summary: 'Remove product from user cart' })
+  @ApiOperation({ summary: 'Remove products from user cart' })
   @ApiBearerAuth()
-  @ApiQuery({
-    name: 'pid',
-    description: 'Product id',
-    type: String,
-    required: true,
+  @ApiBody({
+    type: SelectCartItemDto,
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -110,10 +113,10 @@ export class CartController {
   @Delete('/')
   async removeProductFromCart(
     @Req() req: Request,
-    @Query('pid', new ParseUUIDPipe()) productId: string,
+    @Body() dto: SelectCartItemDto,
     @Res() res: Response,
   ) {
-    await this.cartService.removeProductFromUserCart(req.user._uuid, productId);
+    await this.cartService.removeProductFromUserCart(req.user._uuid, dto);
     return res.sendStatus(HttpStatus.OK);
   }
 }
