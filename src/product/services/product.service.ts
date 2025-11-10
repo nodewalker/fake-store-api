@@ -112,12 +112,16 @@ export class ProductService implements IProductService {
         details.categoryId,
       );
       if (categories.length) {
-        categories.forEach((cat) => {
+        categories.forEach((cat, i) => {
           if (cat?._uuid)
-            qb.andWhere('category._uuid = :uuid', { uuid: cat._uuid });
+            qb.orWhere(`category._uuid = :catid${i}`, {
+              [`catid${i}`]: cat._uuid,
+            });
         });
       } else
-        qb.andWhere('category._uuid = :uuid', { uuid: details.categoryId });
+        qb.andWhere('category._uuid = :categoryID', {
+          categoryID: details.categoryId,
+        });
     }
     if (details.priceFrom)
       qb.andWhere('product.price >= :pfrom', { pfrom: details.priceFrom });
