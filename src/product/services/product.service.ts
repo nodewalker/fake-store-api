@@ -126,7 +126,10 @@ export class ProductService implements IProductService {
     if (details.orderBy && details.sort)
       qb.orderBy(`product.${details.orderBy}`, details.sort);
 
-    const [temp, total]: [ProductEntity[], number] = await qb.getManyAndCount();
+    const [temp, total]: [ProductEntity[], number] = await qb
+      .take(details.limit)
+      .skip((details.page - 1) * details.limit)
+      .getManyAndCount();
     const res = temp.map((pr: ProductEntity) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { reviews, ...r } = pr;
