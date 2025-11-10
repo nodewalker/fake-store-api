@@ -242,25 +242,24 @@ export class CategoryService implements ICategoryService {
         uuid,
       })
       .getMany();
-    return plainToInstance(
-      CategoryDetails,
-      await Promise.all(
-        category.map(async (child) => {
-          if (!child.children?.length) {
-            if (child.products?.length)
-              return {
-                _uuid: child._uuid,
-                name: child.name,
-              };
-          } else {
-            return await this.getSubcategoriesList(child._uuid);
-          }
-        }),
-      ),
-      {
-        excludeExtraneousValues: true,
-      },
-    );
+    const res: CategoryDetails[] = [];
+    for (let i = 0; i < category.length; i++) {
+      if (!category[i].children?.length) {
+        if (category[i].products?.length)
+          res.push({
+            _uuid: category[i]._uuid,
+            name: category[i].name,
+            hasChildren: false,
+            hasProduct: true,
+          });
+      } else {
+        res.push(...(await this.getSubcategoriesList(category[i]._uuid)));
+      }
+    }
+
+    return plainToInstance(CategoryDetails, res, {
+      excludeExtraneousValues: true,
+    });
   }
 
   async getCategoryById(
