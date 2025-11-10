@@ -125,8 +125,10 @@ export class ProductService implements IProductService {
       qb.andWhere('product.price <= :pto', { pto: details.priceTo });
     if (details.orderBy && details.sort)
       qb.orderBy(`product.${details.orderBy}`, details.sort);
-
-    const [temp, total]: [ProductEntity[], number] = await qb.getManyAndCount();
+    const [temp, total]: [ProductEntity[], number] = await qb
+      .take(details.limit)
+      .skip((details.page - 1) * details.limit)
+      .getManyAndCount();
     const priceLength: [number, number] = [
       temp[0]?.price ? temp[0]?.price : 0,
       temp[0]?.price ? temp[0]?.price : 0,
