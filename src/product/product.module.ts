@@ -13,6 +13,7 @@ import {
 } from 'src/utils/typeorm';
 import { UserModule } from 'src/user/user.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { ReviewService } from './services/review.service';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AuthModule } from 'src/auth/auth.module';
   providers: [
     { provide: Services.product, useClass: ProductService },
     { provide: Services.category, useClass: CategoryService },
+    { provide: Services.review, useClass: ReviewService },
   ],
   controllers: [ProductController, CategoryController],
   exports: [{ provide: Services.product, useClass: ProductService }],

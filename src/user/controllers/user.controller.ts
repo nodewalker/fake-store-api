@@ -32,13 +32,18 @@ import {
 } from 'src/utils/dto';
 import { AuthGuard } from 'src/utils/Guards/AuthGuard';
 import { IUserService } from 'src/utils/interfaces/IUserService';
+import { CartController } from './cart.controller';
+import { ICartService } from 'src/utils/interfaces';
 
 @ApiTags('User')
 @Controller(Controllers.user)
-export class UserController {
+export class UserController extends CartController {
   constructor(
     @Inject(Services.user) private readonly userService: IUserService,
-  ) {}
+    @Inject(Services.cart) protected readonly cartService: ICartService,
+  ) {
+    super(cartService);
+  }
 
   @ApiOperation({ summary: 'Get user info' })
   @ApiBearerAuth()

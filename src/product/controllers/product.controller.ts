@@ -10,7 +10,6 @@ import {
   Param,
   ParseFilePipe,
   ParseUUIDPipe,
-  Patch,
   Post,
   Query,
   Req,
@@ -26,14 +25,9 @@ import { diskStorage } from 'multer';
 import { Controllers, Services } from 'src/utils/const';
 import {
   CreateProductDto,
-  CreateReviewDto,
   GetProductsDto,
-  PaginationQueryDto,
   ProductDetails,
   ProductsListDetails,
-  ReviewDetails,
-  ReviewListDetails,
-  UpdateReviewDto,
 } from 'src/utils/dto';
 import { AuthGuard } from 'src/utils/Guards/AuthGuard';
 import { IProductService } from 'src/utils/interfaces';
@@ -46,13 +40,20 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { ReviewController } from './review.controller';
+import { IReviewService } from 'src/utils/interfaces/IReviewService';
 
 @ApiTags('Product')
 @Controller(Controllers.product)
-export class ProductController {
+export class ProductController extends ReviewController {
   constructor(
-    @Inject(Services.product) private readonly productServcie: IProductService,
-  ) {}
+    @Inject(Services.product)
+    protected readonly productService: IProductService,
+    @Inject(Services.review)
+    protected readonly reviewService: IReviewService,
+  ) {
+    super(reviewService);
+  }
 
   @ApiOperation({ summary: 'Get list of products' })
   @ApiResponse({
@@ -71,7 +72,7 @@ export class ProductController {
   @Get('/')
   @HttpCode(HttpStatus.OK)
   async getProducts(@Query() dto: GetProductsDto) {
-    return await this.productServcie.getProducts(dto);
+    return await this.productService.getProducts(dto);
   }
 
   @ApiOperation({ summary: 'Get product by id' })
@@ -96,13 +97,13 @@ export class ProductController {
   })
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
-  getOneById(
+  async getOneById(
     @Param('id', new ParseUUIDPipe())
     id: string,
   ) {
     return plainToInstance(
       ProductDetails,
-      this.productServcie.getProductById(id),
+      await this.productService.getProductById(id),
       { excludeExtraneousValues: true },
     );
   }
@@ -161,147 +162,10 @@ export class ProductController {
     @UploadedFiles(new ParseFilePipe())
     images: Express.Multer.File[],
   ) {
-    return await this.productServcie.createProduct(req.user._uuid, {
+    return await this.productService.createProduct(req.user._uuid, {
       ...dto,
       images: images.map((image) => image.filename),
     });
-  }
-
-  @ApiOperation({ summary: 'Get reviews by product id' })
-  @ApiParam({
-    name: 'id',
-    required: true,
-    type: String,
-    description: 'Product id',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Reviews recived',
-    type: ReviewListDetails,
-  })
-  @ApiResponse({
-    status: '4XX',
-    description: 'Check response message',
-  })
-  @ApiResponse({
-    status: '5XX',
-    description: 'Server error',
-  })
-  @Get(':id/review')
-  async getProductReviews(
-    @Query() pagination: PaginationQueryDto,
-    @Param('id', new ParseUUIDPipe()) id: string,
-  ) {
-    return await this.productServcie.getProductsReviewByProductId(
-      pagination,
-      id,
-    );
-  }
-
-  @ApiOperation({ summary: 'Create product review' })
-  @ApiParam({
-    name: 'id',
-    required: true,
-    type: String,
-    description: 'Product id',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Product review created',
-    type: ReviewDetails,
-  })
-  @ApiResponse({
-    status: '4XX',
-    description: 'Check response message',
-  })
-  @ApiResponse({
-    status: '5XX',
-    description: 'Server error',
-  })
-  @UseGuards(AuthGuard)
-  @Post(':id/review')
-  async createProductReview(
-    @Req() req: Request,
-    @Param('id', new ParseUUIDPipe()) id: string,
-    @Body() dto: CreateReviewDto,
-  ) {
-    return await this.productServcie.createProductReview({
-      ...dto,
-      userId: req.user._uuid,
-      productId: id,
-    });
-  }
-
-  @ApiOperation({ summary: 'Update product review' })
-  @ApiParam({
-    name: 'id',
-    required: true,
-    type: String,
-    description: 'Product id',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Product review updated',
-  })
-  @ApiResponse({
-    status: '4XX',
-    description: 'Check response message',
-  })
-  @ApiResponse({
-    status: '5XX',
-    description: 'Server error',
-  })
-  @UseGuards(AuthGuard)
-  @Patch(':prodid/review/:reviewid')
-  async updateProductReview(
-    @Req() req: Request,
-    @Param('prodid', new ParseUUIDPipe()) productId: string,
-    @Param('reviewid', new ParseUUIDPipe()) reviewId: string,
-    @Body() dto: UpdateReviewDto,
-    @Res() res: Response,
-  ) {
-    await this.productServcie.updateProductReview({
-      ...dto,
-      userId: req.user._uuid,
-      productId,
-      reviewId,
-    });
-    return res.sendStatus(HttpStatus.OK);
-  }
-
-  @ApiOperation({ summary: 'Delete product review' })
-  @ApiParam({
-    name: 'id',
-    required: true,
-    type: String,
-    description: 'Product id',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Product review deleted',
-  })
-  @ApiResponse({
-    status: '4XX',
-    description: 'Check response message',
-  })
-  @ApiResponse({
-    status: '5XX',
-    description: 'Server error',
-  })
-  @UseGuards(AuthGuard)
-  @Delete(':prodid/review/:reviewid')
-  async DeleteProductReview(
-    @Req() req: Request,
-    @Param('prodid', new ParseUUIDPipe()) productId: string,
-    @Param('reviewid', new ParseUUIDPipe()) reviewId: string,
-    @Res() res: Response,
-  ) {
-    await this.productServcie.removeProductReview({
-      reviewId,
-      productId,
-      userId: req.user._uuid,
-    });
-    return res.sendStatus(HttpStatus.OK);
   }
 
   @ApiOperation({ summary: 'Remove product' })
@@ -332,7 +196,7 @@ export class ProductController {
     id: string,
     @Res() res: Response,
   ) {
-    await this.productServcie.removeProduct(id);
+    await this.productService.removeProduct(id);
     return res.sendStatus(HttpStatus.OK);
   }
 }

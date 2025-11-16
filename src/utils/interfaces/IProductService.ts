@@ -1,35 +1,18 @@
-import {
-  ProductDetails,
-  ProductsListDetails,
-  ReviewDetails,
-  ReviewListDetails,
-} from '../dto';
+import { ProductDetails, ProductsListDetails } from '../dto';
 import { ProductEntity } from '../typeorm';
-import {
-  CreateProductDetails,
-  CreateReviewDetails,
-  GetProductsDetails,
-  PaginationDetails,
-  RemoveReviewDetails,
-  UpdateReviewDetails,
-} from '../types';
+import { CreateProductDetails, GetProductsDetails } from '../types';
 
 export interface IProductService {
   createProduct(
+    this: void,
     userId: string,
     details: CreateProductDetails,
   ): Promise<ProductDetails>;
-  getProducts(details: GetProductsDetails): Promise<ProductsListDetails>;
-  getProductById(id: string): Promise<ProductEntity>;
-  isCategoryhasProducts(categoryId: string): Promise<boolean>;
-  removeProduct(productId: string): Promise<void>;
-
-  // REVIEW
-  createProductReview(details: CreateReviewDetails): Promise<ReviewDetails>;
-  getProductsReviewByProductId(
-    pagination: PaginationDetails,
-    id: string,
-  ): Promise<ReviewListDetails>;
-  updateProductReview(details: UpdateReviewDetails): Promise<void>;
-  removeProductReview(details: RemoveReviewDetails): Promise<void>;
+  getProducts(
+    this: void,
+    details: GetProductsDetails,
+  ): Promise<ProductsListDetails>;
+  getProductById(this: void, id: string): Promise<ProductEntity>;
+  isCategoryhasProducts(this: void, categoryId: string): Promise<boolean>;
+  removeProduct(this: void, productId: string): Promise<void>;
 }

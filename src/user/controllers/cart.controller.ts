@@ -1,11 +1,9 @@
 import {
   Body,
-  Controller,
   Delete,
   Get,
   HttpCode,
   HttpStatus,
-  Inject,
   ParseUUIDPipe,
   Post,
   Query,
@@ -18,11 +16,9 @@ import {
   ApiBearerAuth,
   ApiResponse,
   ApiQuery,
-  ApiTags,
   ApiBody,
 } from '@nestjs/swagger';
 import { Request, Response } from 'express';
-import { Controllers, Services } from 'src/utils/const';
 import {
   CartDetails,
   PaginationQueryDto,
@@ -31,12 +27,11 @@ import {
 import { AuthGuard } from 'src/utils/Guards/AuthGuard';
 import { ICartService } from 'src/utils/interfaces';
 
-@ApiTags('Cart')
-@Controller(Controllers.cart)
 export class CartController {
-  constructor(
-    @Inject(Services.cart) private readonly cartService: ICartService,
-  ) {}
+  protected cartService: ICartService;
+  constructor(cartService: ICartService) {
+    this.cartService = cartService;
+  }
 
   @ApiOperation({ summary: 'Get user cart' })
   @ApiBearerAuth()
@@ -54,7 +49,7 @@ export class CartController {
     description: 'Server error',
   })
   @UseGuards(AuthGuard)
-  @Get('/')
+  @Get('/cart')
   @HttpCode(HttpStatus.OK)
   async getCart(@Query() dto: PaginationQueryDto, @Req() req: Request) {
     return await this.cartService.getUserCart(req.user._uuid, dto);
@@ -81,7 +76,7 @@ export class CartController {
     description: 'Server error',
   })
   @UseGuards(AuthGuard)
-  @Post('/')
+  @Post('/cart')
   async addProductToUserCart(
     @Req() req: Request,
     @Query('pid', new ParseUUIDPipe())
@@ -110,7 +105,7 @@ export class CartController {
     description: 'Server error',
   })
   @UseGuards(AuthGuard)
-  @Delete('/')
+  @Delete('/cart')
   async removeProductFromCart(
     @Req() req: Request,
     @Body() dto: SelectCartItemDto,

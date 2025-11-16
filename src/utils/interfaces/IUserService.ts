@@ -7,10 +7,18 @@ import {
 } from '../types';
 
 export interface IUserService {
-  createUser(details: CreateUserDetails): Promise<ReturnCreateUserDetails>;
-  findOne(loginOrUuid: string): Promise<UserEntity | null>;
-  updateUser(userId: string, details: UpdateUserDetails): Promise<void>;
+  createUser(
+    this: void,
+    details: CreateUserDetails,
+  ): Promise<ReturnCreateUserDetails>;
+  findOne(this: void, loginOrUuid: string): Promise<UserEntity | null>;
+  updateUser(
+    this: void,
+    userId: string,
+    details: UpdateUserDetails,
+  ): Promise<void>;
   updateUserPassword(
+    this: void,
     userId: string,
     details: UpdateUserPasswordDetails,
   ): Promise<void>;
