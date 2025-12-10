@@ -1,13 +1,20 @@
+# common
++ delete products from cart
++ get all subcategories by parent
+- graphql support
+
 - update category and product
-- get all subcategories by parent
 - github and google auth
-- fake payment
 - order and order history
-- delete products from cart
 - favorite
-- admin panel
 - only the creator can change the category and product
 
+- admin panel
+- fake payment
+
 # gitbook
++ auto update docs/readme.md
 - request models and response models ( ./models/request && ./models/response )
-- auto update docs/readme.md
+
+# wiki.js
+- init

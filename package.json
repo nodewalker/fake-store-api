@@ -10,7 +10,7 @@
     "generate:docs": "bun run src/docs/generateDocs.ts",
     "generate:gitbook": "npm run generate:swagger && npm run generate:docs && npm run format",
     "build": "set NODE_ENV=prod && nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"docs/**/*.md\"",
+    "format": "prettier --write src/**/*.ts test/**/*.ts docs/**/*.md",
     "start": "nest start",
     "start:dev": "set NODE_ENV=dev && nest start --watch",
     "start:debug": "nest start --debug --watch",
