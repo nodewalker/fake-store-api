@@ -9,6 +9,8 @@ import { CustomValidationPipe } from './utils/validation.pipe';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { ConfigService } from '@nestjs/config';
+import { swaggerDocumentInit } from './docs/generateSwagger';
+import { SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestApplication>(AppModule, {
@@ -36,6 +38,9 @@ async function bootstrap(): Promise<void> {
       max: 100,
     }),
   );
+
+  const swaggerDocument = swaggerDocumentInit(app);
+  SwaggerModule.setup('api', app, swaggerDocument);
 
   await app
     .listen(port, '0.0.0.0')

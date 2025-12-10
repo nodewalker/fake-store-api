@@ -12,6 +12,11 @@ headingLevel: 2
 ---
 
 <!-- Generator: Widdershins v4.0.1 -->
+
+# Authentication
+
+- HTTP Authentication, scheme: bearer
+
 <h1 id="fake-store-api-user">User</h1>
 
 ## Get user info
@@ -32,7 +37,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('GET', 'https://example.com/user');
+xhr.open('GET', 'https://fakestoreapi.ru/user');
 xhr.setRequestHeader('Accept', 'application/json');
 xhr.setRequestHeader('Authorization', 'Bearer {access-token}');
 
@@ -93,7 +98,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('PATCH', 'https://example.com/user');
+xhr.open('PATCH', 'https://fakestoreapi.ru/user');
 xhr.setRequestHeader('Content-Type', 'application/json');
 xhr.setRequestHeader('Authorization', 'Bearer {access-token}');
 
@@ -155,7 +160,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('PATCH', 'https://example.com/user/password');
+xhr.open('PATCH', 'https://fakestoreapi.ru/user/password');
 xhr.setRequestHeader('Content-Type', 'application/json');
 xhr.setRequestHeader('Authorization', 'Bearer {access-token}');
 
@@ -211,7 +216,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('GET', 'https://example.com/user/cart');
+xhr.open('GET', 'https://fakestoreapi.ru/user/cart');
 xhr.setRequestHeader('Accept', 'application/json');
 xhr.setRequestHeader('Authorization', 'Bearer {access-token}');
 
@@ -287,7 +292,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('POST', 'https://example.com/user/cart?pid=string');
+xhr.open('POST', 'https://fakestoreapi.ru/user/cart?pid=string');
 xhr.setRequestHeader('Authorization', 'Bearer {access-token}');
 
 xhr.send(data);
@@ -337,7 +342,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('DELETE', 'https://example.com/user/cart');
+xhr.open('DELETE', 'https://fakestoreapi.ru/user/cart');
 xhr.setRequestHeader('Content-Type', 'application/json');
 xhr.setRequestHeader('Authorization', 'Bearer {access-token}');
 

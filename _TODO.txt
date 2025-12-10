@@ -1,13 +1,14 @@
 # common
 + delete products from cart
 + get all subcategories by parent
-- graphql support
 
 - update category and product
 - github and google auth
 - order and order history
 - favorite
 - only the creator can change the category and product
+
+- graphql support
 
 - admin panel
 - fake payment

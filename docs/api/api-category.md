@@ -12,6 +12,11 @@ headingLevel: 2
 ---
 
 <!-- Generator: Widdershins v4.0.1 -->
+
+# Authentication
+
+- HTTP Authentication, scheme: bearer
+
 <h1 id="fake-store-api-category">Category</h1>
 
 ## Create category
@@ -35,7 +40,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('POST', 'https://example.com/category');
+xhr.open('POST', 'https://fakestoreapi.ru/category');
 xhr.setRequestHeader('Content-Type', 'application/json');
 xhr.setRequestHeader('Authorization', 'Bearer {access-token}');
 
@@ -90,7 +95,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('GET', 'https://example.com/category');
+xhr.open('GET', 'https://fakestoreapi.ru/category');
 xhr.setRequestHeader('Accept', 'application/json');
 
 xhr.send(data);
@@ -160,7 +165,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('GET', 'https://example.com/category/string/children');
+xhr.open('GET', 'https://fakestoreapi.ru/category/string/children');
 xhr.setRequestHeader('Accept', 'application/json');
 
 xhr.send(data);
@@ -234,7 +239,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('DELETE', 'https://example.com/category/string?all=true');
+xhr.open('DELETE', 'https://fakestoreapi.ru/category/string?all=true');
 xhr.setRequestHeader('Authorization', 'Bearer {access-token}');
 
 xhr.send(data);

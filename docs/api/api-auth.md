@@ -12,6 +12,11 @@ headingLevel: 2
 ---
 
 <!-- Generator: Widdershins v4.0.1 -->
+
+# Authentication
+
+- HTTP Authentication, scheme: bearer
+
 <h1 id="fake-store-api-auth">Auth</h1>
 
 ## User registration
@@ -38,7 +43,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('POST', 'https://example.com/auth/signup');
+xhr.open('POST', 'https://fakestoreapi.ru/auth/signup');
 xhr.setRequestHeader('Content-Type', 'application/json');
 xhr.setRequestHeader('Accept', 'application/json');
 
@@ -109,7 +114,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('POST', 'https://example.com/auth/signin');
+xhr.open('POST', 'https://fakestoreapi.ru/auth/signin');
 xhr.setRequestHeader('Content-Type', 'application/json');
 xhr.setRequestHeader('Accept', 'application/json');
 
@@ -174,7 +179,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('POST', 'https://example.com/auth/refresh?rt=string');
+xhr.open('POST', 'https://fakestoreapi.ru/auth/refresh?rt=string');
 xhr.setRequestHeader('Accept', 'application/json');
 
 xhr.send(data);

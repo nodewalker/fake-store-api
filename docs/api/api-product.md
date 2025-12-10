@@ -12,6 +12,11 @@ headingLevel: 2
 ---
 
 <!-- Generator: Widdershins v4.0.1 -->
+
+# Authentication
+
+- HTTP Authentication, scheme: bearer
+
 <h1 id="fake-store-api-product">Product</h1>
 
 ## Get list of products
@@ -32,7 +37,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('GET', 'https://example.com/product');
+xhr.open('GET', 'https://fakestoreapi.ru/product');
 xhr.setRequestHeader('Accept', 'application/json');
 
 xhr.send(data);
@@ -185,7 +190,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('GET', 'https://example.com/product/string');
+xhr.open('GET', 'https://fakestoreapi.ru/product/string');
 xhr.setRequestHeader('Accept', 'application/json');
 
 xhr.send(data);
@@ -253,7 +258,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('DELETE', 'https://example.com/product/string');
+xhr.open('DELETE', 'https://fakestoreapi.ru/product/string');
 xhr.setRequestHeader('Authorization', 'Bearer {access-token}');
 
 xhr.send(data);
@@ -298,7 +303,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('GET', 'https://example.com/product/string/review');
+xhr.open('GET', 'https://fakestoreapi.ru/product/string/review');
 xhr.setRequestHeader('Accept', 'application/json');
 
 xhr.send(data);
@@ -371,7 +376,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('POST', 'https://example.com/product/string/review');
+xhr.open('POST', 'https://fakestoreapi.ru/product/string/review');
 xhr.setRequestHeader('Content-Type', 'application/json');
 xhr.setRequestHeader('Accept', 'application/json');
 
@@ -442,7 +447,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('PATCH', 'https://example.com/product/string/review/string');
+xhr.open('PATCH', 'https://fakestoreapi.ru/product/string/review/string');
 xhr.setRequestHeader('Content-Type', 'application/json');
 
 xhr.send(data);
@@ -498,7 +503,7 @@ xhr.addEventListener('readystatechange', function () {
   }
 });
 
-xhr.open('DELETE', 'https://example.com/product/string/review/string');
+xhr.open('DELETE', 'https://fakestoreapi.ru/product/string/review/string');
 
 xhr.send(data);
 ```

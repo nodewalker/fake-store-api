@@ -969,10 +969,18 @@
     "title": "Fake Store API",
     "description": "A simple REST API that simulates an online store — provides fake products, categories, and users for testing, prototyping, and learning purposes.",
     "version": "1.0",
-    "contact": {}
+    "contact": {
+      "name": "Smirnov Evgeny",
+      "url": "https://smirnov-portfolio.ru",
+      "email": "nodewalker@yandex.com"
+    }
   },
   "tags": [],
-  "servers": [],
+  "servers": [
+    {
+      "url": "https://fakestoreapi.ru"
+    }
+  ],
   "components": {
     "securitySchemes": {
       "bearer": {

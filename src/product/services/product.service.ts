@@ -155,6 +155,8 @@ export class ProductService implements IProductService {
     );
   }
 
+  async updateProduct() {}
+
   async getProductById(id: string): Promise<ProductEntity> {
     const product: ProductEntity | null = await this.productRepository
       .createQueryBuilder('product')
