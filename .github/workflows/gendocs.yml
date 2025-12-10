@@ -37,7 +37,7 @@ jobs:
       - name: Check if docs changed
         id: diff
         run: |
-          git add docs swagger
+          git add -f docs swagger
           if git diff --cached --quiet; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
