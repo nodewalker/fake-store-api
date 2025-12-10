@@ -25,20 +25,37 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
 
-      - name: Install dependencies
+      - name: Install dependencies node
         run: npm ci
 
       - name: Generate gitbook pages
         run: npm run generate:gitbook
 
-      - name: push docs to gitbook
+      - name: Check if docs changed
+        id: diff
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -B gitbook
-          git add -f docs
-          git add -f swagger
-          GIT_COMMIT_HASH=$(git rev-parse --short HEAD@{u} || git rev-parse --short HEAD)
-          git commit -m "[ACTION COMMIT] update docs master (${GIT_COMMIT_HASH})" || echo "no changes"
-          git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/nodewalker/fake-store-api.git gitbook --force
+          git add docs swagger
+          if git diff --cached --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      # - name: Push docs to gitbook
+      #   if: steps.diff.outputs.changed == 'true'
+      #   run: |
+      #     git config user.name "github-actions[bot]"
+      #     git config user.email "github-actions[bot]@users.noreply.github.com"
+      #     git checkout -B gitbook
+      #     git add -f docs
+      #     git add -f swagger
+      #     GIT_COMMIT_HASH=$(git rev-parse --short HEAD@{u} || git rev-parse --short HEAD)
+      #     git commit -m "[ACTION COMMIT] update docs master (${GIT_COMMIT_HASH})"
+      #     git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/nodewalker/fake-store-api.git gitbook --force
+
+      - name: No changes — skipping push
+        if: steps.diff.outputs.changed == 'false'
+        run: echo "Docs unchanged. Skipping push."
