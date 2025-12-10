@@ -44,17 +44,17 @@ jobs:
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
 
-      # - name: Push docs to gitbook
-      #   if: steps.diff.outputs.changed == 'true'
-      #   run: |
-      #     git config user.name "github-actions[bot]"
-      #     git config user.email "github-actions[bot]@users.noreply.github.com"
-      #     git checkout -B gitbook
-      #     git add -f docs
-      #     git add -f swagger
-      #     GIT_COMMIT_HASH=$(git rev-parse --short HEAD@{u} || git rev-parse --short HEAD)
-      #     git commit -m "[ACTION COMMIT] update docs master (${GIT_COMMIT_HASH})"
-      #     git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/nodewalker/fake-store-api.git gitbook --force
+      - name: Push docs to gitbook
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -B gitbook
+          git add -f docs
+          git add -f swagger
+          GIT_COMMIT_HASH=$(git rev-parse --short HEAD@{u} || git rev-parse --short HEAD)
+          git commit -m "[ACTION COMMIT] update docs master (${GIT_COMMIT_HASH})"
+          git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/nodewalker/fake-store-api.git gitbook --force
 
       - name: No changes — skipping push
         if: steps.diff.outputs.changed == 'false'

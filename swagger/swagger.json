@@ -314,6 +314,50 @@
           "Product"
         ]
       },
+      "patch": {
+        "operationId": "ProductController_updateProduct",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Product id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProductDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product updated"
+          },
+          "5XX": {
+            "description": "Server error"
+          },
+          "4XX": {
+            "description": "Check response message"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update product",
+        "tags": [
+          "Product"
+        ]
+      },
       "delete": {
         "operationId": "ProductController_removeProduct",
         "parameters": [
@@ -694,6 +738,50 @@
       }
     },
     "/category/{id}": {
+      "patch": {
+        "operationId": "CategoryController_updateCategory",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Category id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCategoryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Category updated"
+          },
+          "5XX": {
+            "description": "Server error"
+          },
+          "4XX": {
+            "description": "Check response message"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update category",
+        "tags": [
+          "Category"
+        ]
+      },
       "delete": {
         "operationId": "CategoryController_removeCategory",
         "parameters": [
@@ -1285,6 +1373,50 @@
           "images"
         ]
       },
+      "UpdateProductDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of product ( from 2 to 50 symbols )",
+            "example": "New Balance 1906"
+          },
+          "price": {
+            "type": "number",
+            "description": "Price of product ( min 1 )",
+            "example": 1000
+          },
+          "discount": {
+            "type": "number",
+            "description": "Discount of product ( from 0 to 100 )",
+            "default": 0,
+            "example": 25
+          },
+          "removeImages": {
+            "description": "Images to remove",
+            "example": [
+              "17a54659-a06a-464f-a914-190cee7d4b1a",
+              "17a54659-a06a-464f-a914-190cee7d4b1a"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "images": {
+            "items": {
+              "type": "array"
+            },
+            "description": "Product images",
+            "minItems": 1,
+            "maxItems": 3,
+            "type": "array"
+          }
+        },
+        "required": [
+          "images"
+        ]
+      },
       "ReviewUserDetails": {
         "type": "object",
         "properties": {
@@ -1488,6 +1620,19 @@
         "required": [
           "tree",
           "pagination"
+        ]
+      },
+      "UpdateCategoryDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of category ( from 2 to 50 symbols )",
+            "example": "Shoes"
+          }
+        },
+        "required": [
+          "name"
         ]
       },
       "ReturnUserProfileDetails": {
