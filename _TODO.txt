@@ -1,8 +1,8 @@
 # common
 + delete products from cart
 + get all subcategories by parent
++ update category and product
 
-- update category and product
 - github and google auth
 - order and order history
 - favorite

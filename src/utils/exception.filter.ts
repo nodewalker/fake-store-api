@@ -32,6 +32,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       this.logger.warn(exception.message, exception.stack);
     else if (exception instanceof Error)
       // TODO: create issue
+      // or send notification
       this.logger.error(
         exception.message,
         exception.stack,

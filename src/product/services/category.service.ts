@@ -16,7 +16,11 @@ import {
   IUserService,
 } from 'src/utils/interfaces';
 import { ProductCategoryEntity, UserEntity } from 'src/utils/typeorm';
-import { CreateCategoryDetails, PaginationDetails } from 'src/utils/types';
+import {
+  CreateCategoryDetails,
+  PaginationDetails,
+  UpdateCategoryDetails,
+} from 'src/utils/types';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -109,6 +113,7 @@ export class CategoryService implements ICategoryService {
         );
     }
     // TODO: check auth user is null
+    // after auth guard
     // 🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃🙃
     const user: UserEntity | null = await this.userService.findOne(userId);
     if (!user?._uuid)
@@ -279,6 +284,20 @@ export class CategoryService implements ICategoryService {
         HttpStatus.BAD_REQUEST,
       );
     return category;
+  }
+
+  // TODO: test
+  async updateCategory(
+    userid: string,
+    details: UpdateCategoryDetails,
+  ): Promise<void> {
+    const category: ProductCategoryEntity | null = await this.categoryRepository
+      .createQueryBuilder('category')
+      .where('category._uuid = :uuid', { uuid: details._uuid })
+      .getOne();
+    if (!category)
+      throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
+    await this.categoryRepository.update(category, { name: details.name });
   }
 
   async removeCategory(

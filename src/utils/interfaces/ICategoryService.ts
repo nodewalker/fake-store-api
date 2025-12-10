@@ -1,4 +1,4 @@
-import { PaginationDetails } from './../types';
+import { PaginationDetails, UpdateCategoryDetails } from './../types';
 import { CreateCategoryDetails } from '../types';
 import { ProductCategoryEntity } from '../typeorm';
 import { CategoryDetails, RootCategoriesDetail } from '../dto';
@@ -29,4 +29,5 @@ export interface ICategoryService {
     isRemoveAll: boolean,
   ): Promise<void>;
   getSubcategoriesList(this: void, uuid: string): Promise<CategoryDetails[]>;
+  updateCategory(userid: string, details: UpdateCategoryDetails): Promise<void>;
 }

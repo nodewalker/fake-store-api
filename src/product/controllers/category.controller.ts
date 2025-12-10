@@ -9,6 +9,7 @@ import {
   Inject,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   Req,
@@ -33,6 +34,7 @@ import {
   CreateCategoryDto,
   PaginationQueryDto,
   RootCategoriesDetail,
+  UpdateCategoryDto,
 } from 'src/utils/dto';
 import { AuthGuard } from 'src/utils/Guards/AuthGuard';
 import { ICategoryService } from 'src/utils/interfaces';
@@ -141,6 +143,45 @@ export class CategoryController {
     return res;
   }
 
+  @ApiOperation({ summary: 'Update category' })
+  @ApiBearerAuth()
+  @ApiBody({
+    type: UpdateCategoryDto,
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: String,
+    description: 'Category id',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Category updated',
+  })
+  @ApiResponse({
+    status: '4XX',
+    description: 'Check response message',
+  })
+  @ApiResponse({
+    status: '5XX',
+    description: 'Server error',
+  })
+  @UseGuards(AuthGuard)
+  @Patch('/:id')
+  async updateCategory(
+    @Req() req: Request,
+    @Param('id', new ParseUUIDPipe())
+    id: string,
+    @Body() dto: UpdateCategoryDto,
+    @Res() res: Response,
+  ) {
+    await this.categoryServcie.updateCategory(req.user._uuid, {
+      _uuid: id,
+      ...dto,
+    });
+    return res.status(HttpStatus.OK).json({ msg: 'success' });
+  }
+
   @ApiOperation({ summary: 'Remove category by id' })
   @ApiBearerAuth()
   @ApiParam({
@@ -170,6 +211,6 @@ export class CategoryController {
     @Query('all') all?: boolean,
   ) {
     await this.categoryServcie.removeCategory(id, all ? all : false);
-    return res.sendStatus(HttpStatus.OK);
+    return res.status(HttpStatus.OK).json({ msg: 'success' });
   }
 }

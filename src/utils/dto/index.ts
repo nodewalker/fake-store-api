@@ -1,3 +1,5 @@
+import { UpdateCategoryDto } from './req.dto/UpdateCategory.dto';
+import { UpdateProductDto } from './req.dto/UpdateProduct.dto';
 import { SelectCartItemDto } from './req.dto/SelectCartItem.dto';
 import { ReviewDetails } from './res.dto/Review.dto';
 import { CartDetails } from './res.dto/Cart.dto';
@@ -37,6 +39,8 @@ export {
   CreateReviewDto,
   UpdateReviewDto,
   SelectCartItemDto,
+  UpdateProductDto,
+  UpdateCategoryDto,
 };
 
 // RES

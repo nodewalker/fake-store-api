@@ -1,6 +1,10 @@
 import { ProductDetails, ProductsListDetails } from '../dto';
 import { ProductEntity } from '../typeorm';
-import { CreateProductDetails, GetProductsDetails } from '../types';
+import {
+  CreateProductDetails,
+  GetProductsDetails,
+  UpdateProductDetails,
+} from '../types';
 
 export interface IProductService {
   createProduct(
@@ -15,4 +19,5 @@ export interface IProductService {
   getProductById(this: void, id: string): Promise<ProductEntity>;
   isCategoryhasProducts(this: void, categoryId: string): Promise<boolean>;
   removeProduct(this: void, productId: string): Promise<void>;
+  updateProduct(userid: string, details: UpdateProductDetails): Promise<void>;
 }

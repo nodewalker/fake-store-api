@@ -4,7 +4,11 @@ import { Services } from 'src/utils/const';
 import { ICategoryService } from 'src/utils/interfaces';
 import { IProductService } from 'src/utils/interfaces/IProductService';
 import { ProductEntity, ProductImageEntity } from 'src/utils/typeorm';
-import { CreateProductDetails, GetProductsDetails } from 'src/utils/types';
+import {
+  CreateProductDetails,
+  GetProductsDetails,
+  UpdateProductDetails,
+} from 'src/utils/types';
 import { Repository } from 'typeorm';
 import * as fs from 'fs';
 import { plainToInstance } from 'class-transformer';
@@ -155,7 +159,49 @@ export class ProductService implements IProductService {
     );
   }
 
-  async updateProduct() {}
+  // TODO: test
+  async updateProduct(
+    userid: string,
+    details: UpdateProductDetails,
+  ): Promise<void> {
+    if (
+      !details._uuid ||
+      (!details.discount &&
+        !details.removeImages?.length &&
+        !details.addImages?.length &&
+        !details.name &&
+        !details.price)
+    )
+      throw new HttpException('Invalid request', HttpStatus.BAD_REQUEST);
+    const product: ProductEntity | null = await this.productRepository
+      .createQueryBuilder('product')
+      .where('product._uuid = :uuid', { uuid: details._uuid })
+      .leftJoinAndSelect('product.images', 'images')
+      .getOne();
+    if (!product)
+      throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
+    const { removeImages, addImages, ...d } = details;
+    if (removeImages?.length) {
+      const rem = this.productImageRepository.createQueryBuilder();
+      removeImages.map((image: string, i: number) => {
+        rem.orWhere(`images._uuid = :imageid_${i}`, {
+          [`imageid_${i}`]: image,
+        });
+      });
+      rem.delete();
+    }
+    if (addImages?.length) {
+      for (let i = 0; i < addImages.length; i++) {
+        await this.productImageRepository.save({
+          product,
+          _uuid: addImages[i],
+        });
+      }
+    }
+    if (d) {
+      await this.productRepository.update(product, d);
+    }
+  }
 
   async getProductById(id: string): Promise<ProductEntity> {
     const product: ProductEntity | null = await this.productRepository

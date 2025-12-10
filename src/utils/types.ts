@@ -57,6 +57,10 @@ export type GetCategoriesReturn = {
   tree: ProductCategoryEntity[];
   pagination: PaginationReturn;
 };
+export type UpdateCategoryDetails = {
+  _uuid: string;
+  name: string;
+};
 
 // PRODUCT
 export type CreateProductDetails = {
@@ -81,6 +85,16 @@ export type GetProductsReturn = {
   data: ProductEntity[];
   pagination: PaginationReturn;
 };
+export type UpdateProductDetails = Partial<{
+  _uuid: string;
+  name: string;
+  price: number;
+  discount: number;
+  removeImages: string[];
+  addImages: string[];
+}>;
+
+// REVIEW
 export type CreateReviewDetails = {
   userId: string;
   productId: string;

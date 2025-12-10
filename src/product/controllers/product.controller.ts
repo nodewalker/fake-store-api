@@ -10,6 +10,7 @@ import {
   Param,
   ParseFilePipe,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   Req,
@@ -28,6 +29,7 @@ import {
   GetProductsDto,
   ProductDetails,
   ProductsListDetails,
+  UpdateProductDto,
 } from 'src/utils/dto';
 import { AuthGuard } from 'src/utils/Guards/AuthGuard';
 import { IProductService } from 'src/utils/interfaces';
@@ -168,6 +170,75 @@ export class ProductController extends ReviewController {
     });
   }
 
+  @ApiOperation({ summary: 'Update product' })
+  @ApiBearerAuth()
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: UpdateProductDto })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: String,
+    description: 'Product id',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Product updated',
+  })
+  @ApiResponse({
+    status: '4XX',
+    description: 'Check response message',
+  })
+  @ApiResponse({
+    status: '5XX',
+    description: 'Server error',
+  })
+  @UseGuards(AuthGuard)
+  @UseInterceptors(
+    FilesInterceptor('images', 3, {
+      storage: diskStorage({
+        destination: './uploads/products',
+        filename: (req, file, callback) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const sanitized = file.originalname
+            .replace(/\s+/g, '_')
+            .replace(/[^a-zA-Z0-9._-]/g, '');
+          callback(null, `${uniqueSuffix}-${sanitized}`);
+        },
+      }),
+      limits: { fileSize: 10 * 1024 * 1024 }, // 10mb
+      fileFilter: (req, file, callback) => {
+        if (!file.mimetype.match(/^image\/(jpg|jpeg|png|webp)$/)) {
+          return callback(
+            new HttpException(
+              'You can upload only images',
+              HttpStatus.BAD_REQUEST,
+            ),
+            false,
+          );
+        }
+        callback(null, true);
+      },
+    }),
+  )
+  @Patch('/:id')
+  @HttpCode(HttpStatus.OK)
+  async updateProduct(
+    @Req() req: Request,
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() dto: UpdateProductDto,
+    @Res() res: Response,
+    @UploadedFiles(new ParseFilePipe())
+    images?: Express.Multer.File[],
+  ) {
+    await this.productService.updateProduct(req.user._uuid, {
+      _uuid: id,
+      ...dto,
+      addImages: images?.map((image) => image.filename),
+    });
+    return res.status(HttpStatus.OK).json({ msg: 'success' });
+  }
+
   @ApiOperation({ summary: 'Remove product' })
   @ApiBearerAuth()
   @ApiParam({
@@ -197,6 +268,6 @@ export class ProductController extends ReviewController {
     @Res() res: Response,
   ) {
     await this.productService.removeProduct(id);
-    return res.sendStatus(HttpStatus.OK);
+    return res.status(HttpStatus.OK).json({ msg: 'success' });
   }
 }
