@@ -3,12 +3,12 @@ import {
   CreateUserDto,
   LoginDto,
   ReturnUserProfileDetails,
-  SelectCartItemDto,
+  CartItemsDto,
   UpdateUserDto,
   UpdateUserPasswordDto,
 } from 'src/utils/dto';
 import { Request } from 'express';
-import { MockProduct } from './MockProduct';
+import { MockCartProduct } from './MockProduct';
 import { Tokens } from 'src/utils/types';
 
 export const MockUserReq = {
@@ -60,9 +60,9 @@ export const MockLoginDto: LoginDto = {
 // CART
 export const MockUserCart: CartDetails = {
   _uuid: '17a54659-a06a-464f-a914-190cee7d4b1a',
-  products: [MockProduct],
+  products: [MockCartProduct],
 };
 
-export const MockUserCartSelectedProduct: SelectCartItemDto = {
-  selected: ['id', 'id'],
+export const MockUserCartSelectedProduct: CartItemsDto = {
+  items: ['id', 'id'],
 };

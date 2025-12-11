@@ -1,4 +1,5 @@
 import {
+  CartItemsDetails,
   CreateProductDto,
   CreateReviewDto,
   GetProductsDto,
@@ -20,6 +21,18 @@ export const MockProduct: ProductDetails = {
   review_count: 0,
   images: [],
   category: { _uuid: 'category od', name: 'product name' },
+};
+
+export const MockCartProduct: CartItemsDetails = {
+  _uuid: '17a54659-a06a-464f-a914-190cee7d4b1a',
+  name: 'mock product',
+  price: 0,
+  discount: 0,
+  rating: 0,
+  review_count: 0,
+  images: [],
+  category: { _uuid: 'category od', name: 'product name' },
+  quantity: 1,
 };
 
 export const MockProductList: ProductsListDetails = {

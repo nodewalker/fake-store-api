@@ -9,7 +9,8 @@ import {
   UserEntity,
   ReviewEntity,
   OrderEntity,
-  OrderProductEntity,
+  OrderItemEntity,
+  UserCartItemEntity,
 } from './utils/typeorm';
 import { Config } from './utils/Config';
 import { ProductModule } from './product/product.module';
@@ -35,12 +36,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         entities: [
           UserEntity,
           UserCartEntity,
+          UserCartItemEntity,
           ProductEntity,
           ProductImageEntity,
           ProductCategoryEntity,
           ReviewEntity,
           OrderEntity,
-          OrderProductEntity,
+          OrderItemEntity,
         ],
         logging: false,
         synchronize: true,

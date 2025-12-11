@@ -5,8 +5,9 @@ import { Services } from 'src/utils/const';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   OrderEntity,
-  OrderProductEntity,
+  OrderItemEntity,
   UserCartEntity,
+  UserCartItemEntity,
   UserEntity,
 } from 'src/utils/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
@@ -21,8 +22,9 @@ import { OrderService } from './services/order.service';
     TypeOrmModule.forFeature([
       UserEntity,
       UserCartEntity,
+      UserCartItemEntity,
       OrderEntity,
-      OrderProductEntity,
+      OrderItemEntity,
     ]),
     forwardRef(() => AuthModule),
     forwardRef(() => ProductModule),

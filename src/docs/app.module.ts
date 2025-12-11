@@ -3,6 +3,8 @@ import { AuthController } from '../auth/controllers/auth.controller';
 import { CategoryController } from '../product/controllers/category.controller';
 import { ProductController } from '../product/controllers/product.controller';
 import { UserController } from '../user/controllers/user.controller';
+import { CartController } from '../user/controllers/cart.controller';
+import { OrderController } from '../user/controllers/order.controller';
 import { Services } from 'src/utils/const';
 
 @Module({
@@ -12,6 +14,8 @@ import { Services } from 'src/utils/const';
     ProductController,
     CategoryController,
     UserController,
+    CartController,
+    OrderController,
   ],
   providers: [
     { provide: Services.auth, useValue: {} },
@@ -20,6 +24,8 @@ import { Services } from 'src/utils/const';
     { provide: Services.product, useValue: {} },
     { provide: Services.review, useValue: {} },
     { provide: Services.user, useValue: {} },
+    { provide: Services.cart, useValue: {} },
+    { provide: Services.order, useValue: {} },
   ],
 })
 export class AppModule {}
