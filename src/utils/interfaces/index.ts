@@ -1,3 +1,4 @@
+import { IOrderService } from './IOrderService';
 import { ICartService } from './ICartService';
 import { ICategoryService } from './ICategoryService';
 import { IProductService } from './IProductService';
@@ -10,4 +11,5 @@ export {
   IProductService,
   ICategoryService,
   ICartService,
+  IOrderService,
 };

@@ -1,10 +1,11 @@
 import {
   Body,
+  Controller,
   Delete,
   Get,
   HttpCode,
   HttpStatus,
-  ParseUUIDPipe,
+  Inject,
   Post,
   Query,
   Req,
@@ -15,23 +16,21 @@ import {
   ApiOperation,
   ApiBearerAuth,
   ApiResponse,
-  ApiQuery,
   ApiBody,
+  ApiTags,
 } from '@nestjs/swagger';
 import { Request, Response } from 'express';
-import {
-  CartDetails,
-  PaginationQueryDto,
-  SelectCartItemDto,
-} from 'src/utils/dto';
+import { Controllers, Services } from 'src/utils/const';
+import { CartDetails, PaginationQueryDto, CartItemsDto } from 'src/utils/dto';
 import { AuthGuard } from 'src/utils/Guards/AuthGuard';
 import { ICartService } from 'src/utils/interfaces';
 
+@ApiTags('cart')
+@Controller(Controllers.cart)
 export class CartController {
-  protected cartService: ICartService;
-  constructor(cartService: ICartService) {
-    this.cartService = cartService;
-  }
+  constructor(
+    @Inject(Services.cart) private readonly cartService: ICartService,
+  ) {}
 
   @ApiOperation({ summary: 'Get user cart' })
   @ApiBearerAuth()
@@ -49,7 +48,7 @@ export class CartController {
     description: 'Server error',
   })
   @UseGuards(AuthGuard)
-  @Get('/cart')
+  @Get('/')
   @HttpCode(HttpStatus.OK)
   async getCart(@Query() dto: PaginationQueryDto, @Req() req: Request) {
     return await this.cartService.getUserCart(req.user._uuid, dto);
@@ -57,11 +56,8 @@ export class CartController {
 
   @ApiOperation({ summary: 'Add product to user cart' })
   @ApiBearerAuth()
-  @ApiQuery({
-    name: 'pid',
-    description: 'Product id',
-    type: String,
-    required: true,
+  @ApiBody({
+    type: CartItemsDto,
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -76,21 +72,20 @@ export class CartController {
     description: 'Server error',
   })
   @UseGuards(AuthGuard)
-  @Post('/cart')
+  @Post('/')
   async addProductToUserCart(
     @Req() req: Request,
-    @Query('pid', new ParseUUIDPipe())
-    productId: string,
+    @Body() dto: CartItemsDto,
     @Res() res: Response,
   ) {
-    await this.cartService.addProductToUserCart(req.user._uuid, productId);
-    return res.sendStatus(HttpStatus.OK);
+    await this.cartService.addProductToUserCart(req.user._uuid, dto);
+    return res.status(HttpStatus.OK).json({ msg: 'success' });
   }
 
   @ApiOperation({ summary: 'Remove products from user cart' })
   @ApiBearerAuth()
   @ApiBody({
-    type: SelectCartItemDto,
+    type: CartItemsDto,
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -105,13 +100,13 @@ export class CartController {
     description: 'Server error',
   })
   @UseGuards(AuthGuard)
-  @Delete('/cart')
+  @Delete('/')
   async removeProductFromCart(
     @Req() req: Request,
-    @Body() dto: SelectCartItemDto,
+    @Body() dto: CartItemsDto,
     @Res() res: Response,
   ) {
     await this.cartService.removeProductFromUserCart(req.user._uuid, dto);
-    return res.sendStatus(HttpStatus.OK);
+    return res.status(HttpStatus.OK).json({ msg: 'success' });
   }
 }

@@ -1,5 +1,5 @@
 import { CartDetails } from '../dto';
-import { PaginationDetails, SelectedCartItemDetails } from '../types';
+import { PaginationDetails, CartItemsDetails } from '../types';
 
 export interface ICartService {
   getUserCart(
@@ -10,11 +10,11 @@ export interface ICartService {
   addProductToUserCart(
     this: void,
     userId: string,
-    productId: string,
+    details: CartItemsDetails,
   ): Promise<void>;
   removeProductFromUserCart(
     this: void,
     userId: string,
-    details: SelectedCartItemDetails,
+    details: CartItemsDetails,
   ): Promise<void>;
 }

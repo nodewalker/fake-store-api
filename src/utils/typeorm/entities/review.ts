@@ -2,9 +2,9 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from './user';
 import { ProductEntity } from './product';
 
-@Entity('review')
+@Entity('product_review')
 export class ReviewEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid', { name: 'uuid' })
   _uuid: string;
 
   @Column()

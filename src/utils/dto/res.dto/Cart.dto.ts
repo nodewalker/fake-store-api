@@ -1,6 +1,6 @@
-import { Expose } from 'class-transformer';
-import { ProductDetails } from './Product.dto';
+import { Expose, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { CartItemsDetails } from './CartItem.dto';
 
 export class CartDetails {
   @ApiProperty({
@@ -16,8 +16,9 @@ export class CartDetails {
     name: 'products',
     description: 'Products from cart',
     isArray: true,
-    type: ProductDetails,
+    type: CartItemsDetails,
   })
+  @Type(() => CartItemsDetails)
   @Expose()
-  products: ProductDetails[];
+  products: CartItemsDetails[];
 }

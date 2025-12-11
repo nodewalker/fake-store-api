@@ -11,7 +11,7 @@ import { Exclude, Expose } from 'class-transformer';
 
 @Entity({ name: 'product_category' })
 export class ProductCategoryEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid', { name: 'uuid' })
   @Expose()
   _uuid: string;
 

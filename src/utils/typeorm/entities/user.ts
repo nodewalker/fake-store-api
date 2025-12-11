@@ -11,10 +11,11 @@ import { ProductCategoryEntity } from './productCategory';
 import { ProductEntity } from './product';
 import { Exclude } from 'class-transformer';
 import { ReviewEntity } from './review';
+import { OrderEntity } from './order';
 
 @Entity('user')
 export class UserEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid', { name: 'uuid' })
   _uuid: string;
 
   @Column({ name: 'first_name' })
@@ -49,4 +50,7 @@ export class UserEntity {
 
   @OneToMany(() => ReviewEntity, (review) => review.user)
   reviews: ReviewEntity[];
+
+  @OneToMany(() => OrderEntity, (order) => order.user)
+  orders: OrderEntity[];
 }

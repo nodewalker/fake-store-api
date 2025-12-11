@@ -1,6 +1,6 @@
 import { UpdateCategoryDto } from './req.dto/UpdateCategory.dto';
 import { UpdateProductDto } from './req.dto/UpdateProduct.dto';
-import { SelectCartItemDto } from './req.dto/SelectCartItem.dto';
+import { CartItemsDto } from './req.dto/CartItems.dto';
 import { ReviewDetails } from './res.dto/Review.dto';
 import { CartDetails } from './res.dto/Cart.dto';
 import { ProductsListDetails } from './res.dto/ProductsList.dto';
@@ -25,6 +25,7 @@ import { ReviewUserDetails } from './res.dto/ReviewUser.dto';
 import { ReviewListDetails } from './res.dto/ReviewList.dto';
 import { UpdateReviewDto } from './req.dto/UpdateReview.dto';
 import { ProductCategoryDetails } from './res.dto/ProductCategory.dto';
+import { CartItemsDetails } from './res.dto/CartItem.dto';
 
 // REQ
 export {
@@ -38,7 +39,7 @@ export {
   CreateProductDto,
   CreateReviewDto,
   UpdateReviewDto,
-  SelectCartItemDto,
+  CartItemsDto,
   UpdateProductDto,
   UpdateCategoryDto,
 };
@@ -59,4 +60,5 @@ export {
   ReviewUserDetails,
   ReviewDetails,
   ReviewListDetails,
+  CartItemsDetails,
 };

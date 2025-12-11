@@ -69,12 +69,20 @@ export class ProductService implements IProductService {
     );
   }
 
+  // TODO: mini func
   async getProducts(details: GetProductsDetails): Promise<ProductsListDetails> {
     const qb = this.productRepository
       .createQueryBuilder('product')
       .leftJoinAndSelect('product.category', 'category')
       .leftJoinAndSelect('product.images', 'images')
       .leftJoinAndSelect('product.reviews', 'review');
+    if (details.productIds) {
+      for (let i = 0; i < details.productIds.length; i++) {
+        qb.orWhere(`product._uuid = :pid${i}`, {
+          [`pid${i}`]: details.productIds[i],
+        });
+      }
+    }
     if (details.name) {
       const names = details.name?.split(' ');
       names.forEach((name, index) =>
@@ -201,6 +209,16 @@ export class ProductService implements IProductService {
     if (d) {
       await this.productRepository.update(product, d);
     }
+  }
+
+  async getProductList(details: string[]): Promise<ProductEntity[]> {
+    const q = this.productRepository.createQueryBuilder('product');
+    details.forEach((el: string, i: number) => {
+      q.orWhere(`product._uuid = :uuid${i}`, {
+        [`uuid${i}`]: el,
+      });
+    });
+    return q.getMany();
   }
 
   async getProductById(id: string): Promise<ProductEntity> {

@@ -5,6 +5,7 @@ export enum Services {
   category = 'CATEGORY_PROVIDER',
   cart = 'CART_PROVIDER',
   review = 'REVIEW_PROVIDER',
+  order = 'ORDER_PROVIDER',
 }
 
 export enum Controllers {
@@ -12,6 +13,8 @@ export enum Controllers {
   user = 'user',
   product = 'product',
   category = 'category',
+  cart = 'user/cart',
+  order = 'user/order',
 }
 
 export enum OrderBy {
@@ -23,4 +26,10 @@ export enum OrderBy {
 export enum SortType {
   ASC = 'ASC',
   DESC = 'DESC',
+}
+
+export enum OrderStatus {
+  WAITING_FOR_PAYMENT = 'wating_for_payment',
+  COMPLETE = 'complete',
+  IN_PROGRESS = 'in_progress',
 }

@@ -13,7 +13,7 @@ import { ReviewEntity } from './review';
 
 @Entity({ name: 'product' })
 export class ProductEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid', { name: 'uuid' })
   _uuid: string;
 
   @Column()

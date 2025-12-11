@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsString } from 'class-validator';
 
-export class SelectCartItemDto {
+export class CartItemsDto {
   @ApiProperty({
-    name: 'selected',
-    description: 'Selected cart item _uuid',
+    name: 'items',
+    description: 'Cart items _uuid',
     example: [
       '17a54659-a06a-464f-a914-190cee7d4b1a',
       '17a54659-a06a-464f-a914-190cee7d4b1a',
@@ -15,5 +15,5 @@ export class SelectCartItemDto {
   })
   @IsArray()
   @IsString({ each: true })
-  selected: string[];
+  items: string[];
 }

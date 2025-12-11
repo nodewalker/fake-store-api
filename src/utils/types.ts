@@ -40,7 +40,7 @@ export type UpdateUserDetails = {
   email?: string;
   avatarURL?: string;
 };
-export type SelectedCartItemDetails = { selected: string[] };
+export type CartItemsListDetails = { items: string[] };
 
 export type UpdateUserPasswordDetails = {
   currentPassword: string;
@@ -73,6 +73,7 @@ export type CreateProductDetails = {
 export type GetProductsDetails = {
   limit: number;
   page: number;
+  productIds?: string[];
   name?: string;
   orderBy?: OrderBy;
   sort?: SortType;

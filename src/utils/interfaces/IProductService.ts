@@ -20,4 +20,5 @@ export interface IProductService {
   isCategoryhasProducts(this: void, categoryId: string): Promise<boolean>;
   removeProduct(this: void, productId: string): Promise<void>;
   updateProduct(userid: string, details: UpdateProductDetails): Promise<void>;
+  getProductList(details: string[]): Promise<ProductEntity[]>;
 }
