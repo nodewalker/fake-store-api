@@ -294,9 +294,34 @@ export class CategoryService implements ICategoryService {
     const category: ProductCategoryEntity | null = await this.categoryRepository
       .createQueryBuilder('category')
       .where('category._uuid = :uuid', { uuid: details._uuid })
+      .leftJoinAndSelect('category.parent', 'parent')
       .getOne();
     if (!category)
       throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
+    if (!category.parent) {
+      const categoryExist: ProductCategoryEntity | null =
+        await this.categoryRepository
+          .createQueryBuilder('category')
+          .leftJoin('category.parent', 'parent')
+          .where('parent._uuid IS NULL')
+          .andWhere('category.name = :name', { name: details.name })
+          .getOne();
+      if (categoryExist)
+        throw new HttpException(
+          'The name already exist in the root categories',
+          HttpStatus.BAD_REQUEST,
+        );
+    } else {
+      const subCategories = await this.getChildrenByParentId(
+        category.parent._uuid,
+        false,
+      );
+      if (subCategories.filter((el) => el.name === details.name).length)
+        throw new HttpException(
+          'This name already exists in the current subcategories',
+          HttpStatus.BAD_REQUEST,
+        );
+    }
     await this.categoryRepository.update(category, { name: details.name });
   }
 

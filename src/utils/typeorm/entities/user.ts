@@ -29,6 +29,7 @@ export class UserEntity {
   @Column({ unique: true })
   email: string;
 
+  // TODO: nullable after google auth
   @Exclude()
   @Column()
   password: string;

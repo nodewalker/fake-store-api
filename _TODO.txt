@@ -3,9 +3,8 @@
 + get all subcategories by parent
 + update category and product
 
-- github and google auth
 - order and order history
-- favorite
+- google auth
 - only the creator can change the category and product
 
 - graphql support
@@ -19,3 +18,6 @@
 
 # wiki.js
 - init
+
+# !!!
+- save docs
