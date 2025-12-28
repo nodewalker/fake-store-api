@@ -16,6 +16,10 @@ Base URLs:
     fakestoreapi.ru/files/avatars/:id ( for avatars )
     fakestoreapi.ru/files/products/:id ( for product images )
 
+GitHub:
+
+    https://github.com/nodewalker/fake-store-api
+
 # Authentication
 
 - HTTP Authentication, scheme: bearer
